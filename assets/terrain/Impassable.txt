@@ -1,0 +1,10 @@
+Impassable: true
+Land Passable: false
+Mounted Passable: false
+Land Movement Cost: -1
+Mounted Movement Cost: -1
+Air Movement Cost: -1
+Avoid: 0
+Defence: 0
+Resistance: 0
+Special Effects: None

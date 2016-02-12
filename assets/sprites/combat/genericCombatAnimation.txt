@@ -1,0 +1,4 @@
+HitFrames = 10
+CritFrames = 13
+SpecialAttackFrames = 20
+DodgeFrames = 4

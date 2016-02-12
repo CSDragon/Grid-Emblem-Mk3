@@ -1,0 +1,51 @@
+high concept:
+	turn based strategy rpg
+
+game elements:
+	Menus
+	Dialogue
+	Base
+	Battle
+
+core engine, scenes:
+	Scenes:
+		Scenes are everything. Scenes control aspects of the game. 
+		Scenes respond to controls, advance their gamestate, and render in that order. They also call their children to do each step right after they do.
+		Scene is a generic, MapScene inherits from scene, for instance. 
+			Most scene subclasses only need to override respondControls, runFrame and renderFrame.
+		Scenes are either active or inactive, visible or invisible. 
+			If they are active they check for controls and their gamestate updates.
+			If they are visible they render. 
+			When a scene is told to respond to controls, it checks if it has a target. If it does, it tells that scene to respond to controls instead, if not, it responds to controls itself.
+				There are exceptions where a scene will demand it responds to an input even if its child has priority.
+		The child management does not need to differentiate between visible, active and inactive scenes. It calls act and render on all of them, and internally scenes decide if they act or render.
+		Scenes sort their children by visibility layer, to avoid clipping.
+		
+	The Game Loop
+		Respond to controls
+		Do game logic
+		Update graphics
+			if responding to controls and doing game logic took too long, don't update graphics
+				unless 5 frames have passed, in which case force it to update graphics.
+				
+	MapScene
+		Contains 4 main parts
+			Map: contains the raw data for the map, like its image, how big it is, where the cursor starts, the terrain,
+			Cursor: The cursor, named MapCursor because there are many cursors. It moves smoothly, but can be immediately placed.
+			Camera: The camera. It follows the cursor at most times.
+			MapObjects: Anything from units, to treasure chests, to interactable objects that takes up space (or doesn't) on the map.
+		Controls:
+			Directional keys: moves the cursor
+			A: Opens an action box, depending on if it's over one of your units or not. Pressing A on an enemy toggles displaying their threat range.
+			B: Speeds up cursor movement.
+			X: Displays threat range of enemies.
+			Y/R?: Displays advanced unit stats if hovering over a unit
+			L: Go to next unit.
+		Functions:
+			Display the grid and all that's on it.
+			Allow the user to move grid units.
+			Open action boxes
+			Dispaly units ranges.
+			Go to map menus
+				unit stats, army stats, tbc.
+			Attack and crud

@@ -1,0 +1,14 @@
+height: 100
+width: 100
+centerX: 50
+centerY: 50
+
+animations: 2
+idle,0,0,10,4
+selected,0,1,10,4
+
+transitions: 2
+idle,selected,activate,keepFrame
+selected,idle,deactivate,keepFrame
+
+default: idle

@@ -1,0 +1,1068 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package solenus.gridemblem3.scene;
+
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import solenus.gridemblem3.GridEmblemMk3;
+import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.gamemap.*;
+import solenus.gridemblem3.actor.*;
+import solenus.gridemblem3.item.*;
+import solenus.gridemblem3.render.Rendering;
+import solenus.gridemblem3.ui.FightUI;
+import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
+import solenus.gridemblem3.ui.menu.SystemActionMenu;
+import solenus.gridemblem3.ui.menu.UnitActionMenu;
+
+
+/**
+ *
+ * @author Chris
+ */
+public class MapScene extends Scene
+{
+    //the game map
+    private Map map;
+    private MapCursor cursor;
+    private Camera camera;
+    private ArrayList<Actor> actorList;
+    private ArrayList<Unit> unitList;
+    
+    
+    //game control
+    private int numFactions;
+    private int turn;
+    private boolean cinematicMode = false;
+    private Unit selectedUnit;
+    private int lastUnitIndexSearched;
+    private ArrayList<Unit> attackableUnits;
+    private int attackableUnitsIndex;
+    private AI ai;
+    
+
+    //UI Elements
+    private MovementArrow mvArrow;
+    private int movingIndex;
+    private ArrayList<Point> movingLine;
+    private UnitActionMenu unitActionUI;
+    private WeaponSelectionMenu weaponSelect;
+    private FightUI fightUI;
+    private SystemActionMenu systemAction;
+    private BufferedImage Grid;
+    
+    //range UI
+    private boolean drawAllyMoveRange;
+    private ArrayList<Point> allyRangeMap;
+    
+    private ArrayList<Unit> enemyRangeList;
+    private ArrayList<Point> selectedEnemyRangeMap;
+    
+    private boolean drawAllEnemyRanges;
+    private ArrayList<Point> allEnemyRangeMap;
+    
+
+    
+    public MapScene(Scene parent)//TEST: make this take an extra arguement, the map id.
+    {
+        super(parent);
+        this.setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
+        controlState = 1;
+        
+        //TEST: make map take an argument from this method's arguements
+        map = new Map(1);
+        Pathfinding.setMap(map, this);
+        
+        cursor = new MapCursor(map);
+        camera = new Camera(cursor.getX(), cursor.getY());
+        actorList = new ArrayList<>();
+        unitList = new ArrayList<>();
+        ai = new AI(unitList);
+        
+        //range objects
+        enemyRangeList = new ArrayList<>();
+        allyRangeMap = new ArrayList<>();
+        selectedEnemyRangeMap = new ArrayList<>();
+        allEnemyRangeMap = new ArrayList<>();
+        
+        //initialize UI
+        mvArrow = new MovementArrow(cursor, map);
+        unitActionUI = new UnitActionMenu();
+        weaponSelect = new WeaponSelectionMenu();
+        fightUI = new FightUI();
+        systemAction = new SystemActionMenu();
+        
+        try
+        {
+            Grid = ImageIO.read(new File("assets/ui/grid.png"));
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Grid sprite failed to load.");
+            System.out.println(e);
+            System.exit(-1);
+        }
+        
+        //TEST: Don't do this in the final
+        unitList.add(new Unit(0, 6, 1));
+        unitList.get(0).placeOnGrid(10, 7);
+        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(1).placeOnGrid(1, 7);
+        unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(0, 6, 1));
+        unitList.get(2).placeOnGrid(5, 7);
+        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 2, 0, 0 ,0, 2, 2));
+        unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 2, 0, 0 ,0, 1, 1));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(3).placeOnGrid(2, 8);
+        unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(4).placeOnGrid(2, 6);
+        unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        getAllEnemyRanges();
+        
+        numFactions = 2;
+
+        
+    }
+    
+    // <editor-fold desc="Scene control methods">
+    
+        
+    /**
+     * Responds to controls.
+     * most Scene subclasses must override this, and check if they are active.
+     * @param im the input manager
+     */
+    public void respondControls(InputManager im)
+    {
+        //always check this
+        if(active)
+        {
+            //if a child scene is active, do that instead.
+            if(targetScene != null)
+                targetScene.respondControls(im);
+            //else, this scene responds to controls
+            else
+            {
+                /*  
+                    Modes:  1)  Cursor. Moving the cursor around. 
+                            2)  Unit Move. Once a unit has been selected, cursor movement.
+                            3)  Unit Action Box. Once a unit has been moved, controling the action box.
+                            4)  System Action Box. When you select nothing
+                            5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
+                            6)  Select enemy to fight
+                            7)  Select a weapon to fight with. 
+                            8)  Battle
+                            9)  End turn
+                            10) Someone else's turn
+                            11) Player turn Start
+                */
+                
+                //cursor mode
+                switch(controlState)
+                {
+                    case(1):
+                        //A: On a friendly unit, enter move mode, on anything else enter system action box.
+                        if(im.getA() == 1)
+                        {
+                            Unit found = getUnitAtPoint(cursor.getX(), cursor.getY());
+
+                            //nothing found, open up the system action box
+                            if(found == null)
+                                cst1to4();
+                            else if(found.getTeam() == 1)
+                                addEnemyRange(found);
+                            else if(found.getTeam() == 0)
+                            {
+                                if(!found.getHasMoved())
+                                    cst1to2(found);
+                                else
+                                    cst1to4();
+                            }
+                        }
+                        //X: Toggles enemy ranges on/off.
+                        if(im.getX() == 1)
+                            toggleEnemyRanges();
+                        //Y: Clears manually set enemy ranges. 
+                        if(im.getY() == 1)
+                            clearRanges();
+                        //L: Move cursor instantly to next unmoved unit.
+                        if(im.getL()%20 == 1)
+                            moveToNextUnmovedUnit();
+                        //R: Open details screen TODO
+
+                        //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
+                        if (controlState == 1)
+                            cursor.respondControls(im);
+                        break;
+                
+                    case 2:
+                        //A: When over an available location, move the unit to that location and open the action box
+                        if(im.getA() == 1)
+                            if(allyRangeMap.contains(cursor.getCoord()))
+                                cst2to5();
+
+                        //B: Return to state 1.
+                        if(im.getB() == 1)
+                            cst2to1();
+
+                        //X: Toggles enemy ranges on/off.
+                        if(im.getX() == 1)
+                            toggleEnemyRanges();
+                        //Y: Clears manually set enemy ranges.
+                        if(im.getY() == 1)
+                            clearRanges();
+
+
+                        //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
+                        if (controlState == 2)
+                            cursor.respondControls(im);
+                        break;
+                
+                    case 3:
+                        unitActionUI.respondControls(im);
+                        break;
+                        
+                    case 4:
+                        systemAction.respondControls(im);
+                        break;
+                        
+                    case 6:
+                        if(im.getUp() == 1 || im.getRight() == 1)
+                        {
+                            attackableUnitsIndex--;
+                        }
+                        if(im.getDown() == 1 || im.getLeft() == 1)
+                        {
+                            attackableUnitsIndex++;
+                        }
+                        
+                        if(attackableUnitsIndex < 0)
+                            attackableUnitsIndex = attackableUnits.size()-1;
+                        if(attackableUnitsIndex >= attackableUnits.size())
+                            attackableUnitsIndex = 0;
+                        
+                        if(im.getA() == 1)
+                            cst6to7();
+                        if(im.getB() == 1)
+                            cst6to3();
+                        
+                        break;
+                        
+                    case 7:
+                        weaponSelect.respondControls(im);
+                        break;
+                }
+            }
+        }
+    }
+    
+    /**
+     * advances the scene's gamestate 1 frame.
+     * most scene subclasses must override this, and check if they are active.
+     * @return The state of this scene that the parent scene needs to know.
+     */
+    public int runFrame()
+    {   
+        //always check this
+        if(active)
+        {
+                
+            switch(controlState)
+            {
+                /*  
+                    Modes:  1)  Cursor. Moving the cursor around. 
+                            2)  Unit Move. Once a unit has been selected, cursor movement.
+                            3)  Unit Action Box. Once a unit has been moved, controling the action box.
+                            4)  System Action Box. When you select nothing
+                            5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
+                            6)  Select enemy to fight
+                            7)  Select a weapon to fight with. 
+                            8)  Battle
+                            9)  End turn
+                            10) Someone else's turn
+                            11) Player turn Start
+                */
+                
+                /*
+                    Active Objects: Cursor
+                    Camera Follows: Cursor
+                */
+                case 1:
+                    cursor.runFrame();
+                    camera.moveToRenderable(cursor, map);
+                    break;
+                
+                /*  Active Objects: Cursor
+                    Camera Follows: Cursor
+                */
+                case 2:
+                    mvArrow.runFrame();
+                    cursor.runFrame();
+                    camera.moveToRenderable(cursor, map);
+                    break;
+                
+                /*
+                    Active Objects: UnitActionMenu
+                    Camera Follows: Cursor
+                */
+                case 3:
+                    cursor.moveToDest();
+                    camera.moveToRenderable(cursor, map);
+                    switch(unitActionUI.runFrame())
+                    {
+                        case UnitActionMenu.BACK:
+                            cst3to2();
+                            break;
+                            
+                        case UnitActionMenu.ATTACK:
+                            cst3to6();
+                            break;
+                        
+                        case UnitActionMenu.WAIT:
+                            cst3to1();
+                            break;
+                            
+                    }
+                    break;
+                    
+                /*
+                    Active Objects: SystemActionMenu
+                    Camera Follows: Cursor
+                */    
+                case 4:
+                    cursor.moveToDest();
+                    camera.moveToRenderable(cursor, map);
+                        switch(systemAction.runFrame())
+                        {
+                            case SystemActionMenu.BACK:
+                                cst4to1();
+                                break;
+                                
+                            case SystemActionMenu.ENDTURN:
+                                cst4to9();
+                                break;
+                            
+                        }
+                    break;
+                
+                /*
+                    Active Objects: selectedUnit
+                    Camera Follows: selectedUnit
+                */
+                case 5:
+                    //tell the unit to move to the next place on the line. This would have been unit.runFrame() if not for cst5toX
+                    cursor.moveToDest();
+                    if(!selectedUnit.isMoving())
+                    {
+                        if(movingIndex < movingLine.size())
+                        {
+                            selectedUnit.setDest(movingLine.get(movingIndex));
+                            movingIndex++;
+                        }
+                        else
+                            cst5toX();
+                    }
+                    selectedUnit.moveToDest();
+                    camera.moveToRenderable(selectedUnit, map);
+
+                    break;
+                
+                /*
+                    Active Objects: Cursor
+                    Camera Follows: Cursor
+                */
+                case 6:
+                    cursor.moveInstantly(attackableUnits.get(attackableUnitsIndex).getCoord());
+                    camera.moveToRenderable(cursor, map);
+                    break;
+                    
+                /*
+                    Active Objects: WeaponSelctUI
+                    Camera Follows: Cursor
+                */
+                case 7:
+                    camera.moveToRenderable(cursor, map);
+                    switch(weaponSelect.runFrame())
+                    {
+                        //If B pressed, return to enemy select
+                        case WeaponSelectionMenu.BACK:
+                            cst7to6();
+                            break;
+                        case 1:
+                            cst7to8();
+                            break;
+                    }
+                    break;
+                    
+                /*
+                    Active Objects: fightUI
+                    Camera Follows: None
+                */
+                case 8:
+                    switch(fightUI.runFrame())
+                    {
+                        case 0:
+                            cst8to1();
+                            break;
+                    }
+                    break;
+                    
+                /*
+                    Active object: None
+                    Camera Follows: None
+                */
+                case 9:
+                    cst9toX();
+                    break;
+                    
+                /*
+                    Active object: AI
+                    Camera Follows: Cursor
+                */    
+                case 10:
+                    camera.moveToRenderable(cursor, map);
+                    switch(ai.runFrame())
+                    {
+                        case 0:
+                            cst10to9();
+                            break;
+                    }
+                    break;
+                    
+                /*
+                    Active object: None
+                    Camera Follows: None
+                */
+                case 11:
+                    cst11to1();
+                    break;
+            }  
+        
+            
+            //always do this.
+            runChildren();
+        }
+        
+        return -1;
+    }
+    
+    /**
+     * renders the scene.
+     * most scene subclasses must override this, and check if they are visible.
+     */
+    public void renderFrame()
+    {   
+        //always check this
+        if(active)
+        {
+            //animate actors
+            for (Actor al : actorList) 
+                al.Animate();
+            
+            //animate units
+            for (Unit ul : unitList) 
+                ul.Animate();
+            
+            //animate cursor
+            cursor.Animate();
+                       
+            
+            //always do this.
+            drawChildren();
+        }
+    }
+
+    
+    
+    
+    /**
+     * Paints the scene
+     * @param g graphics.
+     */
+    public void paintComponent(Graphics g)
+    {
+        if(visible)
+        {
+            Graphics2D g2 = (Graphics2D)g;
+            
+            Rendering.renderGrid(map.getMapImage(), camera, g2, 0, 0, (int)(GridEmblemMk3.GRIDSIZE*2.5), (int)(GridEmblemMk3.GRIDSIZE*2.5));
+
+            drawGrid(g2);
+
+            drawRanges(g2);
+
+            for (Actor al : actorList)
+                al.renderCam(g2, camera);
+
+            for (Unit ul : unitList)
+                ul.renderCam(g2, camera);
+
+            cursor.renderCam(g2, camera);
+
+            //and the movement arrow
+            mvArrow.draw(g2, camera);
+
+            //draw UI
+            unitActionUI.draw(g2);
+            weaponSelect.draw(g2);
+            systemAction.draw(g2);
+        }
+        
+    }
+    
+    /**
+     * resizes the scene to current app size
+     */
+    public void resize()
+    {
+        camera.resize();
+        super.resize();
+    }
+    
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="Range methods">
+
+    
+    /**
+     * Tells the game to render range indicators on the tiles you can move. If U is null, display nothing
+     * @param u 
+     */
+    public void getAllyMoveRange(Unit u)
+    {
+        allyRangeMap.clear();
+        if(u != null)
+        {
+            Pathfinding.findAllMovableLocations(u);
+            allyRangeMap.addAll(Pathfinding.getMoveList());
+        }
+    }
+    
+    /**
+     * Tells the game to render range indicators on the tiles this unit can affect. If U is null, display nothing
+     * @param u The unit whose range is being displayed.
+     */
+    public void getAllyRange(Unit u)
+    {
+        allyRangeMap.clear();
+        if(u != null)
+            allyRangeMap.addAll(Pathfinding.getAllAttackLocations(u));
+    }
+    
+    /**
+     * Adds a unit to the range display. If the enemy is already there, remove it.
+     * @param u The unit whose range is being displayed 
+     */
+    public void addEnemyRange(Unit u)
+    {
+        //since this is the only way 
+        if(enemyRangeList.contains(u))
+            removeEnemyRange(u);
+        else
+        {
+            //add to list
+            enemyRangeList.add(u);
+
+            //add threat points to threat map
+            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u));
+
+            //Remove duplicates
+            HashSet h = new HashSet(selectedEnemyRangeMap);
+            selectedEnemyRangeMap.clear();
+            selectedEnemyRangeMap.addAll(h);
+        }
+    }
+    
+    /**
+     * Removes a unit from the range display
+     * @param u The unit whose range is being displayed 
+     */
+    public void removeEnemyRange(Unit u)
+    {
+        //remove from list
+        enemyRangeList.remove(u);
+        
+        //recreate the threat map.
+        selectedEnemyRangeMap.clear();
+        for (Unit enemy : enemyRangeList) 
+            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(enemy));
+
+    }
+    
+    /**
+     * finds all the enemies threat ranges.
+     */
+    public void getAllEnemyRanges()
+    {
+        for (Unit u : unitList)
+        {
+            if(u.getTeam() == 1)
+                allEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u));
+        }
+        
+        //Remove duplicates
+        HashSet h = new HashSet(allEnemyRangeMap);
+        allEnemyRangeMap.clear();
+        allEnemyRangeMap.addAll(h);
+    }
+    
+    /**
+     * toggles the all enemy range.
+     */
+    public void toggleEnemyRanges()
+    {
+        drawAllEnemyRanges = !drawAllEnemyRanges;
+    }
+    
+    /**
+     * Clears the list of enemies whose range is being drawn. 
+     */
+    public void clearRanges()
+    {
+        enemyRangeList.clear();
+        selectedEnemyRangeMap.clear();
+    }
+    
+    
+    //Drawing methods.
+    
+    /**
+     * Draws the grid
+     * @param g The graphics
+     */
+    public void drawGrid(Graphics2D g)
+    {
+        int numW = GridEmblemMk3.WIDTH / GridEmblemMk3.GRIDSIZE;
+        int numh = GridEmblemMk3.HEIGHT / GridEmblemMk3.GRIDSIZE;
+        
+        int a = (int)camera.getX();
+        int b = (int)camera.getY();
+        
+        for(int i = a-numW; i<= numW+a; i++)
+            for(int j = b-numW; j<= numW+b; j++)
+                if(i > -1 && j > -1 && i < map.getWidth() && j < map.getHeight())
+                    Rendering.renderGrid(Grid, camera, g, i, j, 40, 40);
+    }
+    
+    
+    /**
+     * Draws in the ally, enemy and all enemy range indicators
+     * @param g Graphics
+     */
+    public void drawRanges(Graphics2D g)
+    {
+        //allenemy
+        if(drawAllEnemyRanges)
+        {
+            g.setColor(new Color(255,0,0,64));
+            for(Point p : allEnemyRangeMap)
+                drawRangeSquare(g, p);
+        }
+        //enemy
+        else
+        {
+            g.setColor(new Color(225,0,0,64));
+            for(Point p : selectedEnemyRangeMap)
+                drawRangeSquare(g, p);
+        }
+        
+        //ally
+        if(drawAllyMoveRange)
+        {
+            
+            g.setColor(new Color(63,63,225,127));
+            for(Point p : allyRangeMap)
+            drawRangeSquare(g, p);
+        }
+        
+    }
+    
+    /**
+     * Draws a square on the tile at point p
+     * @param g the graphics
+     * @param p the point
+     */
+    public void drawRangeSquare(Graphics2D g, Point p)
+    {
+        if(!(p.x >= map.getWidth() || p.x < 0 || p.y >= map.getHeight() || p.y < 0))
+        g.fillRect((int)Math.round(GridEmblemMk3.GRIDSIZE*(p.x - camera.getX()) - GridEmblemMk3.HALFGRIDSIZE + GridEmblemMk3.HALFWIDTH), 
+                   (int)Math.round(GridEmblemMk3.GRIDSIZE*(p.y - camera.getY()) - GridEmblemMk3.HALFGRIDSIZE + GridEmblemMk3.HALFHEIGHT), 
+                   GridEmblemMk3.GRIDSIZE, GridEmblemMk3.GRIDSIZE);
+    }
+    
+    
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="Unit Selection methods">
+    
+    
+    /**
+     * Finds the unit on tile (x,y).
+     * @param x the x loc
+     * @param y the y loc
+     * @return the unit at that (x,y) location.
+     */
+    public Unit getUnitAtPoint(int x, int y)
+    {
+        //static search in O(n) time. The list will always be unsorted, and it's a small list, so this is fine.
+        for (Unit u : unitList) 
+        {
+            if(u.getX() == x && u.getY() == y)
+                return u;
+        }
+        
+        //nothing was found
+        return null;
+    }
+    
+    
+
+    /**
+     * Finds the unit at point p
+     * @param p the point where we're looking
+     * @return  the unit at point p.
+     */
+    public Unit getUnitAtPoint(Point p)
+    {
+        return getUnitAtPoint(p.x,p.y);
+    }
+    
+    /**
+     * Finds the actor on tile (x,y).
+     * @param x the x loc
+     * @param y the y loc
+     * @return the actor at that (x,y) location.
+     */
+    public Actor getActorAtPoint(int x, int y)
+    {
+        //static search in O(n) time. The list will always be unsorted, and it's a small list, so this is fine.
+        for (Actor a : unitList) 
+        {
+            if(a.getX() == x && a.getY() == y)
+                return a;
+        }
+        
+        //nothing was found
+        return null;
+    }
+    
+    
+    /**
+     * Finds the unit at point p
+     * @param p the point where we're looking
+     * @return  the unit at point p.
+     */
+    public Actor getActorAtPoint(Point p)
+    {
+        return getActorAtPoint(p.x,p.y);
+    }
+    
+    /**
+     * moves cursor to next unit
+     * This is possibly the least elegant code I've ever written. But it works
+     */
+    public void moveToNextUnmovedUnit()
+    {
+        //If we're currently on an unmoved allied unit, use that one as the base
+        if(getUnitAtPoint(cursor.getCoord()) != null && (unitList.get(lastUnitIndexSearched).getTeam() == 0 && unitList.get(lastUnitIndexSearched).getHasMoved() == false))
+        {
+            lastUnitIndexSearched = unitList.indexOf(getUnitAtPoint(cursor.getCoord()));
+        }
+        
+        //If units died, this might have become small enough that we're starting out of bounds.
+        if (lastUnitIndexSearched >= unitList.size())
+            lastUnitIndexSearched = 0;
+        int back = lastUnitIndexSearched;
+        
+        //this loop system is so convaluted, but it works. And I think it makes sense. Maybe a do-while would have been better.
+        Unit found = null;
+        lastUnitIndexSearched++;
+        if(lastUnitIndexSearched == unitList.size())
+                lastUnitIndexSearched = 0;
+        
+        while (lastUnitIndexSearched != back && found == null)
+        {
+            if(unitList.get(lastUnitIndexSearched).getTeam() == 0 && unitList.get(lastUnitIndexSearched).getHasMoved() == false)
+            {
+                found = unitList.get(lastUnitIndexSearched);
+                break;
+            }
+            
+            lastUnitIndexSearched++;
+            if(lastUnitIndexSearched == unitList.size())
+                lastUnitIndexSearched = 0;
+        }
+        if(found != null)
+            cursor.moveInstantly(found.getX(), found.getY());
+    }
+    
+    //</editor-fold>
+
+    public void startTurn()
+    {
+        for(Unit u : unitList)
+        {
+            if(u.getTeam() == turn)
+                u.beginTurn();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public void endTurn()
+    {
+        turn++;
+        turn %= numFactions;
+    }
+    
+    //<editor-fold desc="controlState Methods">
+    //Methods who's primary function is to transition the control state from one state to another.
+    //"cst = controlState transition"
+
+    
+    /**
+     * enters move mode with unit U
+     * @param u the unit that will move
+     */
+    public void cst1to2(Unit u)
+    {
+        getAllyMoveRange(u);
+        drawAllyMoveRange = true;
+        controlState = 2;
+        selectedUnit = u;
+        mvArrow.start(u, allyRangeMap);
+        cursor.getSprite().sendTrigger("activate");
+    }
+        
+    /**
+     * Opens the system action box
+     */
+    public void cst1to4()
+    {
+        controlState = 4;
+        cursor.setVisible(false);
+        systemAction.start();
+        
+    }
+    
+    /**
+     * Returns from move mode to cursor mode
+     */
+    public void cst2to1()
+    {
+        cursor.moveInstantly(selectedUnit.getX(), selectedUnit.getY());
+        cursor.getSprite().sendTrigger("deactivate");
+        drawAllyMoveRange = true;
+        getAllyMoveRange(null);
+        controlState = 1;
+        selectedUnit = null;
+        mvArrow.end();
+    }
+    
+    /**
+     * goes to the mode that actually moves a unit.
+     */
+    public void cst2to5()
+    {
+        drawAllyMoveRange = false;
+        controlState = 5;
+        movingIndex = 0;
+        
+        movingLine = mvArrow.getPath();
+        
+        mvArrow.setVisible(false);
+    }
+    
+    /**
+     * transitions from the unit action box back to cursor mode
+     */
+    public void cst3to1()
+    {
+        cursor.getSprite().sendTrigger("deactivate");
+        drawAllyMoveRange = true;
+        getAllyMoveRange(null);
+        controlState = 1;
+        selectedUnit.endMovement();
+        selectedUnit = null;
+        mvArrow.end();
+        unitActionUI.end();
+    }
+    
+    /**
+     * Transitions from the unit action box back to move mode
+     */
+    public void cst3to2()
+    {
+        mvArrow.setVisible(true);
+        drawAllyMoveRange = true;
+        selectedUnit.moveInstantly(movingLine.get(0));
+        unitActionUI.end();
+        
+        controlState = 2;
+    }
+    
+    /**
+     * Transitions from the unit action box to selecting an item.
+     */
+    public void cst3to6()
+    {
+        controlState = 6;
+        attackableUnits = unitActionUI.getAttackableUnits();
+        attackableUnitsIndex = attackableUnits.size()-1;
+        unitActionUI.setVisible(false);
+    }
+    
+    /**
+     * Leaves the system action box and returns to the cursor
+     */
+    public void cst4to1()
+    {
+        controlState = 1;
+        cursor.setVisible(true);
+        systemAction.end();
+    }
+    
+    /**
+     * Ends the turn from the system action box
+     */
+    public void cst4to9()
+    {
+        controlState = 9;
+        cursor.setVisible(false);
+        systemAction.end();
+        endTurn();
+    }
+    
+    /**
+     * leaves movingUnitMode to go to a number of different options.
+     */
+    public void cst5toX()
+    {
+        //if it's you're turn, and you're in a place w
+        if(turn == 0)
+        {
+            controlState = 3;
+            selectedUnit.getSprite().sendTrigger("idle");
+            unitActionUI.start(selectedUnit);
+        }
+    }
+    
+    /**
+     * Goes to item select.
+     */
+    public void cst6to7()
+    {
+        controlState = 7;
+        weaponSelect.start(selectedUnit, attackableUnits.get(attackableUnitsIndex));
+    }
+
+    
+    /**
+     * Going back from attack weapon select mode to unit action box
+     */
+    public void cst6to3()
+    {
+        controlState = 3;
+        unitActionUI.setVisible(true);
+        cursor.moveInstantly(selectedUnit.getCoord());
+
+    }
+    
+    /**
+     * Going from weapon select back to target select
+     */
+    public void cst7to6()
+    {
+        controlState = 6;
+        weaponSelect.end();
+    }
+    
+    /**
+     * Going from weapon select to a fight
+     */
+    public void cst7to8()
+    {
+        controlState = 8;
+        selectedUnit.equipWeapon(weaponSelect.getWeapon());
+        weaponSelect.end();
+        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex));
+        mvArrow.end();
+    }
+    
+    /**
+     * The unit has finished attacking. Go back to move mode.
+     */
+    public void cst8to1()
+    {
+        controlState = 1;
+        cursor.moveInstantly(selectedUnit.getCoord());
+        cursor.getSprite().sendTrigger("deactivate");
+        selectedUnit.endMovement();
+        fightUI.end();
+        
+    }
+    
+    /**
+     * Moves from the end of turn phase to someone else's turn
+     */
+    public void cst9toX()
+    {
+        //if it's the player's turn
+        if(turn == 0)
+            controlState = 11;
+        
+        //if it's someone else's turn;
+        else
+        {
+            controlState = 10;
+            ai.start(turn);
+        }
+        
+        startTurn();
+
+    }
+    
+    /**
+     * Ends the current AI turn and returns to the next turn function.
+     */
+    public void cst10to9()
+    {
+        controlState = 9;
+        endTurn();
+    }
+    
+    /**
+     * Starts a new player turn
+     */
+    public void cst11to1()
+    {
+        controlState = 1;
+        cursor.setVisible(active);
+    }
+    
+    
+    //</editor-fold>
+}

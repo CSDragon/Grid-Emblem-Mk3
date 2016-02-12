@@ -1,0 +1,57 @@
+
+
+
+Main.exe
+	ControlsWrapper
+		InputsToControls
+
+	MenuWrapper
+		MenuButton
+		SaveLoadFunctions
+		OptionFunctions
+
+
+	GameWrapper
+		Grid
+			GridObject
+				GridUnit
+					Item
+				ItemObject
+					Item-
+			Terrain
+		BattleMechanics
+		Scenario
+		Midbattle Menus
+			All Units
+			Map Overview
+			
+			
+	GraphicsWrapper
+		MenuGraphics
+		GridGraphics
+		IngameMenuGraphics
+		DialogueGraphics
+		BattleGraphics
+	
+	DialogueWrapper
+		Dialogue;
+	
+.
+	
+	
+	
+External data:
+
+\data\
+
+\data\settings.ini -- contains keybinds, graphics and audio settings
+\data\items\x.ged item files
+\data\effects\x.ged effect files
+\data\map\x.ged map files
+\data\scenario\x.ged scenario data files
+\data\music\ music
+\data\sfx\ sounds
+\data\art\ art
+\data\scripts
+
+\save\x.sav save files

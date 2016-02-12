@@ -1,0 +1,36 @@
+Main Menu:
+	New Game
+	Continue
+	Settings
+	Exit
+	
+Settings:
+	Keybinds
+	Graphics
+	Audio
+	
+Keybinds:
+	Up
+	Down
+	Left
+	Right
+	A
+	B
+	X
+	Y
+	L
+	R
+	Confirm
+	Cancel
+
+Graphics
+	720
+	900
+	1080
+	Back
+	
+Audio
+	Master slider
+	SFX slider
+	Music slider
+	Back

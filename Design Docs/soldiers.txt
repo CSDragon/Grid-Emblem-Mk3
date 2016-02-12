@@ -1,0 +1,12 @@
+Nameless soldiers:
+
+4 to a square. Cannot build them up or level them.
+You can buy the army better equipment but that makes losing them all the more expensive.
+Whne you lose one, you must pay their equimpent cost to replace them.
+You have presets.
+Only as fast as teh slowest
+Attack together. Must target the same target across them.
+You can, however, attack individual soldiers. 
+
+
+Strengthened and weakened by overall morale, which is affected by route rate, how many soldiers you lost recently, how may alied/enemy commanders have fallen, etc.

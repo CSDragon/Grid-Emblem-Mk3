@@ -1,0 +1,68 @@
+TODOs
+	
+	MapScene:
+		
+	
+	Unit:
+		isEqupable
+		
+	Terrain
+		processSpecialEffects
+		
+	Map
+		convert the terrain list in the file read to be more 2d, so when you look at it, it makes sense. if it's 13x10, there should be 10 lines with 13 elements, not 130 lines.
+		
+	UnitActionBox
+		checkCommands
+	
+	FightScene
+		fight
+	
+	
+Current TODO Stack:
+	Controls, mapscene A/X/Y
+	UnitActionBox
+	FightScene
+		
+
+BUGS:
+	Can't remove units from selectedEnemyRange
+	Ally move range doesn't look good enough
+	resizing has weird effects sometimes. This may not matter, as you should never be able to resize ingame anyway.
+	Pressing B from 6 runs the same frame of UnitActionBox again
+	Upleft into an enemy unit, the straight up (all within areas you could normally reach) causes the movement arrow to go straight through the enemy unit. (Fix diagonals)
+
+	
+Fixed Bugs:
+	60fps? -- major Jittery map movement: 1000/60 was an int,
+	Camera movement could use a better algorithm -- Camera movement now has a speed limit. All else was fine.
+	Pressing L while the cursor is on a unit, the L input doesn't care. Which can lead to an L press going nowhere. Set last unit to hovered unit
+	cursor doesn't bump anymore (delay after first move, which allows for more precise movement)
+	movementArrow Diagonals don't quite work (remove diagonals)
+	During moveMode, pressing A outside the move range shouldn't do anything.
+	
+Discarded Bugs:
+	Pressing up and right in quick succession does not queue up a right command unless another up command was pressed. -- Pressing buttons in quick succession should now queue up commands
+	(?) Reweight can crash if it goes out of bounds, but it never should. If this actually ever happens, create a reset button for mapscene.
+	Pathfinding really shouldn't need to see mapscene. Maybe move the unit list into map?
+	
+
+	
+Completed:
+	General
+		Add multi-size support
+	
+	gamemap
+		MovementArrow
+			Diagonals
+	scene
+		MapScene
+	
+	actor
+		Unit
+			movement animations
+			
+			
+Maybe Someday:
+	Unit speed on button press
+			

@@ -1,0 +1,68 @@
+Bludgeon:
+Fracture -- Reduce enemy's speed and movement
+Cripple -- Heavily reduce enemy's speed and movement
+Shatter -- Immobilize enemy. Dodge goes to 0. Defense cut in half
+
+Slash:
+Vantage -- Attack First
+Adept -- Attack Twice
+Astra -- One attack becomes 5 at half power.
+
+Pierce:
+Luna -- Attack that ignores some defenses
+Sol -- Attack that heals you
+Run them through -- Enemy cannot take actions for a few turns, but can still move
+
+Bows:
+Confirmed Hit
+Confirmed Crit
+Confirmed Kill
+
+Light: Gives staves each rank.
+Resist Shred
+Magic Shred
+Pacify -- All weapon's stats go to +0 attack
+
+Elemental:
+Sorcerer -- Cast once from your equipped tome, and once from your 2nd tome
+Raw Tome -- Doubles tome's attack power
+Raw Magic -- Doubles your magic power.
+
+Dark: Gives Curses? at each rank. Ranged staves that reduce the stats of enemies?
+Curse -- Reduces all enemy stats
+Silence -- Enemy can no longer attack or counter attack for a number of turns
+Devour -- Reduces enemy stats to 0 even HP. Enemy doesn't die and cannot make actions until killed. (Soul sucked away). Great for extra exp.
+
+Heavy Armor:
+Sturdy: Halves damage taken from physical sources or Halves incoming damage from physical sources. Not sure
+Aegis: Nullifies enemy active abilities.
+Unbreakable: Resist all damage and status effects from this attack. (Attack misses, even if it was a guarenteed hit)
+
+Medium Armor:
+Deflect: On proc, gain 5 temporary armor/resist
+Parry: Gain 1 extra retaliation attack (Cannot proc abilities)
+Counter: Return half damage taken back to it's source (Passive)
+
+Light Armor
+Dodge: Enemy attack misses
+Taunt: Every attack dodged applies a 10% hitrate debuff on a target which stacks, and lasts until they can manage to hit something (Passive)
+Roll: Unit allowed to move one square in any direction after attacking or being attacked.(Passive?)
+
+Cloth Armor
+Better for wear: Reduces casting penalty by X with other armors
+Null-Mgaic Mantle: reduce (incoming/taken) damage from magic by half
+Reflect: Bounce a magic attack back at its sender. They too can reflect
+
+
+Other Abilities:
+Arcane Strike: Any physical B, Any magic C -- Adds half your magic to a physical attack, or half your attack to a magic attack
+Hypocracy: Light B, Dark B -- Can proc Dark abilities with light tomes, and Light abilities with Dark Tomes. Can use staves and curses while wielding the wrong tome.
+Percision: Pierce S/A, Bows A/S -- Attack that ignores all defense and armor type.
+Knock-out Blow: Bows A, Bludgeon B -- Blunt arrow headshot that instantly knocks out an enemy for x turns. While knocked out they can be coup de grace'd
+Elemental Novice: Any 3 C rank Elemental magics -- Magic +2 while wielding an elemental tome
+Elemental Master: Any 3 A rank Elemental magics -- Magic +5 while wielding an elemental tome
+Master of Magics: S Rank All Magics -- All tome damage doubled
+Master of Arms: S Rank All Weapons (including bows?) -- All weapon damage is doubled
+Arcane Arrow: A rank any magic, B Rank Bows -- +1 range to magic attacks. Can attack (but not counter attack) with bows at melee range.
+Quickswitch: Slash A, Bows B -- If melee attacked when wielding a bow, equip your next usable weapon
+

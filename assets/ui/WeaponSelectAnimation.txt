@@ -1,0 +1,4 @@
+height: 30
+width: 132
+centerX: 66
+centerY: 15

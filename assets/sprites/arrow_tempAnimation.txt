@@ -1,0 +1,4 @@
+height: 80
+width: 80
+centerX: 40
+centerY: 40
