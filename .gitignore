@@ -1,0 +1,4 @@
+*.psd
+build/*
+dist/*
+nbproject/*
