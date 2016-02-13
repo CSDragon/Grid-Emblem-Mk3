@@ -100,6 +100,8 @@ public class Unit extends Actor
     {
         super("generic");
         
+        hp = 10;
+        curHP = 10;
         team = t;
         move = m;
         transportType = mt;
@@ -288,6 +290,11 @@ public class Unit extends Actor
             return other.team == ENEMY;
         else
             return (other.getTeam() != ENEMY);
+    }
+    
+    public boolean isDead()
+    {
+        return (curHP <= 0);
     }
 
     

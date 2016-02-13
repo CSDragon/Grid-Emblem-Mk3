@@ -13,9 +13,9 @@ package solenus.gridemblem3.item;
 public class Weapon 
 {
     //Weapon types
-    private static final int BLUDGEON = 0;
-    private static final int SLASH = 1;
-    private static final int PIERCE = 2;
+    private static final int SWORD = 0;
+    private static final int AXE = 1;
+    private static final int LANCE = 2;
     private static final int BOW = 3;
     private static final int LIGHT = 4;
     private static final int ELEMENTAL = 5;
@@ -27,21 +27,23 @@ public class Weapon
     private int strOrMag;
     private int mastery;
     private int dmg;
-    private double dullness;
+    private int maxUses;
+    private int curUses;
     private int hit;
     private int weight;
     private int crit;
     private int minRange;
     private int maxRange;
     
-    public Weapon(String n, int type, int som, int m, int d, int h, int w, int c, int minR, int maxR)
+    public Weapon(String n, int type, int som, int m, int use, int d, int h, int w, int c, int minR, int maxR)
     {
         name = n;
         weaponType = type;
         strOrMag = som;
         mastery = m;
+        maxUses = use;
+        curUses = use;
         dmg = d;
-        dullness = 1;
         hit = h;
         weight = w;
         crit = c;
@@ -51,17 +53,11 @@ public class Weapon
     
     public void dull()
     {
-        dullness *= 0.98;
-    }
-    
-    public void powerDull()
-    {
-        dullness *= 0.9;
-    }
-    
-    public void sharpen()
-    {
-        dullness = 1;
+        if(curUses == 1)
+            name = name + " (broken)";
+        
+        if(curUses > 0)
+            curUses -= 1;
     }
     
 
@@ -106,7 +102,10 @@ public class Weapon
      */
     public int getDmg() 
     {
-        return (int)Math.ceil(dmg*dullness);
+        if (curUses > 0)
+            return dmg;
+        else
+            return dmg/2;
     }
 
     /**

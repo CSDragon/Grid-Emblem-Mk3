@@ -30,6 +30,23 @@ public class FightUI extends UI
     
     private BufferedImage attackerSprite;
     private BufferedImage defenderSprite;
+    
+    private int attackerHitFrames;
+    private int attackerMissFrames;
+    private int attackerCritSpecialFrames;
+    
+    private int defenderHitFrames;
+    private int defenderMissFrames;
+    private int defenderCritSpecialFrames;
+    
+    private int noGraphicFrames = 16;
+    private int halfNoGraphicFrames = 8;
+    
+    private boolean attackerTurn;
+    private boolean defenderTurn;
+    
+    private double xDir;
+    private double yDir;
 
     private Map map;
     
@@ -69,20 +86,22 @@ public class FightUI extends UI
             /*
             States:
                 0) Startup (Load resorces)
-                1) Determine all damage
-                2) Animations
-                3) End
+                1) End
+                2) First attack.
             */
             switch(controlState)
             {
                 case 0:
+                    loadRecorces();
                     break;
                 case 1:
-                    break;
+                    cleanup();
+                    return 0;
                 case 2:
+                    cst2to3();
                     break;
                 case 3:
-                    return 0;
+                    break;
             }
         }
         
@@ -97,6 +116,29 @@ public class FightUI extends UI
         //always check this
         if(active)
         {
+            if(graphics)
+            {
+                
+            }
+            
+            else
+            {
+                if(attackerTurn)
+                {
+                    if(remainingFrames > halfNoGraphicFrames)
+                        attacker.moveVisually(attacker.getX() + xDir*(.05*(double)(remainingFrames-noGraphicFrames)), attacker.getY() + yDir*(.05*(remainingFrames-noGraphicFrames)));
+                    else
+                        attacker.moveVisually(attacker.getX() - xDir*.05*remainingFrames, attacker.getY() - yDir*.05*remainingFrames);
+                }
+                
+                if(defenderTurn)
+                {
+                    if(remainingFrames > halfNoGraphicFrames)
+                        defender.moveVisually(defender.getX() - xDir*(.05*(remainingFrames-noGraphicFrames)), defender.getY() - yDir*(.05*(remainingFrames-noGraphicFrames)));
+                    else
+                        defender.moveVisually(defender.getX() + xDir*.05*remainingFrames, defender.getY() + yDir*.05*remainingFrames);
+                }
+            }
         }
     }
     
@@ -109,6 +151,14 @@ public class FightUI extends UI
         //always check this
         if(visible)
         {
+            if(graphics)
+            {
+                
+            }
+            else
+            {
+                
+            }
         }
     }
     
@@ -116,19 +166,127 @@ public class FightUI extends UI
      * Start up a fight
      * @param a The attacker
      * @param d The defender
+     * @param mode Full animation (true) or no animation (false).
      */
-    public void start(Unit a, Unit d)
+    public void start(Unit a, Unit d, boolean mode)
     {
         super.start();
         attacker = a;
         defender = d;
         remainingFrames = 1;
+        graphics = mode;
     }
     
 
     //</editor-fold>
     
+    public void loadRecorces()
+    {
+        controlState = 2;
+        //If fight with graphics
+        if(graphics)
+        {
+            //TODO
+        }
+        
+        //Otw, no graphics.
+        else
+        {
+            xDir = attacker.getX() - defender.getX();
+            yDir = attacker.getY() - defender.getY();
+            if(xDir > 1)
+                xDir = 1;
+            if(xDir < -1)
+                xDir = -1;
+            if(yDir > 1)
+                yDir = 1;
+            if(yDir < -1)
+                yDir = -1;
+            
+        }
+    }
+    
+    public void cleanup()
+    {
+        //Just in case they're not back where they belong.
+        if(!graphics)
+        {
+            attacker.moveInstantly(attacker.getCoord());
+            defender.moveInstantly(defender.getCoord());
+        }
+    }
+    
+    
+    //<editor-fold desc="controlState Methods">
+    //Methods who's primary function is to transition the control state from one state to another.
+    //"cst = controlState transition"
+    
+    public void cst2to3()
+    {
+        controlState = 1;//I know.
+    }
+    
+    //</editor-fold>
+    
+    
     //<editor-fold desc="Combat Mechanics">
+    
+    /**
+     * Simulates a battle between attacker and defender.
+     */
+    public void combat()
+    {
+        attack(attacker, defender);
+        if(attacker.isDead() || defender.isDead())
+        {
+            return;
+        }
+        
+        attack(defender, attacker);
+        if(attacker.isDead() || defender.isDead())
+        {
+            return;
+        }
+        
+        if(attacker.getTotalSpd() >= defender.getTotalSpd() + 4)
+        {
+            attack(attacker, defender);
+            if(attacker.isDead() || defender.isDead())
+            {
+                return;
+            }
+        }
+        
+        else if(defender.getTotalSpd() >= attacker.getTotalSpd()+ 4)
+        {
+            attack(defender, attacker);
+            if(attacker.isDead() || defender.isDead())
+            {
+                return;
+            }
+        }
+        
+        //Other stuff might happen, so don't remove those returns.
+        
+        
+    }
+    
+    
+    /**
+     * Determines if a can even hit b
+     * @param a The unit attacking. Not necessarily attacker
+     * @param b The unit defending. Not necessarily defender
+     * @return If an attack can be made.
+     */
+    public boolean canAttack(Unit a, Unit b)
+    {
+        //TODO Automatic weapon selection if at the wrong range.
+        int dist = a.distanceTo(b);
+        if(a.getEquppedWeapon().getMinRange() <= dist && a.getEquppedWeapon().getMaxRange() >= dist)
+            return true;
+        else
+            return false;
+    }
     
     /**
      * Simulates 1 attack, from a to b
@@ -158,6 +316,8 @@ public class FightUI extends UI
             
             //Take Damage
             b.takeDamage(damage);
+            
+            a.getEquppedWeapon().dull();
         }
         
         return hit;

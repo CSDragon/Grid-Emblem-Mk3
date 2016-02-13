@@ -51,6 +51,7 @@ public class MapScene extends Scene
     private ArrayList<Unit> attackableUnits;
     private int attackableUnitsIndex;
     private AI ai;
+    boolean fightMode;
     
 
     //UI Elements
@@ -118,26 +119,28 @@ public class MapScene extends Scene
         //TEST: Don't do this in the final
         unitList.add(new Unit(0, 6, 1));
         unitList.get(0).placeOnGrid(10, 7);
-        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         
         unitList.add(new Unit(1, 6, 1));
         unitList.get(1).placeOnGrid(1, 7);
-        unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         
         unitList.add(new Unit(0, 6, 1));
         unitList.get(2).placeOnGrid(5, 7);
-        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 2, 0, 0 ,0, 1, 2));
-        unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 2, 0, 0 ,0, 2, 2));
-        unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 2, 0, 0 ,0, 1, 1));
+        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
+        unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
         
         unitList.add(new Unit(1, 6, 1));
         unitList.get(3).placeOnGrid(2, 8);
-        unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         
         unitList.add(new Unit(1, 6, 1));
         unitList.get(4).placeOnGrid(2, 6);
-        unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 2, 0, 0 ,0, 1, 2));
+        unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         getAllEnemyRanges();
+        
+        fightMode = false;
         
         numFactions = 2;
 
@@ -485,6 +488,9 @@ public class MapScene extends Scene
             
             //animate cursor
             cursor.Animate();
+            
+            //UI
+            fightUI.renderFrame();
                        
             
             //always do this.
@@ -1008,7 +1014,7 @@ public class MapScene extends Scene
         controlState = 8;
         selectedUnit.equipWeapon(weaponSelect.getWeapon());
         weaponSelect.end();
-        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex));
+        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightMode);
         mvArrow.end();
     }
     
