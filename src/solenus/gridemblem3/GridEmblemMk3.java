@@ -53,7 +53,6 @@ public class GridEmblemMk3
     {
         checkGraphicSettings();
         
-        // TODO code application logic here
         gameFrame = new JFrame("Grid Emblem");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setUndecorated(windowState);
@@ -69,6 +68,7 @@ public class GridEmblemMk3
         gameFrame.setVisible(true);
         
         im = new InputManager();
+        im.checkKeybindSettings();
         
         gameFrame.addKeyListener(im);
         gameFrame.setLocationRelativeTo(null);
@@ -275,6 +275,11 @@ public class GridEmblemMk3
             System.exit(-1);
         }
         
+    }
+    
+    public static void saveKeybinds()
+    {
+        im.saveKeybinds();
     }
     
 
