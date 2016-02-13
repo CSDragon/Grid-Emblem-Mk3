@@ -44,6 +44,8 @@ public class Unit extends Actor
     private boolean hasMoved;
     
     //Combat Stats
+    int level;
+    
     private double hp;
     private double str;
     private double mag;
@@ -217,6 +219,8 @@ public class Unit extends Actor
         def += defup;
         res += resup;
         luck += luckup;
+        
+        level++;
     }
     
     /**
@@ -296,9 +300,23 @@ public class Unit extends Actor
     {
         return (curHP <= 0);
     }
+    
+    /**
+     * Using brave weapon? Has adept? Calcluate it here. TODO
+     * @return The number of attacks this unit does this round.
+     */
+    public int numAttacks()
+    {
+        return 1;
+    }
 
     
     //<editor-fold desc="getters and setters">
+    
+    public int getLevel()
+    {
+        return level;
+    }
     
     /**
      * @return name

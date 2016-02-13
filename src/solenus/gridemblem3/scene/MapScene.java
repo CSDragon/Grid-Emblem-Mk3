@@ -127,7 +127,7 @@ public class MapScene extends Scene
         
         unitList.add(new Unit(0, 6, 1));
         unitList.get(2).placeOnGrid(5, 7);
-        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
         unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
         unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
         
@@ -425,6 +425,11 @@ public class MapScene extends Scene
                     switch(fightUI.runFrame())
                     {
                         case 0:
+                            cst8to1();
+                            break;
+                        case 1://TODO Kill a unit
+                        case 2:
+                        case 3:
                             cst8to1();
                             break;
                     }

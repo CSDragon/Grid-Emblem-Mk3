@@ -19,6 +19,11 @@ import solenus.gridemblem3.item.Weapon;
 
 public class FightUI extends UI
 {
+    public static final int NOBODYDIED = 0;
+    public static final int ATTACKERDIED = 1;
+    public static final int DEFENDERDIED = 2;
+    public static final int BOTHDIED = 3;
+    
     private boolean fastForwardFlag;
     private boolean graphics;
     
@@ -26,6 +31,8 @@ public class FightUI extends UI
     private Unit defender;
     
     private int controlState;
+    private int nextState;
+    private int numAttacks;
     private int remainingFrames;
     
     private BufferedImage attackerSprite;
@@ -33,20 +40,38 @@ public class FightUI extends UI
     
     private int attackerHitFrames;
     private int attackerMissFrames;
-    private int attackerCritSpecialFrames;
+    private int attackerCritFrames;
+    private int attackerHitDamagePoint;
+    private int attackerMissDamagePoint;
+    private int attackerCritDamagePoint;
     
     private int defenderHitFrames;
     private int defenderMissFrames;
-    private int defenderCritSpecialFrames;
+    private int defenderCritFrames;
+    private int defenderHitDamagePoint;
+    private int defenderMissDamagePoint;
+    private int defenderCritDamagePoint;
     
     private int noGraphicFrames = 16;
-    private int halfNoGraphicFrames = 8;
+    private int noGraphicDamagePoint = 8;
     
+    //Control flags
+    private int attackPhase; //0 = nothing yet, 1 = attacker, 2 = defender, 3 = speed
     private boolean attackerTurn;
     private boolean defenderTurn;
+    private boolean attackerDied;
+    private boolean defenderDied;
+    private int attackerXP;
+    private int defenderXP;
+    private int returnValue;
+    
+    
     
     private double xDir;
     private double yDir;
+    
+    private int attackResult; //0 = miss, 1 = hit, 2 = crit
+    private int attackDamage;
 
     private Map map;
     
@@ -87,7 +112,11 @@ public class FightUI extends UI
             States:
                 0) Startup (Load resorces)
                 1) End
-                2) First attack.
+                2) Determine who should attack next, and set up for it.
+                3) Attack
+                4) Animate
+                5) Death check
+                6) Unit Death
             */
             switch(controlState)
             {
@@ -96,11 +125,22 @@ public class FightUI extends UI
                     break;
                 case 1:
                     cleanup();
-                    return 0;
+                    return returnValue;
+                    
                 case 2:
-                    cst2to3();
+                    startAttack();
                     break;
                 case 3:
+                    combat();
+                    break;
+                case 4:
+                    watchAnimation();
+                    break;
+                case 5:
+                    deathCheck();
+                    break;
+                case 6:
+                    killUnit();
                     break;
             }
         }
@@ -125,7 +165,7 @@ public class FightUI extends UI
             {
                 if(attackerTurn)
                 {
-                    if(remainingFrames > halfNoGraphicFrames)
+                    if(remainingFrames > noGraphicDamagePoint)
                         attacker.moveVisually(attacker.getX() + xDir*(.05*(double)(remainingFrames-noGraphicFrames)), attacker.getY() + yDir*(.05*(remainingFrames-noGraphicFrames)));
                     else
                         attacker.moveVisually(attacker.getX() - xDir*.05*remainingFrames, attacker.getY() - yDir*.05*remainingFrames);
@@ -133,7 +173,7 @@ public class FightUI extends UI
                 
                 if(defenderTurn)
                 {
-                    if(remainingFrames > halfNoGraphicFrames)
+                    if(remainingFrames > noGraphicDamagePoint)
                         defender.moveVisually(defender.getX() - xDir*(.05*(remainingFrames-noGraphicFrames)), defender.getY() - yDir*(.05*(remainingFrames-noGraphicFrames)));
                     else
                         defender.moveVisually(defender.getX() + xDir*.05*remainingFrames, defender.getY() + yDir*.05*remainingFrames);
@@ -162,6 +202,8 @@ public class FightUI extends UI
         }
     }
     
+    //</editor-fold>
+
     /**
      * Start up a fight
      * @param a The attacker
@@ -173,12 +215,20 @@ public class FightUI extends UI
         super.start();
         attacker = a;
         defender = d;
-        remainingFrames = 1;
         graphics = mode;
+        
+        //Clean the flags.
+        numAttacks = 0;
+        
+        attackPhase = 0;
+        attackerTurn = false;
+        defenderTurn = false;
+        attackerDied = false;
+        defenderDied = false;
+        attackerXP = 0;
+        defenderXP = 0;
+        returnValue = NOBODYDIED;
     }
-    
-
-    //</editor-fold>
     
     public void loadRecorces()
     {
@@ -206,24 +256,210 @@ public class FightUI extends UI
         }
     }
     
+    /**
+     * Cleans up, and awards XP TODO
+     */
     public void cleanup()
     {
+        System.out.println(returnValue);
         //Just in case they're not back where they belong.
         if(!graphics)
         {
             attacker.moveInstantly(attacker.getCoord());
             defender.moveInstantly(defender.getCoord());
         }
+        
+        //Award XP
+        if(attacker.getTeam() == 0)
+        {
+            int xp = 10;
+            if(defenderDied)
+                xp+=20;
+            attackerXP = xpMath(attacker, defender, xp);
+        }
+        
+        if(defender.getTeam() == 0)
+        {
+            int xp = 10;
+            if(attackerDied)
+                xp+=20;
+            defenderXP = xpMath(defender, attacker, xp);
+        }
     }
     
+    /**
+     * Determines how much XP a unit should get
+     * @param a The attacking unit
+     * @param b The defnding unit
+     * @param xp The base XP for the action
+     * @return The amount of XP Unit a gets
+     */
+    public int xpMath(Unit a, Unit b, int xp)
+    {
+        float ret = xp;
+        
+        //If A is overleveled (more than 3 higher), reduce by 10% for each level too hight.
+        if(a.getLevel() > b.getLevel()+3)
+        {
+            ret = ret - (a.getLevel() - b.getLevel() - 3)*xp*0.1f;
+            if(ret < 1)
+                ret = 1;
+        }
+        //if A is underleveled give it 20% more xp per level it was weaker than b.
+        else if(a.getLevel() < b.getLevel())
+            ret = ret + (a.getLevel() - b.getLevel())*xp*.2f;
+        return (int)ret;
+    }
+
     
     //<editor-fold desc="controlState Methods">
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
     
-    public void cst2to3()
+    /**
+     * Starts up the attack.
+     */
+    public void startAttack()
     {
-        controlState = 1;//I know.
+        //Nobody has attacked yet. The attacker goes first
+        if(attackPhase == 0)
+        {
+            attackPhase = 1;
+            attackerTurn = true;
+            setUpAttack(attacker);
+            controlState = 3;
+        }
+        
+        //Now it's the defender's turn
+        else if(attackPhase == 1)
+        {
+            attackPhase = 2;
+            attackerTurn = false;
+            defenderTurn = true;
+            setUpAttack(defender);
+            controlState = 3;
+        }
+        
+        //Now the speed round
+        else if(attackPhase == 2)
+        {
+            attackPhase = 3;
+            int speedDef = attacker.getTotalSpd() - defender.getTotalSpd();
+            
+            //the attacker is fast enough. FIGHT
+            if (speedDef >= 4)
+            {
+                attackerTurn = true;
+                setUpAttack(attacker);
+                controlState = 3;
+            }
+            
+            //the defender is fast enough. FIGHT
+            else if(speedDef <= -4)
+            {
+                defenderTurn = true;
+                setUpAttack(defender);
+                controlState = 3;
+            }
+            
+            //they were the same-ish speed. No more fighting.
+            else
+                controlState = 1;
+        }
+    }
+    
+    /**
+     * Performs the combat and preps the animation
+     */
+    public void combat()
+    {
+        numAttacks--;
+        
+        //Temp holding spots.
+        Unit a = (attackerTurn) ? attacker : defender;
+        Unit b = (attackerTurn) ? defender : attacker;
+        
+        //Perform the attack
+        if(canAttack(a,b))
+        {
+            attack(a,b);
+        }
+        
+        //Set how long the animation is gonna last
+        if(!graphics)
+            remainingFrames = noGraphicFrames;
+        else
+        {
+            if(attackerTurn)
+                switch(attackResult)
+                {
+                    case 0:
+                        remainingFrames = attackerMissFrames;
+                    case 1:
+                        remainingFrames = attackerHitFrames;
+                    case 2:
+                        remainingFrames = attackerCritFrames;
+                }
+            else
+                switch(attackResult)
+                {
+                    case 0:
+                        remainingFrames = defenderMissFrames;
+                    case 1:
+                        remainingFrames = defenderHitFrames;
+                    case 2:
+                        remainingFrames = defenderCritFrames;
+                }
+            
+        }
+        
+        //and move on to the animation.
+        controlState = 4;
+    }
+    
+    /**
+     * Makes crud wait for the animation to play out.
+     */
+    public void watchAnimation()
+    {
+        //Decrement the number of remaining frames. And when we're out of remaining frames move on.
+        remainingFrames--;
+        if(remainingFrames == 0)
+            controlState = 5;
+    }
+    
+    /**
+     * Checks if anything died.
+     */
+    public void deathCheck()
+    {
+        attackerDied = attacker.isDead();
+        defenderDied = defender.isDead();
+        
+        //if either have died, cut the battle short.
+        if(attackerDied || defenderDied)
+            controlState = 6;
+        
+        //If we have no more attacks, move on to the next phase
+        else if(numAttacks == 0)
+            controlState = 2;
+        //If we do have attacks, go back to fighting.
+        else
+            controlState = 3;
+    }
+    
+    public void killUnit()
+    {
+        if(attackerDied && defenderDied)
+            returnValue = BOTHDIED;
+        else if(attackerDied)
+            returnValue = ATTACKERDIED;
+        else if(defenderDied)
+            returnValue = DEFENDERDIED;
+        else
+            returnValue = NOBODYDIED;
+        
+        controlState = 1;
     }
     
     //</editor-fold>
@@ -231,46 +467,21 @@ public class FightUI extends UI
     
     //<editor-fold desc="Combat Mechanics">
     
-    /**
-     * Simulates a battle between attacker and defender.
-     */
-    public void combat()
+    
+    public void setUpAttack(Unit a)
     {
-        attack(attacker, defender);
-        if(attacker.isDead() || defender.isDead())
-        {
-            return;
-        }
+        numAttacks = a.numAttacks();
         
-        attack(defender, attacker);
-        if(attacker.isDead() || defender.isDead())
-        {
-            return;
-        }
-        
-        if(attacker.getTotalSpd() >= defender.getTotalSpd() + 4)
-        {
-            attack(attacker, defender);
-            if(attacker.isDead() || defender.isDead())
-            {
-                return;
-            }
-        }
-        
-        else if(defender.getTotalSpd() >= attacker.getTotalSpd()+ 4)
-        {
-            attack(defender, attacker);
-            if(attacker.isDead() || defender.isDead())
-            {
-                return;
-            }
-        }
-        
-        //Other stuff might happen, so don't remove those returns.
-        
-        
+        controlState = nextState;
     }
     
+    public void waitForAnimations()
+    {
+        remainingFrames--;
+        
+        if(remainingFrames <= 0)
+            controlState = nextState;
+    }
     
     /**
      * Determines if a can even hit b
@@ -282,47 +493,84 @@ public class FightUI extends UI
     {
         //TODO Automatic weapon selection if at the wrong range.
         int dist = a.distanceTo(b);
-        if(a.getEquppedWeapon().getMinRange() <= dist && a.getEquppedWeapon().getMaxRange() >= dist)
-            return true;
-        else
-            return false;
+        return (a.getEquppedWeapon().getMinRange() <= dist && a.getEquppedWeapon().getMaxRange() >= dist);
     }
     
     /**
      * Simulates 1 attack, from a to b
      * @param a The unit attacking. Not necessarily attacker
      * @param b The unit defending. Not necessarily defender
-     * @return if the attack hit or not
      */
-    public boolean attack(Unit a, Unit b)
+    public void attack(Unit a, Unit b)
     {
-        //Determine Hit Rate, Evasion, and Weapon Advantage.
-        int hitRate = a.getTotalSkill()*2 + a.getTotalLuck() + a.getEquppedWeapon().getHit();
-        int evade = b.getTotalSpd()*2 + b.getTotalLuck() + map.getTerrainAtPoint(b.getCoord()).getEvade();
-        int weaponAdvantage = weaponAdvantageAccuracy(a.getEquppedWeapon(), b.getEquppedWeapon());
-        
         //Get the RNG
         int d100 = (int)Math.ceil(Math.random()*100);
         
         //Do we hit?
-        boolean hit = d100 < (hitRate + weaponAdvantage - evade);
+        boolean hit = d100 < hitChance(a, b, map);
         
         if(hit)
         {
+            //Get the RNG
+            d100 = (int)Math.ceil(Math.random()*100);
+            
             //Deterimine raw damage
-            int damage = determineDamage(a, b);
+            attackDamage = determineDamage(a, b);
             
             //(Insert Damage Resist abilities)
             
+            //Do we crit?
+            boolean crit = d100 < critChance(a,b);
+
+            if(crit)
+            {
+                attackDamage = attackDamage*3;
+                attackResult = 2; 
+            }
+            
+            else
+            {
+                attackResult = 1;
+            }
+            
             //Take Damage
-            b.takeDamage(damage);
+            b.takeDamage(attackDamage);
             
             a.getEquppedWeapon().dull();
         }
         
-        return hit;
+        //we missed
+        else
+            attackResult = 0;
+        
     }
     
+    /**
+     * Gets the chance a unit can hit its target
+     * @param a The attacking Unit
+     * @param b The defending Unit
+     * @param m The map it takes place on.
+     * @return The hit chance.
+     */
+    public static int hitChance(Unit a, Unit b, Map m)
+    {
+        //Determine Hit Rate, Evasion, and Weapon Advantage.
+        int hitRate = a.getTotalSkill()*2 + a.getTotalLuck() + a.getEquppedWeapon().getHit();
+        int evade = b.getTotalSpd()*2 + b.getTotalLuck() + m.getTerrainAtPoint(b.getCoord()).getEvade();
+        int weaponAdvantage = weaponAdvantageAccuracy(a.getEquppedWeapon(), b.getEquppedWeapon());
+        
+        return(hitRate + weaponAdvantage - evade);
+    }
+    
+    public static int critChance(Unit a, Unit b)
+    {
+        //Determine crit chance
+        int critRate = a.getEquppedWeapon().getCrit() + a.getTotalSkill()/2;
+        int avoid = b.getTotalLuck();
+        
+        return critRate-avoid;
+    }
+
     
     /**
      * Determines the amount of damage

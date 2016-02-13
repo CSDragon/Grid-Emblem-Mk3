@@ -1,0 +1,56 @@
+Attacker Fights
+	Animate
+		Did anyone die?
+		Yes
+			goto 48
+		No		
+			Attacker still has attacks?
+			Yes
+				Goto 1
+			No
+				Goto 12
+Defender Fights
+	Animate
+		Did anyone die?
+		Yes
+			End
+		No
+			Defender still has attacks?
+			Yes
+				Goto 12
+			No
+				Goto 23
+Who gets the speed bonus?
+Attacker
+	Attacker Fights
+		Animate
+			Did anyone die?
+			Yes
+				goto 48
+			No 
+				Attacker still has attacks?
+				yes
+					Goto 25
+				no
+					goto x
+Defender
+	Defender Fights
+		Animate
+			Did anyone die?
+			Yes
+				goto 48
+			No
+				Defender still ahs attacks?
+				yes
+					goto 37
+				no
+					goto 49
+Animate death
+Clean up
+	Grant XP
+	
+
+					
+			
+			
+					
