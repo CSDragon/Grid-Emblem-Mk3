@@ -125,6 +125,17 @@ public abstract class GridRenderable
     }
     
     /**
+     * Moves the renderable only visibly. Not actually.
+     * @param _x The x location
+     * @param _y The y location
+     */
+    public void moveVisually(double _x, double _y)
+    {
+        xCur = _x;
+        yCur = _y;
+    }
+    
+    /**
      * Render the sprite based on the camera
      * @param g2 the graphics
      * @param c  the camera

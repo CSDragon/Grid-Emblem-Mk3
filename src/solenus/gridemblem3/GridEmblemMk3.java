@@ -5,7 +5,6 @@
  */
 package solenus.gridemblem3;
 
-import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import solenus.gridemblem3.scene.SceneManager;
@@ -26,7 +25,7 @@ public class GridEmblemMk3
     //the max ammount of gameframes the game can process without rendering is 5. After that it MUST render. Giving a theoretic minimum of 12fps.
     //though, if it's having trouble processing the gamestate good gracious it's gonna have trouble rendering.
     private static final int MAX_FRAMESKIP = 5; 
-    private static final double timeBetweenFrames = 1000/60.0;
+    private static final double timeBetweenFrames = 1000000000/60.0;
     
     private static JFrame gameFrame;
     private static SceneManager sceneControl;
@@ -88,7 +87,7 @@ public class GridEmblemMk3
     public static void runGame()
     {
         //Set up
-        double nextGameTick = System.currentTimeMillis();
+        long nextGameTick = System.nanoTime();
         int loops = 0;
         
         
@@ -98,7 +97,7 @@ public class GridEmblemMk3
             
             
             //If it's been 16.6666 ms since the last game tick happened, advance the game
-            if(System.currentTimeMillis() >= nextGameTick)
+            if(System.nanoTime() >= nextGameTick)
             {
                 //Input
                 im.gameStep();

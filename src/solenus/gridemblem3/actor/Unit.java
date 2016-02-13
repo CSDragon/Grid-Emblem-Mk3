@@ -224,6 +224,8 @@ public class Unit extends Actor
     public void takeDamage(int damage)
     {
         curHP -= damage;
+        if (curHP < 0)
+            curHP = 0;
     }
     
     /**
@@ -515,8 +517,6 @@ public class Unit extends Actor
     {
         return bonusMove;
     }
-    
-    
     
     
     /**

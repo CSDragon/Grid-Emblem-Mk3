@@ -28,7 +28,7 @@ public class Terrain
     private int mountCost;
     private int airCost;
         
-    private int avoid;
+    private int evade;
     private int def;
     private int res;
     
@@ -57,7 +57,7 @@ public class Terrain
             landCost = Integer.decode(in.readLine().substring(20));
             mountCost = Integer.decode(in.readLine().substring(23));
             airCost = Integer.decode(in.readLine().substring(19));
-            avoid = Integer.decode(in.readLine().substring(7));
+            evade = Integer.decode(in.readLine().substring(7));
             def = Integer.decode(in.readLine().substring(9));
             res = Integer.decode(in.readLine().substring(12));
             specialEffects = in.readLine().substring(17);
@@ -121,6 +121,30 @@ public class Terrain
     public String getName()
     {
         return name;
+    }
+
+    /**
+     * @return the evade
+     */
+    public int getEvade() 
+    {
+        return evade;
+    }
+
+    /**
+     * @return the def
+     */
+    public int getDef() 
+    {
+        return def;
+    }
+
+    /**
+     * @return the res
+     */
+    public int getRes()
+    {
+        return res;
     }
     
 }

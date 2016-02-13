@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.gamemap.Map;
+import solenus.gridemblem3.item.Weapon;
 
 /**
  *
@@ -23,16 +25,17 @@ public class FightUI extends UI
     private Unit attacker;
     private Unit defender;
     
-    int remainingFrames;
+    private int controlState;
+    private int remainingFrames;
     
     private BufferedImage attackerSprite;
     private BufferedImage defenderSprite;
 
-
+    private Map map;
     
-    public FightUI()
+    public FightUI(Map m)
     {
-        
+        map = m;
     }
     
     
@@ -63,13 +66,24 @@ public class FightUI extends UI
         //always check this
         if(active)
         {
-            //DUMMY TODO
-            defender.takeDamage(determineDamage(attacker, defender));
-            attacker.takeDamage(determineDamage(defender, attacker));
-            remainingFrames--;
-            
-            if(remainingFrames == 0)
-                return 0;
+            /*
+            States:
+                0) Startup (Load resorces)
+                1) Determine all damage
+                2) Animations
+                3) End
+            */
+            switch(controlState)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    return 0;
+            }
         }
         
         return -1;
@@ -98,10 +112,6 @@ public class FightUI extends UI
         }
     }
     
-    
-    //</editor-fold>
-    
-    
     /**
      * Start up a fight
      * @param a The attacker
@@ -113,6 +123,44 @@ public class FightUI extends UI
         attacker = a;
         defender = d;
         remainingFrames = 1;
+    }
+    
+
+    //</editor-fold>
+    
+    //<editor-fold desc="Combat Mechanics">
+    
+    /**
+     * Simulates 1 attack, from a to b
+     * @param a The unit attacking. Not necessarily attacker
+     * @param b The unit defending. Not necessarily defender
+     * @return if the attack hit or not
+     */
+    public boolean attack(Unit a, Unit b)
+    {
+        //Determine Hit Rate, Evasion, and Weapon Advantage.
+        int hitRate = a.getTotalSkill()*2 + a.getTotalLuck() + a.getEquppedWeapon().getHit();
+        int evade = b.getTotalSpd()*2 + b.getTotalLuck() + map.getTerrainAtPoint(b.getCoord()).getEvade();
+        int weaponAdvantage = weaponAdvantageAccuracy(a.getEquppedWeapon(), b.getEquppedWeapon());
+        
+        //Get the RNG
+        int d100 = (int)Math.ceil(Math.random()*100);
+        
+        //Do we hit?
+        boolean hit = d100 < (hitRate + weaponAdvantage - evade);
+        
+        if(hit)
+        {
+            //Deterimine raw damage
+            int damage = determineDamage(a, b);
+            
+            //(Insert Damage Resist abilities)
+            
+            //Take Damage
+            b.takeDamage(damage);
+        }
+        
+        return hit;
     }
     
     
@@ -128,10 +176,10 @@ public class FightUI extends UI
         switch(a.getEquppedWeapon().getStrOrMag())
         {
             case 0:
-                a.getStr();
+                attack += a.getTotalStr();
                 break;
             case 1:
-                a.getMag();
+                attack += a.getTotalMag();
                 break;
             // case other? What else do we need? Half/half?
         }
@@ -143,18 +191,41 @@ public class FightUI extends UI
             case 1:
             case 2:
             case 3:
-                defense = (int)b.getDef();
+                defense = (int)b.getTotalDef();
                 break;
             case 4:
             case 5:
             case 6:
-                defense = (int)b.getRes();
+                defense = (int)b.getTotalRes();
                 break;
         }
         
         return attack - defense;
-        
     }
+    
+    /**
+     * Determines the weapon triangle advantage of two weapons. TODO
+     * @param a The attacker's weapon
+     * @param b The defender's weapon
+     * @return The bonus accuracy the attacker gets;
+     */
+    public static int weaponAdvantageAccuracy(Weapon a, Weapon b)
+    {
+        return 0;
+    }
+    
+    /**
+     * Determines the weapon triangle advantage of two weapons. TODO
+     * @param a The attacker's weapon
+     * @param b The defender's weapon
+     * @return The bonus accuracy the defender gets.
+     */
+    public static int weaponAdvantageDamage(Weapon a, Weapon b)
+    {
+        return 0;
+    }
+    
+    //</editor-fold>
     
     
 }

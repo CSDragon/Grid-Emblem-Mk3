@@ -101,7 +101,7 @@ public class MapScene extends Scene
         mvArrow = new MovementArrow(cursor, map);
         unitActionUI = new UnitActionMenu();
         weaponSelect = new WeaponSelectionMenu();
-        fightUI = new FightUI();
+        fightUI = new FightUI(map);
         systemAction = new SystemActionMenu();
         
         try
