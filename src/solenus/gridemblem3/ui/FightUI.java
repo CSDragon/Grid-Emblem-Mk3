@@ -213,6 +213,7 @@ public class FightUI extends UI
     public void start(Unit a, Unit d, boolean mode)
     {
         super.start();
+        controlState = 0;
         attacker = a;
         defender = d;
         graphics = mode;
@@ -261,7 +262,6 @@ public class FightUI extends UI
      */
     public void cleanup()
     {
-        System.out.println(returnValue);
         //Just in case they're not back where they belong.
         if(!graphics)
         {
@@ -635,5 +635,17 @@ public class FightUI extends UI
     
     //</editor-fold>
     
+    //<editor-fold desc="getters and setters">
     
+    public Unit getAttacker()
+    {
+        return attacker;
+    }
+    
+    public Unit getDefender()
+    {
+        return defender;
+    }
+    
+    //</editor-fold>
 }

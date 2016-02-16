@@ -16,20 +16,23 @@ TODOs
 		checkCommands
 	
 	FightUI:
-		fight
+		Graphics
+		
+		
 	
 	AI: 
 		Everything
 	
 	
 Current TODO Stack:
-	
+	No Graphcis fight UI
 		
 
 BUGS:
 	Can't remove units from selectedEnemyRange
 	Ally move range doesn't look good enough
 	Upleft into an enemy unit, the straight up (all within areas you could normally reach) causes the movement arrow to go straight through the enemy unit. (Fix diagonals)
+	When determining which enemies are in range, the game only checks the equipped weapon.
 
 	
 Fixed Bugs:

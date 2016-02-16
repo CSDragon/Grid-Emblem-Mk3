@@ -6,6 +6,7 @@
 package solenus.gridemblem3.scene;
 
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -40,6 +41,7 @@ public class MapScene extends Scene
     private Camera camera;
     private ArrayList<Actor> actorList;
     private ArrayList<Unit> unitList;
+    private ArrayList<Unit> dieingUnits;
     
     
     //game control
@@ -52,6 +54,7 @@ public class MapScene extends Scene
     private int attackableUnitsIndex;
     private AI ai;
     boolean fightMode;
+    private int animationFrames;
     
 
     //UI Elements
@@ -90,6 +93,7 @@ public class MapScene extends Scene
         camera = new Camera(cursor.getX(), cursor.getY());
         actorList = new ArrayList<>();
         unitList = new ArrayList<>();
+        dieingUnits = new ArrayList<>();
         ai = new AI(unitList);
         
         //range objects
@@ -118,25 +122,25 @@ public class MapScene extends Scene
         
         //TEST: Don't do this in the final
         unitList.add(new Unit(0, 6, 1));
-        unitList.get(0).placeOnGrid(10, 7);
+        unitList.get(0).placeOnGrid(15, 7);
         unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         
         unitList.add(new Unit(1, 6, 1));
-        unitList.get(1).placeOnGrid(1, 7);
+        unitList.get(1).placeOnGrid(6, 7);
         unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         
         unitList.add(new Unit(0, 6, 1));
-        unitList.get(2).placeOnGrid(5, 7);
+        unitList.get(2).placeOnGrid(10, 7);
         unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
         unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
         unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
         
         unitList.add(new Unit(1, 6, 1));
-        unitList.get(3).placeOnGrid(2, 8);
+        unitList.get(3).placeOnGrid(7, 8);
         unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         
         unitList.add(new Unit(1, 6, 1));
-        unitList.get(4).placeOnGrid(2, 6);
+        unitList.get(4).placeOnGrid(7, 7);
         unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         getAllEnemyRanges();
         
@@ -169,8 +173,8 @@ public class MapScene extends Scene
                 /*  
                     Modes:  1)  Cursor. Moving the cursor around. 
                             2)  Unit Move. Once a unit has been selected, cursor movement.
-                            3)  Unit Action Box. Once a unit has been moved, controling the action box.
-                            4)  System Action Box. When you select nothing
+                            3)  Unit Action UI. Once a unit has been moved, controling the UnitAction UI.
+                            4)  System Action UI. When you select nothing, controlling the SystemAction UI.
                             5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
                             6)  Select enemy to fight
                             7)  Select a weapon to fight with. 
@@ -178,6 +182,8 @@ public class MapScene extends Scene
                             9)  End turn
                             10) Someone else's turn
                             11) Player turn Start
+                            12) Unit death
+                            13) Exp
                 */
                 
                 //cursor mode
@@ -217,7 +223,7 @@ public class MapScene extends Scene
                         if (controlState == 1)
                             cursor.respondControls(im);
                         break;
-                
+                    
                     case 2:
                         //A: When over an available location, move the unit to that location and open the action box
                         if(im.getA() == 1)
@@ -295,8 +301,8 @@ public class MapScene extends Scene
                 /*  
                     Modes:  1)  Cursor. Moving the cursor around. 
                             2)  Unit Move. Once a unit has been selected, cursor movement.
-                            3)  Unit Action Box. Once a unit has been moved, controling the action box.
-                            4)  System Action Box. When you select nothing
+                            3)  Unit Action UI. Once a unit has been moved, controling the UnitAction UI.
+                            4)  System Action UI. When you select nothing, controlling the SystemAction UI.
                             5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
                             6)  Select enemy to fight
                             7)  Select a weapon to fight with. 
@@ -304,9 +310,12 @@ public class MapScene extends Scene
                             9)  End turn
                             10) Someone else's turn
                             11) Player turn Start
+                            12) Unit death
+                            13) Exp
                 */
                 
                 /*
+                    Cursor Mode
                     Active Objects: Cursor
                     Camera Follows: Cursor
                 */
@@ -315,7 +324,9 @@ public class MapScene extends Scene
                     camera.moveToRenderable(cursor, map);
                     break;
                 
-                /*  Active Objects: Cursor
+                /*
+                    Unit Movement Mode
+                    Active Objects: Cursor
                     Camera Follows: Cursor
                 */
                 case 2:
@@ -325,6 +336,7 @@ public class MapScene extends Scene
                     break;
                 
                 /*
+                    Unit Action UI
                     Active Objects: UnitActionMenu
                     Camera Follows: Cursor
                 */
@@ -349,6 +361,7 @@ public class MapScene extends Scene
                     break;
                     
                 /*
+                    System Action UI
                     Active Objects: SystemActionMenu
                     Camera Follows: Cursor
                 */    
@@ -369,6 +382,7 @@ public class MapScene extends Scene
                     break;
                 
                 /*
+                    Movement animation
                     Active Objects: selectedUnit
                     Camera Follows: selectedUnit
                 */
@@ -391,6 +405,7 @@ public class MapScene extends Scene
                     break;
                 
                 /*
+                    Enemy Selection
                     Active Objects: Cursor
                     Camera Follows: Cursor
                 */
@@ -400,11 +415,12 @@ public class MapScene extends Scene
                     break;
                     
                 /*
+                    Weapon Selection
                     Active Objects: WeaponSelctUI
-                    Camera Follows: Cursor
+                    Camera Follows: SelectedUnit
                 */
                 case 7:
-                    camera.moveToRenderable(cursor, map);
+                    camera.moveToRenderable(selectedUnit, map);
                     switch(weaponSelect.runFrame())
                     {
                         //If B pressed, return to enemy select
@@ -418,24 +434,28 @@ public class MapScene extends Scene
                     break;
                     
                 /*
+                    Battle
                     Active Objects: fightUI
                     Camera Follows: None
                 */
                 case 8:
-                    switch(fightUI.runFrame())
+                    int result = fightUI.runFrame(); //gotta store result so resolveBattle can be passed it regardless of which case it came from.
+                    switch(result)
                     {
                         case 0:
                             cst8to1();
                             break;
-                        case 1://TODO Kill a unit
+                        case 1:
                         case 2:
                         case 3:
-                            cst8to1();
+                            resolveBattle(result);
+                            cst8to12();
                             break;
                     }
                     break;
                     
                 /*
+                    End Turn
                     Active object: None
                     Camera Follows: None
                 */
@@ -444,6 +464,7 @@ public class MapScene extends Scene
                     break;
                     
                 /*
+                    Someone Else's Turn
                     Active object: AI
                     Camera Follows: Cursor
                 */    
@@ -458,12 +479,24 @@ public class MapScene extends Scene
                     break;
                     
                 /*
+                    Player Turn Start
                     Active object: None
                     Camera Follows: None
                 */
                 case 11:
                     cst11to1();
                     break;
+                
+                /*
+                    Dieing Unit
+                    Active object: None
+                    Camera Follows: None
+                */
+                case 12:
+                    if(animationFrames != 0)
+                        animationFrames --;
+                    else
+                        cst12to1();
             }  
         
             
@@ -527,6 +560,15 @@ public class MapScene extends Scene
 
             for (Unit ul : unitList)
                 ul.renderCam(g2, camera);
+            
+            //Draw the dieing units in fade out.
+            if(!dieingUnits.isEmpty())
+            {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (animationFrames/30.0f)));
+                for (Unit dead : dieingUnits)
+                    dead.renderCam(g2, camera);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+            }
 
             cursor.renderCam(g2, camera);
 
@@ -849,6 +891,27 @@ public class MapScene extends Scene
         turn %= numFactions;
     }
     
+    public void resolveBattle(int whoDied)
+    {
+        if(whoDied !=2)
+        {
+            unitList.remove(fightUI.getAttacker());
+            actorList.remove(fightUI.getAttacker());
+            dieingUnits.add(fightUI.getAttacker());
+            
+            //if team == 0, remove from your party.
+        }
+
+        if(whoDied != 1)
+        {
+            unitList.remove(fightUI.getDefender());
+            actorList.remove(fightUI.getDefender());
+            dieingUnits.add(fightUI.getDefender());
+            
+            //if team == 0, remove from your party.
+        }
+    }
+    
     //<editor-fold desc="controlState Methods">
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
@@ -884,6 +947,7 @@ public class MapScene extends Scene
      */
     public void cst2to1()
     {
+        cursor.setVisible(true);
         cursor.moveInstantly(selectedUnit.getX(), selectedUnit.getY());
         cursor.getSprite().sendTrigger("deactivate");
         drawAllyMoveRange = true;
@@ -1017,6 +1081,7 @@ public class MapScene extends Scene
     public void cst7to8()
     {
         controlState = 8;
+        cursor.setVisible(false);
         selectedUnit.equipWeapon(weaponSelect.getWeapon());
         weaponSelect.end();
         fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightMode);
@@ -1029,10 +1094,24 @@ public class MapScene extends Scene
     public void cst8to1()
     {
         controlState = 1;
+        cursor.setVisible(true);
         cursor.moveInstantly(selectedUnit.getCoord());
         cursor.getSprite().sendTrigger("deactivate");
         selectedUnit.endMovement();
         fightUI.end();
+        
+    }
+    
+    public void cst8to12()
+    {
+        //if player character among the dead
+        //Send trigger for player death dialog Dialog
+        
+        controlState = 12;
+        animationFrames = 30;
+        
+        //play sound of unit dieing
+        
         
     }
     
@@ -1072,6 +1151,20 @@ public class MapScene extends Scene
     {
         controlState = 1;
         cursor.setVisible(active);
+    }
+    
+    /**
+     * Removes the dieing units from DieingUnits, removing them from the game.
+     */
+    public void cst12to1()
+    {
+        controlState = 1;
+        cursor.setVisible(true);
+        cursor.moveInstantly(selectedUnit.getCoord());
+        cursor.getSprite().sendTrigger("deactivate");
+        selectedUnit.endMovement();
+        fightUI.end();
+        dieingUnits.clear();
     }
     
     
