@@ -208,7 +208,6 @@ public class UnitActionMenu extends Menu
     public void start(Unit u)
     {
         super.start();
-        cursorLoc = 0;
         selectedUnit = u;
         attackableUnits = null;
         availCommands = null;

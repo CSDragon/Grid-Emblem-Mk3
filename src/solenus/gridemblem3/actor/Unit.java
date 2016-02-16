@@ -62,7 +62,7 @@ public class Unit extends Actor
     private int transportType;
     private int armorType;
     
-    private int bonusHp;
+    private int bonusHP;
     private int bonusStr;
     private int bonusMag;
     private int bonusSpd;
@@ -241,8 +241,8 @@ public class Unit extends Actor
     public void heal(int amt)
     {
         curHP += amt;
-        if(curHP > getTotalHp())
-            curHP = getTotalHp();
+        if(curHP > getTotalHP())
+            curHP = getTotalHP();
     }
 
     //</editor-fold>
@@ -337,9 +337,14 @@ public class Unit extends Actor
     /**
      * @return the hp
      */
-    public double getHp() 
+    public double getHP() 
     {
         return hp;
+    }
+    
+    public int getCurHP()
+    {
+        return curHP;
     }
 
     /**
@@ -410,7 +415,7 @@ public class Unit extends Actor
     /**
      * @return the hpup
      */
-    public double getHpup()
+    public double getHPup()
     {
         return hpup;
     }
@@ -472,11 +477,11 @@ public class Unit extends Actor
     }
 
     /**
-     * @return the bonusHp
+     * @return the bonusHP
      */
-    public int getBonusHp() 
+    public int getBonusHP() 
     {
-        return bonusHp;
+        return bonusHP;
     }
 
     /**
@@ -545,11 +550,11 @@ public class Unit extends Actor
     
     
     /**
-     * @return the totalHp
+     * @return the totalHP
      */
-    public int getTotalHp() 
+    public int getTotalHP() 
     {
-        return (int)(hp+bonusHp);
+        return (int)(hp+bonusHP);
     }
 
     /**

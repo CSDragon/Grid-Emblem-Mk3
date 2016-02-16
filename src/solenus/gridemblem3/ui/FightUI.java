@@ -75,13 +75,13 @@ public class FightUI extends UI
 
     private Map map;
     
-    private FightHealthBarUI chb;
+    //UI elements
+    private FightHealthBarUI attackerHealthBar;
+    private FightHealthBarUI defenderHealthBar;
     
     public FightUI(Map m)
     {
         map = m;
-        
-        chb = new FightHealthBarUI(40,20, 0);
     }
     
     
@@ -201,7 +201,8 @@ public class FightUI extends UI
             }
             else
             {
-                chb.draw(g);
+                attackerHealthBar.draw(g);
+                defenderHealthBar.draw(g);
             }
         }
     }
@@ -233,6 +234,15 @@ public class FightUI extends UI
         attackerXP = 0;
         defenderXP = 0;
         returnValue = NOBODYDIED;
+        
+        
+        int x = attacker.getX() - defender.getX();
+        if(x > 0)
+            x = 1;
+        else
+            x = -1;
+        attackerHealthBar = new FightHealthBarUI(attacker.getTotalHP(), attacker.getCurHP(),  x);
+        defenderHealthBar = new FightHealthBarUI(defender.getTotalHP(), defender.getCurHP(), -x);
     }
     
     public void loadRecorces()

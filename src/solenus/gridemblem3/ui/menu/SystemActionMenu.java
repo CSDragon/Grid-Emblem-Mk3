@@ -122,17 +122,4 @@ public class SystemActionMenu extends Menu
     }
     
     
-    
-    
-    
-     /**
-     * get the UnitActionUI ready to work on a unit.
-     */
-    public void start()
-    {
-        super.start();
-        cursorLoc = 0;
-    }
-    
-    
 }

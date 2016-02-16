@@ -82,6 +82,8 @@ public class FightHealthBarUI extends UI
         controlState = 0;
         
         location = loc*50;
+        if(loc < 0)
+            location -= uiWidth;
     }
     
     /**
@@ -128,16 +130,16 @@ public class FightHealthBarUI extends UI
         //always check this
         if(visible)
         {
-            Rendering.renderAbsolute(ui, g, 0, -200, 0, 0, 1, 1);
+            Rendering.renderAbsolute(ui, g, -location, -200, 0, 0, 1, 1);
             
             //render empty pips
             for(int i = curHP; i<maxHP; i++)
             {
                 //render the top bar
                 if(i<30)
-                   Rendering.renderAbsolute(emptyPip, g, -30 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
+                   Rendering.renderAbsolute(emptyPip, g, -location - 30 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
                 else
-                    Rendering.renderAbsolute(emptyPip, g, -30 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
+                    Rendering.renderAbsolute(emptyPip, g, -location - 30 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
             }
             
             //render full pips
@@ -145,9 +147,9 @@ public class FightHealthBarUI extends UI
             {
                 //render the top bar
                 if(i<30)
-                   Rendering.renderAbsolute(fullPip, g, -30 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
+                   Rendering.renderAbsolute(fullPip, g, -location - 30 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
                 else
-                    Rendering.renderAbsolute(fullPip, g, -30 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
+                    Rendering.renderAbsolute(fullPip, g, -location - 30 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
             }
         }
     }

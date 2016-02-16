@@ -115,4 +115,13 @@ public abstract class Menu extends UI
         bTrigger     = false;
     }
     
+    /**
+     * Starts up the menu
+     */
+    public void start()
+    {
+        super.start();
+        cursorLoc = 0;
+    }
+    
 }
