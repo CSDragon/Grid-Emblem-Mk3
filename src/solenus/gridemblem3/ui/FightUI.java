@@ -329,6 +329,21 @@ public class FightUI extends UI
             ret = ret + (a.getLevel() - b.getLevel())*xp*.2f;
         return (int)ret;
     }
+    
+    /**
+     * Decides who gets xp. This model is a bit limited, as only one unit can get XP in a fight, but only player units should get XP,
+     * there should be no XP in multiplayer, and player units should not attack other player units.
+     * @return Weather attacker, defender or neither get XP.
+     */
+    public int isXPAwarded()
+    {
+        if(attackerXP > 0 && attacker.getTeam() == 0 && (returnValue != 1 && returnValue != 3))
+            return 1;
+        if(defenderXP > 0 && defender.getTeam() == 0 && (returnValue != 2 && returnValue != 3))
+            return 2;
+        
+        return 0;
+    }
 
     
     //<editor-fold desc="controlState Methods">
@@ -560,7 +575,6 @@ public class FightUI extends UI
             //Take Damage
             b.takeDamage(attackDamage);
             
-            //TEST
             if(attackerTurn)
                 defenderHealthBar.damage(attackDamage);
             else
@@ -675,6 +689,21 @@ public class FightUI extends UI
     public Unit getDefender()
     {
         return defender;
+    }
+    
+    public int getAttackerXP()
+    {
+        return attackerXP;
+    }
+    
+    public int getDefenderXP()
+    {
+        return defenderXP;
+    }
+    
+    public int getWhoDied()
+    {
+        return returnValue;
     }
     
     //</editor-fold>

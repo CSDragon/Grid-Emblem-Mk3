@@ -135,9 +135,9 @@ public class UnitActionMenu extends Menu
             {
                 Rendering.renderAbsolute(top, g, 200, 0, width, height, 2, 1);
                 for(int i = 1; i < numCommands-1; i++)
-                    Rendering.renderAbsolute(mid, g, 200, -height*i, width, height, 2, 1);
-                Rendering.renderAbsolute(bot, g, 200, -height*(numCommands-1), width, height, 2, 1);
-                Rendering.renderAbsolute(cursor, g, 200, -height*cursorLoc, width, height, 2, 1);
+                    Rendering.renderAbsolute(mid, g, 200, height*i, width, height, 2, 1);
+                Rendering.renderAbsolute(bot, g, 200, height*(numCommands-1), width, height, 2, 1);
+                Rendering.renderAbsolute(cursor, g, 200, height*cursorLoc, width, height, 2, 1);
             }
             
             else
@@ -146,7 +146,7 @@ public class UnitActionMenu extends Menu
                 Rendering.renderAbsolute(cursor, g, 200, 0, width, height, 2, 1);
             }
             
-            int textOffset = 11;
+            int textOffset = -11;
             
             //set font
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -156,13 +156,13 @@ public class UnitActionMenu extends Menu
             if(attackFlag)
             {
                 Rendering.renderTextAbsolute("Attack", g, 190, textOffset, width, 0, 2, 1, 0);
-                textOffset -= height;
+                textOffset += height;
             }
             
             if(itemFlag)
             {
                 Rendering.renderTextAbsolute("Item", g, 190, textOffset, width, 0, 2, 1, 0);
-                textOffset -= height;
+                textOffset += height;
             }
             
                 Rendering.renderTextAbsolute("Wait", g, 190, textOffset, width, 0, 2, 1, 0);

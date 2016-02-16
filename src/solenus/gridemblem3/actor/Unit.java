@@ -45,6 +45,7 @@ public class Unit extends Actor
     
     //Combat Stats
     int level;
+    int xp;
     
     private double hp;
     private double str;
@@ -208,7 +209,9 @@ public class Unit extends Actor
     
     //<editor-fold desc="stat mechanics">
     
-    //level up
+    /**
+     * Levels up the unit.
+     */
     public void levelUp()
     {
         hp += hpup;
@@ -221,6 +224,18 @@ public class Unit extends Actor
         luck += luckup;
         
         level++;
+        xp -= 100;
+    }
+    
+    /**
+     * Makes the unit receive XP
+     * @param xpReceived The XP the unit received.
+     */
+    public void receiveXP(int xpReceived)
+    {
+        xp += xpReceived;
+        while(xp >= 100)
+            levelUp();
     }
     
     /**
@@ -316,6 +331,11 @@ public class Unit extends Actor
     public int getLevel()
     {
         return level;
+    }
+    
+    public int getXP()
+    {
+        return xp;
     }
     
     /**

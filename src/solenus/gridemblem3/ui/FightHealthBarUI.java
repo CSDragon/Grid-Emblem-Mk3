@@ -26,7 +26,6 @@ public class FightHealthBarUI extends UI
     
     private int maxHP;
     private int curHP;
-    private int lastHP;
     private int tempHP;
     private int controlState;
     private int framesLeft;
@@ -62,7 +61,7 @@ public class FightHealthBarUI extends UI
             //load sheet image
             spriteSheet = ImageIO.read(new File("assets/ui/FightHealthBarUISheet.png"));
         
-            //load animations
+            //load info
             BufferedReader in = new BufferedReader(new FileReader("assets/ui/FightHealthBarUIAnimation.txt"));
             
             //get sprite dimensions
@@ -104,31 +103,29 @@ public class FightHealthBarUI extends UI
                 1) Idle
                 2) Animating
             */
-            if(controlState == 2)
+            switch(controlState)
             {
-                if(framesLeft % FRAMESPERTIC == 0)
-                    tempHP--;
-                framesLeft--;
-                if(framesLeft == 0)
-                    controlState = 1;
+                case 2:
+                    if(framesLeft % FRAMESPERTIC == 0)
+                        tempHP--;
+                    framesLeft--;
+                    if(framesLeft == 0)
+                        controlState = 1;
+
+                    return false;
                 
-                return false;
+                case 3:
+                    if(framesLeft % FRAMESPERTIC == 0)
+                        tempHP++;
+                    framesLeft--;
+                    if(framesLeft == 0)
+                        controlState = 1;
             }
         }
         
         return true;
     }
     
-    /**
-     * renders the scene.
-     */
-    public void renderFrame()
-    {   
-        //always check this
-        if(active)
-        {
-        }
-    }
     
     /**
      * Draws to the graphics.
@@ -139,16 +136,16 @@ public class FightHealthBarUI extends UI
         //always check this
         if(visible)
         {
-            Rendering.renderAbsolute(ui, g, -location, -200, 0, 0, 1, 1);
+            Rendering.renderAbsolute(ui, g, location, 200, 0, 0, 1, 1);
             
             //render empty pips
             for(int i = tempHP; i<maxHP; i++)
             {
                 //render the top bar
                 if(i<30)
-                   Rendering.renderAbsolute(emptyPip, g, -location - 31 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
+                   Rendering.renderAbsolute(emptyPip, g, location + 31 +(pipWidth+1)*i, 205, 0, 0, 1, 1);
                 else
-                    Rendering.renderAbsolute(emptyPip, g, -location - 31 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
+                    Rendering.renderAbsolute(emptyPip, g, location + 31 +(pipWidth+1)*(i-30), 215, 0, 0, 1, 1);
             }
             
             //render full pips
@@ -156,19 +153,19 @@ public class FightHealthBarUI extends UI
             {
                 //render the top bar
                 if(i<30)
-                   Rendering.renderAbsolute(fullPip, g, -location - 31 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
+                   Rendering.renderAbsolute(fullPip, g, location + 31 +(pipWidth+1)*i, 205, 0, 0, 1, 1);
                 else
-                    Rendering.renderAbsolute(fullPip, g, -location - 31 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
+                    Rendering.renderAbsolute(fullPip, g, location + 31 +(pipWidth+1)*(i-30), 215, 0, 0, 1, 1);
             }
             
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
             g.setColor(Color.white);
-            Rendering.renderTextAbsolute(Integer.toString(tempHP), g, -location - 14, -218, 0, 0, 1, 1, 1);
+            Rendering.renderTextAbsolute(Integer.toString(tempHP), g, location + 14, 218, 0, 0, 1, 1, 1);
         }
     }
     
     /**
-     * The amout of 
+     * Deal damage
      * @param dmg The damage taken
      */
     public void damage(int dmg)
@@ -181,6 +178,22 @@ public class FightHealthBarUI extends UI
         framesLeft = (tempHP - curHP)*FRAMESPERTIC;
         
         controlState = 2;
+    }
+    
+    /**
+     * Get healed.
+     * @param heal The damage healed
+     */
+    public void heal(int heal)
+    {
+        tempHP = curHP;
+        curHP += heal;
+        if(curHP > maxHP)
+            curHP = maxHP;
+        
+        framesLeft = (curHP - tempHP)*FRAMESPERTIC;
+        
+        controlState = 3;
     }
     
 }

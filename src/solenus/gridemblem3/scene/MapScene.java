@@ -24,6 +24,7 @@ import solenus.gridemblem3.actor.*;
 import solenus.gridemblem3.item.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.ui.FightUI;
+import solenus.gridemblem3.ui.XPBarUI;
 import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
 import solenus.gridemblem3.ui.menu.SystemActionMenu;
 import solenus.gridemblem3.ui.menu.UnitActionMenu;
@@ -66,6 +67,7 @@ public class MapScene extends Scene
     private FightUI fightUI;
     private SystemActionMenu systemAction;
     private BufferedImage Grid;
+    private XPBarUI xp;
     
     //range UI
     private boolean drawAllyMoveRange;
@@ -108,6 +110,7 @@ public class MapScene extends Scene
         weaponSelect = new WeaponSelectionMenu();
         fightUI = new FightUI(map);
         systemAction = new SystemActionMenu();
+        xp = new XPBarUI();
         
         try
         {
@@ -314,8 +317,7 @@ public class MapScene extends Scene
                             13) Exp
                 */
                 
-                /*
-                    Cursor Mode
+                /*  Cursor Mode
                     Active Objects: Cursor
                     Camera Follows: Cursor
                 */
@@ -324,8 +326,7 @@ public class MapScene extends Scene
                     camera.moveToRenderable(cursor, map);
                     break;
                 
-                /*
-                    Unit Movement Mode
+                /*  Unit Movement Mode
                     Active Objects: Cursor
                     Camera Follows: Cursor
                 */
@@ -335,8 +336,7 @@ public class MapScene extends Scene
                     camera.moveToRenderable(cursor, map);
                     break;
                 
-                /*
-                    Unit Action Menu
+                /*  Unit Action Menu
                     Active Objects: UnitActionMenu
                     Camera Follows: Cursor
                 */
@@ -360,8 +360,7 @@ public class MapScene extends Scene
                     }
                     break;
                     
-                /*
-                    System Action Menu
+                /*  System Action Menu
                     Active Objects: SystemActionMenu
                     Camera Follows: Cursor
                 */    
@@ -381,8 +380,7 @@ public class MapScene extends Scene
                         }
                     break;
                 
-                /*
-                    Movement animation
+                /*  Movement animation
                     Active Objects: selectedUnit
                     Camera Follows: selectedUnit
                 */
@@ -404,8 +402,7 @@ public class MapScene extends Scene
 
                     break;
                 
-                /*
-                    Enemy Selection
+                /*  Enemy Selection
                     Active Objects: Cursor
                     Camera Follows: Cursor
                 */
@@ -414,8 +411,7 @@ public class MapScene extends Scene
                     camera.moveToRenderable(cursor, map);
                     break;
                     
-                /*
-                    Weapon Selection
+                /*  Weapon Selection
                     Active Objects: WeaponSelctUI
                     Camera Follows: SelectedUnit
                 */
@@ -433,17 +429,16 @@ public class MapScene extends Scene
                     }
                     break;
                     
-                /*
-                    Battle
+                /*  Battle
                     Active Objects: fightUI
-                    Camera Follows: None
+                    Camera Follows: selectedUnit
                 */
                 case 8:
                     int result = fightUI.runFrame(); //gotta store result so resolveBattle can be passed it regardless of which case it came from.
                     switch(result)
                     {
                         case 0:
-                            cst8to1();
+                            cst8toX();
                             break;
                         case 1:
                         case 2:
@@ -454,18 +449,16 @@ public class MapScene extends Scene
                     }
                     break;
                     
-                /*
-                    End Turn
-                    Active object: None
+                /*  End Turn
+                    Active Object: None
                     Camera Follows: None
                 */
                 case 9:
                     cst9toX();
                     break;
                     
-                /*
-                    Someone Else's Turn
-                    Active object: AI
+                /*  Someone Else's Turn
+                    Active Object: AI
                     Camera Follows: Cursor
                 */    
                 case 10:
@@ -478,25 +471,37 @@ public class MapScene extends Scene
                     }
                     break;
                     
-                /*
-                    Player Turn Start
-                    Active object: None
+                /*  Player Turn Start
+                    Active Object: None
                     Camera Follows: None
                 */
                 case 11:
                     cst11to1();
                     break;
                 
-                /*
-                    Dieing Unit
-                    Active object: None
+                /*  Dieing Unit
+                    Active Object: None
                     Camera Follows: None
                 */
                 case 12:
                     if(animationFrames != 0)
                         animationFrames --;
                     else
-                        cst12to1();
+                        cst12toX();
+                    break;
+                
+                /*  XP Bar
+                    Active Object: XPBarUI
+                    Camera Follows: None
+                */
+                case 13:
+                    switch(xp.runFrame())
+                    {
+                        case 1:
+                            cst13to1();
+                            break;
+                    }
+                    
             }  
         
             
@@ -580,6 +585,7 @@ public class MapScene extends Scene
             weaponSelect.draw(g2);
             systemAction.draw(g2);
             fightUI.draw(g2);
+            xp.draw(g2);
         }
         
     }
@@ -1092,14 +1098,29 @@ public class MapScene extends Scene
     /**
      * The unit has finished attacking. Go back to move mode.
      */
-    public void cst8to1()
+    public void cst8toX()
     {
-        controlState = 1;
-        cursor.setVisible(true);
-        cursor.moveInstantly(selectedUnit.getCoord());
-        cursor.getSprite().sendTrigger("deactivate");
-        selectedUnit.endMovement();
-        fightUI.end();
+        switch(fightUI.isXPAwarded())
+        {
+            case 1:
+                xp.start(fightUI.getAttacker(), fightUI.getAttackerXP());
+                controlState = 13;
+                break;
+                
+            case 2:
+                xp.start(fightUI.getDefender(), fightUI.getDefenderXP());
+                controlState = 13;
+                break;
+            
+            case 0:
+                controlState = 1;
+                cursor.setVisible(true);
+                cursor.moveInstantly(selectedUnit.getCoord());
+                cursor.getSprite().sendTrigger("deactivate");
+                selectedUnit.endMovement();
+                fightUI.end();
+                break;
+        }
         
     }
     
@@ -1155,9 +1176,15 @@ public class MapScene extends Scene
     }
     
     /**
-     * Removes the dieing units from DieingUnits, removing them from the game.
+     * Removes the dieing units from DieingUnits, removing them from the game. And then goes back to 8's transition.
      */
-    public void cst12to1()
+    public void cst12toX()
+    {
+        dieingUnits.clear();
+        cst8toX();
+    }
+    
+    public void cst13to1()
     {
         controlState = 1;
         cursor.setVisible(true);
@@ -1165,7 +1192,7 @@ public class MapScene extends Scene
         cursor.getSprite().sendTrigger("deactivate");
         selectedUnit.endMovement();
         fightUI.end();
-        dieingUnits.clear();
+        xp.end();
     }
     
     

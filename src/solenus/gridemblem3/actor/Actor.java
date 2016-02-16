@@ -15,7 +15,6 @@ import solenus.gridemblem3.gamemap.GridRenderable;
  */
 public abstract class Actor extends GridRenderable
 {
-    protected boolean gridded;
     protected boolean passable;
     
     
@@ -34,31 +33,15 @@ public abstract class Actor extends GridRenderable
      */
     public void placeOnGrid(int _x, int _y)
     {
-        gridded = true;
         x = _x;
         y = _y;
         xCur = _x;
         yCur = _y;
     }
     
-    
-    /**
-     * Tells the actor it has been removed from the grid.
-     */
-    public void removeFromGrid()
-    {
-        gridded = false;
-    }
-    
-    public boolean getGridded()
-    {
-        return gridded;
-    }
-    
     public void renderCam (Graphics2D g2, Camera c)
     {
-        if(gridded)
-            super.renderCam(g2,c);
+        super.renderCam(g2,c);
     }
     
     public boolean isPassable()

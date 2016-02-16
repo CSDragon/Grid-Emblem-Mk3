@@ -1,0 +1,8 @@
+Width: 372
+Height: 48
+CenterX: 186
+CenterY: 24
+XP StartX: 82
+XP StartY: 12
+Pixels Per XP: 2
+Bar Height: 24

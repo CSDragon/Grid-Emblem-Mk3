@@ -94,9 +94,9 @@ public class SystemActionMenu extends Menu
             {
                 Rendering.renderAbsolute(top, g, 0, 0, centerX, height, 1, 1);
                 for(int i = 1; i < numCommands-1; i++)
-                    Rendering.renderAbsolute(mid, g, 0, -height*i, centerX, height, 1, 1);
-                Rendering.renderAbsolute(bot, g, 0, -height*(numCommands-1), centerX, height, 1, 1);
-                Rendering.renderAbsolute(cursor, g, 0, -height*cursorLoc, centerX, height, 1, 1);
+                    Rendering.renderAbsolute(mid, g, 0, height*i, centerX, height, 1, 1);
+                Rendering.renderAbsolute(bot, g, 0, height*(numCommands-1), centerX, height, 1, 1);
+                Rendering.renderAbsolute(cursor, g, 0, height*cursorLoc, centerX, height, 1, 1);
             }
             
             else
@@ -105,7 +105,7 @@ public class SystemActionMenu extends Menu
                 Rendering.renderAbsolute(cursor, g, 0, 0, centerX, height, 1, 1);
             }
             
-            int textOffset = 11;
+            int textOffset = -11;
             
             //set font
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -114,8 +114,8 @@ public class SystemActionMenu extends Menu
             //render text
             for(String s : actions)
             {
-                Rendering.renderTextAbsolute(s, g, -10, textOffset, centerX, 0, 1, 1, 0);
-                textOffset -= height;
+                Rendering.renderTextAbsolute(s, g, 10, textOffset, centerX, 0, 1, 1, 0);
+                textOffset += height;
             }
            
         }

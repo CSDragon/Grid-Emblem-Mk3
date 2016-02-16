@@ -5,6 +5,7 @@
  */
 package solenus.gridemblem3.render;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.GridEmblemMk3;
@@ -71,12 +72,12 @@ public class Rendering
     {
         //change the orientation
         if(xOrientation == 1)
-            x = GridEmblemMk3.HALFWIDTH - xAdjust - x;
+            x = GridEmblemMk3.HALFWIDTH - xAdjust + x;
         else if(xOrientation == 2)
             x = GridEmblemMk3.WIDTH - xAdjust - x;
 
         if(yOrientation == 1)
-            y = GridEmblemMk3.HALFHEIGHT - yAdjust - y;
+            y = GridEmblemMk3.HALFHEIGHT - yAdjust + y;
         else if (yOrientation == 2)
             y = GridEmblemMk3.HEIGHT - yAdjust - y;
 
@@ -100,12 +101,12 @@ public class Rendering
     {
         //change the orientation
         if(xOrientation == 1)
-            x = GridEmblemMk3.HALFWIDTH - xAdjust - x;
+            x = GridEmblemMk3.HALFWIDTH - xAdjust + x;
         else if(xOrientation == 2)
             x = GridEmblemMk3.WIDTH - xAdjust - x;
 
         if(yOrientation == 1)
-            y = GridEmblemMk3.HALFHEIGHT - yAdjust - y;
+            y = GridEmblemMk3.HALFHEIGHT - yAdjust + y;
         else if (yOrientation == 2)
             y = GridEmblemMk3.HEIGHT - yAdjust - y;
         
@@ -115,6 +116,23 @@ public class Rendering
             x -= (g.getFontMetrics().stringWidth(s));
         
         g.drawString(s, x, y);
+    }
+    
+    public static void renderRectAbsolute(Graphics2D g, int x, int y, int width, int height, Color c, int xAdjust, int yAdjust, int xOrientation, int yOrientation)
+    {
+        //change the orientation
+        if(xOrientation == 1)
+            x = GridEmblemMk3.HALFWIDTH - xAdjust + x;
+        else if(xOrientation == 2)
+            x = GridEmblemMk3.WIDTH - xAdjust - x;
+
+        if(yOrientation == 1)
+            y = GridEmblemMk3.HALFHEIGHT - yAdjust + y;
+        else if (yOrientation == 2)
+            y = GridEmblemMk3.HEIGHT - yAdjust - y;
+        
+        g.setColor(c);
+        g.fillRect(x, y, width, height);
     }
     
     
