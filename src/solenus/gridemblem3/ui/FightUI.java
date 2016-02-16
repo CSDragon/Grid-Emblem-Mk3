@@ -75,9 +75,13 @@ public class FightUI extends UI
 
     private Map map;
     
+    private FightHealthBarUI chb;
+    
     public FightUI(Map m)
     {
         map = m;
+        
+        chb = new FightHealthBarUI(40,20, 0);
     }
     
     
@@ -197,7 +201,7 @@ public class FightUI extends UI
             }
             else
             {
-                
+                chb.draw(g);
             }
         }
     }

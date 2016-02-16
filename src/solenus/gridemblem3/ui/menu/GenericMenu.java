@@ -42,7 +42,7 @@ public abstract class GenericMenu extends Menu
     {
         try
         {
-        //load sheet image
+            //load sheet image
             spriteSheet = ImageIO.read(new File("assets/ui/GenericMenuSheet.png"));
 
             //load animations
@@ -54,8 +54,8 @@ public abstract class GenericMenu extends Menu
             width = Integer.decode(in.readLine().substring(7));
             centerX = Integer.decode(in.readLine().substring(9));
             centerY = Integer.decode(in.readLine().substring(9));
-
-
+            
+            in.close();
         }
         catch(Exception e)
         {

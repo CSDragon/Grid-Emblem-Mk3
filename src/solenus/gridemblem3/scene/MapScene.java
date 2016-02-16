@@ -61,7 +61,7 @@ public class MapScene extends Scene
     private MovementArrow mvArrow;
     private int movingIndex;
     private ArrayList<Point> movingLine;
-    private UnitActionMenu unitActionUI;
+    private UnitActionMenu unitActionMenu;
     private WeaponSelectionMenu weaponSelect;
     private FightUI fightUI;
     private SystemActionMenu systemAction;
@@ -104,7 +104,7 @@ public class MapScene extends Scene
         
         //initialize UI
         mvArrow = new MovementArrow(cursor, map);
-        unitActionUI = new UnitActionMenu();
+        unitActionMenu = new UnitActionMenu();
         weaponSelect = new WeaponSelectionMenu();
         fightUI = new FightUI(map);
         systemAction = new SystemActionMenu();
@@ -173,8 +173,8 @@ public class MapScene extends Scene
                 /*  
                     Modes:  1)  Cursor. Moving the cursor around. 
                             2)  Unit Move. Once a unit has been selected, cursor movement.
-                            3)  Unit Action UI. Once a unit has been moved, controling the UnitAction UI.
-                            4)  System Action UI. When you select nothing, controlling the SystemAction UI.
+                            3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
+                            4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
                             5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
                             6)  Select enemy to fight
                             7)  Select a weapon to fight with. 
@@ -248,7 +248,7 @@ public class MapScene extends Scene
                         break;
                 
                     case 3:
-                        unitActionUI.respondControls(im);
+                        unitActionMenu.respondControls(im);
                         break;
                         
                     case 4:
@@ -301,8 +301,8 @@ public class MapScene extends Scene
                 /*  
                     Modes:  1)  Cursor. Moving the cursor around. 
                             2)  Unit Move. Once a unit has been selected, cursor movement.
-                            3)  Unit Action UI. Once a unit has been moved, controling the UnitAction UI.
-                            4)  System Action UI. When you select nothing, controlling the SystemAction UI.
+                            3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
+                            4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
                             5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
                             6)  Select enemy to fight
                             7)  Select a weapon to fight with. 
@@ -336,14 +336,14 @@ public class MapScene extends Scene
                     break;
                 
                 /*
-                    Unit Action UI
+                    Unit Action Menu
                     Active Objects: UnitActionMenu
                     Camera Follows: Cursor
                 */
                 case 3:
                     cursor.moveToDest();
                     camera.moveToRenderable(cursor, map);
-                    switch(unitActionUI.runFrame())
+                    switch(unitActionMenu.runFrame())
                     {
                         case UnitActionMenu.BACK:
                             cst3to2();
@@ -361,7 +361,7 @@ public class MapScene extends Scene
                     break;
                     
                 /*
-                    System Action UI
+                    System Action Menu
                     Active Objects: SystemActionMenu
                     Camera Follows: Cursor
                 */    
@@ -576,9 +576,10 @@ public class MapScene extends Scene
             mvArrow.draw(g2, camera);
 
             //draw UI
-            unitActionUI.draw(g2);
+            unitActionMenu.draw(g2);
             weaponSelect.draw(g2);
             systemAction.draw(g2);
+            fightUI.draw(g2);
         }
         
     }
@@ -983,7 +984,7 @@ public class MapScene extends Scene
         selectedUnit.endMovement();
         selectedUnit = null;
         mvArrow.end();
-        unitActionUI.end();
+        unitActionMenu.end();
     }
     
     /**
@@ -994,7 +995,7 @@ public class MapScene extends Scene
         mvArrow.setVisible(true);
         drawAllyMoveRange = true;
         selectedUnit.moveInstantly(movingLine.get(0));
-        unitActionUI.end();
+        unitActionMenu.end();
         
         controlState = 2;
     }
@@ -1005,9 +1006,9 @@ public class MapScene extends Scene
     public void cst3to6()
     {
         controlState = 6;
-        attackableUnits = unitActionUI.getAttackableUnits();
+        attackableUnits = unitActionMenu.getAttackableUnits();
         attackableUnitsIndex = attackableUnits.size()-1;
-        unitActionUI.setVisible(false);
+        unitActionMenu.setVisible(false);
     }
     
     /**
@@ -1041,7 +1042,7 @@ public class MapScene extends Scene
         {
             controlState = 3;
             selectedUnit.getSprite().sendTrigger("idle");
-            unitActionUI.start(selectedUnit);
+            unitActionMenu.start(selectedUnit);
         }
     }
     
@@ -1061,7 +1062,7 @@ public class MapScene extends Scene
     public void cst6to3()
     {
         controlState = 3;
-        unitActionUI.setVisible(true);
+        unitActionMenu.setVisible(true);
         cursor.moveInstantly(selectedUnit.getCoord());
 
     }
