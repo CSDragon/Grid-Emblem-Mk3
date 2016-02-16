@@ -155,17 +155,17 @@ public class UnitActionMenu extends Menu
             //render text
             if(attackFlag)
             {
-                Rendering.renderTextAbsolute("Attack", g, 190, textOffset, width, 0, 2, 1);
+                Rendering.renderTextAbsolute("Attack", g, 190, textOffset, width, 0, 2, 1, 0);
                 textOffset -= height;
             }
             
             if(itemFlag)
             {
-                Rendering.renderTextAbsolute("Item", g, 190, textOffset, width, 0, 2, 1);
+                Rendering.renderTextAbsolute("Item", g, 190, textOffset, width, 0, 2, 1, 0);
                 textOffset -= height;
             }
             
-                Rendering.renderTextAbsolute("Wait", g, 190, textOffset, width, 0, 2, 1);
+                Rendering.renderTextAbsolute("Wait", g, 190, textOffset, width, 0, 2, 1, 0);
             
             
         }

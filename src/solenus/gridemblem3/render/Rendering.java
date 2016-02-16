@@ -94,8 +94,9 @@ public class Rendering
      * @param yAdjust the amount to move y based on the sprite's size and orientation.
      * @param xOrientation the orientation which it should be rendered, left, center or right.
      * @param yOrientation the orientation which it should be rendered, up, center or down.
+     * @param textOrientation the orientation which line of text renders. Left, center or right.
      */
-    public static void renderTextAbsolute(String s, Graphics2D g, int x, int y, int xAdjust, int yAdjust, int xOrientation, int yOrientation)
+    public static void renderTextAbsolute(String s, Graphics2D g, int x, int y, int xAdjust, int yAdjust, int xOrientation, int yOrientation, int textOrientation)
     {
         //change the orientation
         if(xOrientation == 1)
@@ -107,6 +108,11 @@ public class Rendering
             y = GridEmblemMk3.HALFHEIGHT - yAdjust - y;
         else if (yOrientation == 2)
             y = GridEmblemMk3.HEIGHT - yAdjust - y;
+        
+        if(textOrientation == 1)
+            x -= (g.getFontMetrics().stringWidth(s))/2;
+        else if(textOrientation == 2)
+            x -= (g.getFontMetrics().stringWidth(s));
         
         g.drawString(s, x, y);
     }

@@ -5,6 +5,8 @@
  */
 package solenus.gridemblem3.ui;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -20,9 +22,12 @@ import solenus.gridemblem3.render.Rendering;
  */
 public class FightHealthBarUI extends UI
 {
+    public static final int FRAMESPERTIC = 6;
+    
     private int maxHP;
-    private int lastHP;
     private int curHP;
+    private int lastHP;
+    private int tempHP;
     private int controlState;
     private int framesLeft;
     private int location;
@@ -48,9 +53,9 @@ public class FightHealthBarUI extends UI
         super();
         
         maxHP = max;
-        lastHP = cur;
         curHP = cur;
-        visible = true;
+        tempHP = cur;
+        start();
         
         try
         {
@@ -90,7 +95,7 @@ public class FightHealthBarUI extends UI
      * Progresses the element forward 1 frame.
      * @return The resultant state.
      */
-    public int runFrame()
+    public boolean runFrame()
     {
         if(active)
         {
@@ -101,13 +106,17 @@ public class FightHealthBarUI extends UI
             */
             if(controlState == 2)
             {
+                if(framesLeft % FRAMESPERTIC == 0)
+                    tempHP--;
                 framesLeft--;
                 if(framesLeft == 0)
-                    return 1;
+                    controlState = 1;
+                
+                return false;
             }
         }
         
-        return -1;
+        return true;
     }
     
     /**
@@ -133,31 +142,45 @@ public class FightHealthBarUI extends UI
             Rendering.renderAbsolute(ui, g, -location, -200, 0, 0, 1, 1);
             
             //render empty pips
-            for(int i = curHP; i<maxHP; i++)
+            for(int i = tempHP; i<maxHP; i++)
             {
                 //render the top bar
                 if(i<30)
-                   Rendering.renderAbsolute(emptyPip, g, -location - 30 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
+                   Rendering.renderAbsolute(emptyPip, g, -location - 31 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
                 else
-                    Rendering.renderAbsolute(emptyPip, g, -location - 30 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
+                    Rendering.renderAbsolute(emptyPip, g, -location - 31 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
             }
             
             //render full pips
-            for(int i = 0; i<curHP; i++)
+            for(int i = 0; i<tempHP; i++)
             {
                 //render the top bar
                 if(i<30)
-                   Rendering.renderAbsolute(fullPip, g, -location - 30 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
+                   Rendering.renderAbsolute(fullPip, g, -location - 31 -(pipWidth+1)*i, -205, 0, 0, 1, 1);
                 else
-                    Rendering.renderAbsolute(fullPip, g, -location - 30 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
+                    Rendering.renderAbsolute(fullPip, g, -location - 31 -(pipWidth+1)*(i-30), -215, 0, 0, 1, 1);
             }
+            
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+            g.setColor(Color.white);
+            Rendering.renderTextAbsolute(Integer.toString(tempHP), g, -location - 14, -218, 0, 0, 1, 1, 1);
         }
     }
     
-    public void start()
+    /**
+     * The amout of 
+     * @param dmg The damage taken
+     */
+    public void damage(int dmg)
     {
+        tempHP = curHP;
+        curHP -= dmg;
+        if(curHP < 0)
+            curHP = 0;
         
+        framesLeft = (tempHP - curHP)*FRAMESPERTIC;
+        
+        controlState = 2;
     }
-
     
 }

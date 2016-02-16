@@ -150,7 +150,7 @@ public class WeaponSelectionMenu extends Menu
             //render text
             for(Weapon w : weaponList)
             {
-                Rendering.renderTextAbsolute(w.getName(), g, 190, textOffset, width, 0, 2, 1);
+                Rendering.renderTextAbsolute(w.getName(), g, 190, textOffset, width, 0, 2, 1, 0);
                 textOffset -= height;
             }
             

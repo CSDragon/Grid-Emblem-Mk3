@@ -33,7 +33,6 @@ public class FightUI extends UI
     private int controlState;
     private int nextState;
     private int numAttacks;
-    private int remainingFrames;
     
     private BufferedImage attackerSprite;
     private BufferedImage defenderSprite;
@@ -51,6 +50,12 @@ public class FightUI extends UI
     private int defenderHitDamagePoint;
     private int defenderMissDamagePoint;
     private int defenderCritDamagePoint;
+    
+    private int animationLength;
+    private int damagePoint;
+    private int frameCount;
+    private boolean attackerBarDone;
+    private boolean defenderBarDone;
     
     private int noGraphicFrames = 16;
     private int noGraphicDamagePoint = 8;
@@ -169,18 +174,18 @@ public class FightUI extends UI
             {
                 if(attackerTurn)
                 {
-                    if(remainingFrames > noGraphicDamagePoint)
-                        attacker.moveVisually(attacker.getX() + xDir*(.05*(double)(remainingFrames-noGraphicFrames)), attacker.getY() + yDir*(.05*(remainingFrames-noGraphicFrames)));
+                    if(frameCount > noGraphicDamagePoint)
+                        attacker.moveVisually(attacker.getX() + xDir*(.05*(double)(frameCount-noGraphicFrames)), attacker.getY() + yDir*(.05*(frameCount-noGraphicFrames)));
                     else
-                        attacker.moveVisually(attacker.getX() - xDir*.05*remainingFrames, attacker.getY() - yDir*.05*remainingFrames);
+                        attacker.moveVisually(attacker.getX() - xDir*.05*frameCount, attacker.getY() - yDir*.05*frameCount);
                 }
                 
                 if(defenderTurn)
                 {
-                    if(remainingFrames > noGraphicDamagePoint)
-                        defender.moveVisually(defender.getX() - xDir*(.05*(remainingFrames-noGraphicFrames)), defender.getY() - yDir*(.05*(remainingFrames-noGraphicFrames)));
+                    if(frameCount > noGraphicDamagePoint)
+                        defender.moveVisually(defender.getX() - xDir*(.05*(frameCount-noGraphicFrames)), defender.getY() - yDir*(.05*(frameCount-noGraphicFrames)));
                     else
-                        defender.moveVisually(defender.getX() + xDir*.05*remainingFrames, defender.getY() + yDir*.05*remainingFrames);
+                        defender.moveVisually(defender.getX() + xDir*.05*frameCount, defender.getY() + yDir*.05*frameCount);
                 }
             }
         }
@@ -340,7 +345,7 @@ public class FightUI extends UI
         {
             attackPhase = 1;
             attackerTurn = true;
-            setUpAttack(attacker);
+            numAttacks = attacker.numAttacks();
             controlState = 3;
         }
         
@@ -350,7 +355,7 @@ public class FightUI extends UI
             attackPhase = 2;
             attackerTurn = false;
             defenderTurn = true;
-            setUpAttack(defender);
+            numAttacks = defender.numAttacks();
             controlState = 3;
         }
         
@@ -364,7 +369,7 @@ public class FightUI extends UI
             if (speedDef >= 4)
             {
                 attackerTurn = true;
-                setUpAttack(attacker);
+                numAttacks = attacker.numAttacks();
                 controlState = 3;
             }
             
@@ -372,7 +377,7 @@ public class FightUI extends UI
             else if(speedDef <= -4)
             {
                 defenderTurn = true;
-                setUpAttack(defender);
+                numAttacks = defender.numAttacks();
                 controlState = 3;
             }
             
@@ -401,31 +406,44 @@ public class FightUI extends UI
         
         //Set how long the animation is gonna last
         if(!graphics)
-            remainingFrames = noGraphicFrames;
+            animationLength = noGraphicFrames;
         else
         {
             if(attackerTurn)
                 switch(attackResult)
                 {
                     case 0:
-                        remainingFrames = attackerMissFrames;
+                        animationLength = attackerMissFrames;
+                        damagePoint = attackerMissDamagePoint;
+                        break;
                     case 1:
-                        remainingFrames = attackerHitFrames;
+                        animationLength = attackerHitFrames;
+                        damagePoint = attackerHitDamagePoint;
+                        break;
                     case 2:
-                        remainingFrames = attackerCritFrames;
+                        animationLength = attackerCritFrames;
+                        damagePoint = attackerCritDamagePoint;
+                        break;
                 }
             else
                 switch(attackResult)
                 {
                     case 0:
-                        remainingFrames = defenderMissFrames;
+                        animationLength = defenderMissFrames;
+                        damagePoint = defenderMissDamagePoint;
+                        break;
                     case 1:
-                        remainingFrames = defenderHitFrames;
+                        animationLength = defenderHitFrames;
+                        damagePoint = defenderHitDamagePoint;
+                        break;
                     case 2:
-                        remainingFrames = defenderCritFrames;
+                        animationLength = defenderCritFrames;
+                        damagePoint = defenderCritDamagePoint;
+                        break;
                 }
             
         }
+        frameCount = 0;
         
         //and move on to the animation.
         controlState = 4;
@@ -437,8 +455,15 @@ public class FightUI extends UI
     public void watchAnimation()
     {
         //Decrement the number of remaining frames. And when we're out of remaining frames move on.
-        remainingFrames--;
-        if(remainingFrames == 0)
+        if(frameCount > damagePoint)
+        {
+            attackerBarDone = attackerHealthBar.runFrame();
+            defenderBarDone = defenderHealthBar.runFrame();
+        }
+        
+        if(frameCount < animationLength)
+            frameCount++;
+        if(frameCount >= animationLength && attackerBarDone && defenderBarDone)
             controlState = 5;
     }
     
@@ -481,22 +506,7 @@ public class FightUI extends UI
     
     //<editor-fold desc="Combat Mechanics">
     
-    
-    public void setUpAttack(Unit a)
-    {
-        numAttacks = a.numAttacks();
-        
-        controlState = nextState;
-    }
-    
-    public void waitForAnimations()
-    {
-        remainingFrames--;
-        
-        if(remainingFrames <= 0)
-            controlState = nextState;
-    }
-    
+
     /**
      * Determines if a can even hit b
      * @param a The unit attacking. Not necessarily attacker
@@ -549,6 +559,12 @@ public class FightUI extends UI
             
             //Take Damage
             b.takeDamage(attackDamage);
+            
+            //TEST
+            if(attackerTurn)
+                defenderHealthBar.damage(attackDamage);
+            else
+                attackerHealthBar.damage(attackDamage);
             
             a.getEquppedWeapon().dull();
         }

@@ -1,4 +1,4 @@
-Width: 214
+Width: 215
 Height: 27
 Width: 5
 Height: 7
