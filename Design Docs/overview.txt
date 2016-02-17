@@ -12,7 +12,7 @@ core engine, scenes:
 		Scenes are everything. Scenes control aspects of the game. 
 		Scenes respond to controls, advance their gamestate, and render in that order. They also call their children to do each step right after they do.
 		Scene is a generic, MapScene inherits from scene, for instance. 
-			Most scene subclasses only need to override respondControls, runFrame and renderFrame.
+			Most scene subclasses only need to override respondControls, runFrame, animate and draw/paintComponent.
 		Scenes are either active or inactive, visible or invisible. 
 			If they are active they check for controls and their gamestate updates.
 			If they are visible they render. 

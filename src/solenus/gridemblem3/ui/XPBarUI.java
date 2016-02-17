@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileReader;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.render.Rendering;
 
@@ -47,8 +48,14 @@ public class XPBarUI extends UI
     private int postWait = 20;
     private int postCounter;
     
+    private boolean fastMode;
+    
+    private LevelUpUI lvl;
+    
     public XPBarUI()
     {
+        lvl = new LevelUpUI();
+        
         try
         {
             //load sheet image
@@ -80,6 +87,19 @@ public class XPBarUI extends UI
     }
     
     /**
+     * Responds to controls.
+     * @param im the input manager
+     */
+    public void respondControls(InputManager im)
+    {
+        if(active)
+        {
+            fastMode = (im.getA() > 0);
+            lvl.respondControls(im);
+        }
+    }
+    
+    /**
      * Progresses the gamestate of this object forward one frame
      * @return If it's done or not
      */
@@ -87,6 +107,12 @@ public class XPBarUI extends UI
     {
         if(active)
         {
+            /*
+            STATES
+                0) Inactive
+                1) Filling the bar
+                2) Level Up
+            */
             switch(controlState)
             {
                 case 1:
@@ -95,12 +121,18 @@ public class XPBarUI extends UI
                     else if (cur < endingXP)
                     {
                         cur++;
-                        receivingXP.receiveXP(1);
+                        if(receivingXP.receiveXP(1))
+                            cst1to2();
                     }
                     else if (postCounter < postWait)
                         postCounter++;
                     else
                         controlState = 0;
+                    return -1;
+                    
+                case 2:
+                    if(lvl.runFrame() == 1)
+                        cst2to1();
                     return -1;
             }
         }
@@ -123,9 +155,9 @@ public class XPBarUI extends UI
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
             g.setColor(Color.white);
             Rendering.renderTextAbsolute("EXP", g, 40, centerY+6, centerX, 0, 1, 1, 1);
-            Rendering.renderTextAbsolute(Integer.toString(cur), g, width-40, centerY+6, centerX, 0, 1, 1, 1);
+            Rendering.renderTextAbsolute(Integer.toString(cur%100), g, width-40, centerY+6, centerX, 0, 1, 1, 1);
 
-
+            lvl.draw(g);
         }
     }
     
@@ -141,4 +173,28 @@ public class XPBarUI extends UI
         
         controlState = 1;
     }
+    
+    //<editor-fold desc="controlState Methods">
+    //Methods who's primary function is to transition the control state from one state to another.
+    //"cst = controlState transition"
+
+    /**
+     * Start the level up UI
+     */
+    public void cst1to2()
+    {
+        controlState = 2;
+        lvl.start(receivingXP);
+    }
+    
+    /**
+     * We're done with the Level Up UI
+     */
+    public void cst2to1()
+    {
+        controlState = 1;
+        lvl.end();
+    }
+    
+    //</editor-fold>
 }

@@ -114,6 +114,8 @@ public class Unit extends Actor
         
         hasMoved = false;
         passable = true;
+        
+        xp = 80;
     }
     
     //</editor-fold>
@@ -230,12 +232,12 @@ public class Unit extends Actor
     /**
      * Makes the unit receive XP
      * @param xpReceived The XP the unit received.
+     * @return If the unit leveled up
      */
-    public void receiveXP(int xpReceived)
+    public boolean receiveXP(int xpReceived)
     {
         xp += xpReceived;
-        while(xp >= 100)
-            levelUp();
+        return (xp >= 100);
     }
     
     /**

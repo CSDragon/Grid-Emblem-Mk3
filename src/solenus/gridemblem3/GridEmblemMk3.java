@@ -108,16 +108,15 @@ public class GridEmblemMk3
                 nextGameTick += timeBetweenFrames;
                 
                 //Run Animations
-                sceneControl.renderFrame();
+                sceneControl.animate();
 
+                    gameFrame.repaint();
 
                 //Graphics: If the graphics step takes too long, the system is designed to skip it, with a minimum of 12fps
                 if(System.currentTimeMillis() > nextGameTick && loops < MAX_FRAMESKIP)
                     loops++;
                 else
                 {
-                    //And ACTUALLY render. I really need to rename RenderFrame
-                    gameFrame.repaint();
                     loops = 0;
                 } 
             }

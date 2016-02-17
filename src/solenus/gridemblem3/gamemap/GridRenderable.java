@@ -47,7 +47,7 @@ public abstract class GridRenderable
     /**
      * animates the sprite
      */
-    public void Animate()
+    public void animate()
     {
         sprite.animate();
     }

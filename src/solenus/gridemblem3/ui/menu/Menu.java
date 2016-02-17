@@ -82,7 +82,7 @@ public abstract class Menu extends UI
     /**
      * Progresses all the sprites forward one frame.
      */
-    public void renderFrame()
+    public void animate()
     {
         if(active)
         {

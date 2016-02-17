@@ -100,7 +100,7 @@ public abstract class Scene extends JPanel implements Comparable<Scene>
      * renders the scene.
      * most scene subclasses must override this, and check if they are visible.
      */
-    public void renderFrame()
+    public void animate()
     {   
         //always check this
         if(visible)
@@ -173,7 +173,7 @@ public abstract class Scene extends JPanel implements Comparable<Scene>
     {
         for (Scene s : childScenes)
         {
-            s.renderFrame();
+            s.animate();
         }
     }
     

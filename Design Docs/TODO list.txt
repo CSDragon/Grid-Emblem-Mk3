@@ -25,7 +25,7 @@ TODOs
 	
 	
 Current TODO Stack:
-	No Graphcis fight UI
+	Level up
 		
 
 BUGS:

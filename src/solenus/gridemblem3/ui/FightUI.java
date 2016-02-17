@@ -160,7 +160,7 @@ public class FightUI extends UI
     /**
      * renders the scene.
      */
-    public void renderFrame()
+    public void aniamte()
     {   
         //always check this
         if(active)

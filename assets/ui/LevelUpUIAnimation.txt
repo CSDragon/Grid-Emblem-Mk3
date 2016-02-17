@@ -1,0 +1,4 @@
+Width: 290
+Height: 362
+CenterX: 145
+CenterY: 181

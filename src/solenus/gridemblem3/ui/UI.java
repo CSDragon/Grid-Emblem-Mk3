@@ -21,7 +21,7 @@ public abstract class UI
     /**
      * renders the scene.
      */
-    public void renderFrame()
+    public void animate()
     {   
         //always check this
         if(active)

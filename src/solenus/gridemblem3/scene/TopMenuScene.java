@@ -216,7 +216,7 @@ public class TopMenuScene extends Scene
      * renders the scene.
      * most scene subclasses must override this, and check if they are visible.
      */
-    public void renderFrame()
+    public void animate()
     {   
         //always check this
         if(visible)

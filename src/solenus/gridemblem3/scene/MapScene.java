@@ -145,6 +145,10 @@ public class MapScene extends Scene
         unitList.add(new Unit(1, 6, 1));
         unitList.get(4).placeOnGrid(7, 7);
         unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(5).placeOnGrid(7, 6);
+        unitList.get(5).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         getAllEnemyRanges();
         
         fightMode = false;
@@ -282,6 +286,9 @@ public class MapScene extends Scene
                         
                     case 7:
                         weaponSelect.respondControls(im);
+                        break;
+                    case 13:
+                        xp.respondControls(im);
                         break;
                 }
             }
@@ -516,24 +523,24 @@ public class MapScene extends Scene
      * renders the scene.
      * most scene subclasses must override this, and check if they are visible.
      */
-    public void renderFrame()
+    public void animate()
     {   
         //always check this
         if(active)
         {
             //animate actors
             for (Actor al : actorList) 
-                al.Animate();
+                al.animate();
             
             //animate units
             for (Unit ul : unitList) 
-                ul.Animate();
+                ul.animate();
             
             //animate cursor
-            cursor.Animate();
+            cursor.animate();
             
             //UI
-            fightUI.renderFrame();
+            fightUI.animate();
                        
             
             //always do this.
