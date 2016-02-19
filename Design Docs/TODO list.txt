@@ -25,7 +25,7 @@ TODOs
 	
 	
 Current TODO Stack:
-	Some basic AI
+	Level up
 		
 
 BUGS:

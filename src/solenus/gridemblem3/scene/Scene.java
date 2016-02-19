@@ -17,12 +17,14 @@ import solenus.gridemblem3.InputManager;
  *
  * @author Chris
  */
-public abstract class Scene extends JPanel
+public abstract class Scene extends JPanel implements Comparable<Scene>
 {
+    protected ArrayList<Scene> childScenes;
     protected Scene targetScene;
     protected Scene parent;
     protected boolean active;
     protected boolean visible;
+    protected int visibleLayer;
     protected int controlState;
     
     //<editor-fold desc="Constructors">
@@ -36,6 +38,9 @@ public abstract class Scene extends JPanel
         this();
         //set parent and children
         parent = _parent;
+        
+        //this should be overridden almost every time. It exists only so we don't run into clipping or visibilty problems in tests.
+        visibleLayer = parent.getVisibleLayer()+1;
     }
     
     /**
@@ -44,6 +49,9 @@ public abstract class Scene extends JPanel
     public Scene()
     {
         //everything set to null, false or 0.
+        //initialize childScenes as empty.
+        childScenes = new ArrayList<Scene>();
+        
         setLayout(null);
         setVisible(false);
     }
@@ -81,6 +89,8 @@ public abstract class Scene extends JPanel
         //always check this
         if(active)
         {
+            //always do this.
+            runChildren();
         }
         
         return -1;
@@ -96,6 +106,8 @@ public abstract class Scene extends JPanel
         if(visible)
         {
             
+            //always do this.
+            drawChildren();
         }
     }
     
@@ -106,13 +118,67 @@ public abstract class Scene extends JPanel
     {
         setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
         setPreferredSize(new Dimension(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT));
+        for(Scene c : childScenes)
+            c.resize();
     }
 
     
     //</editor-fold>
     
+    //<editor-fold desc="Child Management">
+    
     /**
-     * This scene gives control priority to one of its children
+     * Adds a scene to allScenes, but makes sure to check it isn't a duplicate. Sorts the list by visibility
+     * @param s The scene to be added
+     * @return if it succeeds
+     */
+    public boolean addScene(Scene s)
+    {
+        if(!childScenes.contains(s))
+        {
+            childScenes.add(s);
+            Collections.sort(childScenes);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Removes a scene from the 
+     * @param s
+     * @return If it succeeds
+     */
+    public boolean removeScene(Scene s)
+    {
+        return childScenes.remove(s);
+    }
+    
+    
+    /**
+     * Runs all scenes.
+     */
+    public void runChildren()
+    {
+        for (Scene s : childScenes) 
+        {
+            s.runFrame();
+        }
+            
+    }
+    
+    /**
+     * draws all scenes
+     */
+    public void drawChildren()
+    {
+        for (Scene s : childScenes)
+        {
+            s.animate();
+        }
+    }
+    
+    /**
+     * This scene gives control priority to one of its child
      * @param s The scene to receive priority
      */
     public void givePriority(Scene s)
@@ -130,6 +196,18 @@ public abstract class Scene extends JPanel
     
     //</editor-fold>
     
+    // <editor-fold desc="Comparable">
+    @Override
+    public int compareTo(Scene other)
+    {
+        if(visibleLayer < other.getVisibleLayer())
+            return -1;
+        else if(visibleLayer == other.getVisibleLayer())
+            return 0;
+        else 
+            return 1;
+    }
+    // </editor-fold>
     
     //<editor-fold desc="on/off control">
     public void visible()
@@ -175,5 +253,9 @@ public abstract class Scene extends JPanel
         return visible;
     }
     
+    public int getVisibleLayer()
+    {
+        return visibleLayer;
+    }
     //</editor-fold>
 }

@@ -34,15 +34,19 @@ public class SceneManager extends Scene
         
         //Make the child scenes.
         ms = new MapScene(this);
+        childScenes.add(ms);
         add(ms);
         
         tms = new TopMenuScene(this);
+        childScenes.add(tms);
         add(tms);
         
         ds = new DialogueScene(this);
+        childScenes.add(ds);
         add(ds);
         
         hs = new HQScene(this);
+        childScenes.add(hs);
         add(hs);
     }
 

@@ -114,6 +114,9 @@ public class TopMenuScene extends Scene
         //always check this
         if(active)
         {
+            //always do this.
+            runChildren();
+            
             /*
             STATES:
                 0 = Main Menu
@@ -218,6 +221,9 @@ public class TopMenuScene extends Scene
         //always check this
         if(visible)
         {
+            
+            //always do this.
+            drawChildren();
         }
     }
     
@@ -244,6 +250,8 @@ public class TopMenuScene extends Scene
     {
         setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
         setPreferredSize(new Dimension(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT));
+        for(Scene c : childScenes)
+            c.resize();
     }
 
     //</editor-fold>
