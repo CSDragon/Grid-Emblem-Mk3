@@ -223,12 +223,10 @@ public class TopMenuScene extends Scene
     
     /**
      * Paints the scene
-     * @param g graphics.
+     * @param g2 graphics.
      */
-    public void paintComponent(Graphics g)
+    public void draw(Graphics2D g2)
     {
-        Graphics2D g2 = (Graphics2D)g;
-        
         //draw UI
         main.draw(g2);
         settings.draw(g2);

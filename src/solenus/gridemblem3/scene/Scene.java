@@ -6,6 +6,7 @@
 package solenus.gridemblem3.scene;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JPanel;
@@ -87,17 +88,29 @@ public abstract class Scene extends JPanel
     }
     
     /**
-     * renders the scene.
-     * most scene subclasses must override this, and check if they are visible.
+     * animates the scene's objects 1 frame
+     * most scene subclasses must override this, and check if they are active.
      */
     public void animate()
     {   
         //always check this
-        if(visible)
+        if(active)
         {
-            
         }
     }
+    
+    /**
+     * Draws the scene
+     * @param g 
+     */
+    public void draw(Graphics2D g)
+    {
+        if(visible)
+        {
+        }
+    }
+    
+  
     
     /**
      * resizes the scene to the current app size

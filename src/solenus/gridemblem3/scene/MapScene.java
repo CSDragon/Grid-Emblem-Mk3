@@ -545,14 +545,12 @@ public class MapScene extends Scene
     
     /**
      * Paints the scene
-     * @param g graphics.
+     * @param g2 graphics.
      */
-    public void paintComponent(Graphics g)
+    public void draw(Graphics2D g2)
     {
         if(visible)
         {
-            Graphics2D g2 = (Graphics2D)g;
-            
             Rendering.renderGrid(map.getMapImage(), camera, g2, 0, 0, (int)(GridEmblemMk3.GRIDSIZE*2.5), (int)(GridEmblemMk3.GRIDSIZE*2.5));
 
             drawGrid(g2);

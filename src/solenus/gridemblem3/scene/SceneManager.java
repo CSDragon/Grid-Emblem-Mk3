@@ -6,7 +6,10 @@
 package solenus.gridemblem3.scene;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import solenus.gridemblem3.GridEmblemMk3;
+import solenus.gridemblem3.InputManager;
 
 /**
  * The top level scene for the game.
@@ -34,21 +37,35 @@ public class SceneManager extends Scene
         
         //Make the child scenes.
         ms = new MapScene(this);
-        add(ms);
-        
         tms = new TopMenuScene(this);
-        add(tms);
-        
         ds = new DialogueScene(this);
         add(ds);
-        
         hs = new HQScene(this);
         add(hs);
     }
-
+        
+    /**
+     * Responds to controls.
+     * @param im the input 
+     */
+    public void respondControls(InputManager im)
+    {
+        if(active)
+        {
+            switch(controlState)
+            {
+                case 1:
+                    tms.respondControls(im);
+                    break;
+                case 2:
+                    ms.respondControls(im);
+                    break;
+            }
+        }
+    }
+    
     /**
      * advances the scene's gamestate 1 frame.
-     * most scene subclasses must override this, and check if they are active.
      * @return The state of this scene that the parent scene needs to know.
      */
     public int runFrame()
@@ -86,7 +103,32 @@ public class SceneManager extends Scene
         return -1;
     }
     
+    /**
+     * animates the scene's objects 1 frame
+     */
+    public void animate()
+    {
+        if(active)
+        {
+            tms.animate();
+            ms.animate();
+            ds.animate();
+            hs.animate();
+        }
+    }
     
+    /**
+     * Draws the scene.
+     */
+    public void paintComponent(Graphics g)
+    {
+        Graphics2D g2 = (Graphics2D)g;
+        tms.draw(g2);
+        ms.draw(g2);
+        hs.draw(g2);
+        ds.draw(g2);
+
+    }
     
     //<editor-fold desc="controlState Methods">
     //Methods who's primary function is to transition the control state from one state to another.
