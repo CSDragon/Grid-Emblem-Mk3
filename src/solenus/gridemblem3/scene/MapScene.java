@@ -510,10 +510,6 @@ public class MapScene extends Scene
                     }
                     
             }  
-        
-            
-            //always do this.
-            runChildren();
         }
         
         return -1;
@@ -541,10 +537,6 @@ public class MapScene extends Scene
             
             //UI
             fightUI.animate();
-                       
-            
-            //always do this.
-            drawChildren();
         }
     }
 
