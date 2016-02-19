@@ -7,8 +7,6 @@ package solenus.gridemblem3.scene;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.Collections;
 import javax.swing.JPanel;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
@@ -18,13 +16,18 @@ import solenus.gridemblem3.InputManager;
  *
  * @author Chris
  */
-public abstract class Scene extends JPanel
+public abstract class Scene
 {
     protected Scene targetScene;
     protected Scene parent;
     protected boolean active;
     protected boolean visible;
     protected int controlState;
+    
+    protected int width;
+    protected int height;
+    protected int xLoc;
+    protected int yLoc;
     
     //<editor-fold desc="Constructors">
     
@@ -35,6 +38,7 @@ public abstract class Scene extends JPanel
     public Scene(Scene _parent)
     {
         this();
+
         //set parent and children
         parent = _parent;
     }
@@ -44,9 +48,11 @@ public abstract class Scene extends JPanel
      */
     public Scene()
     {
-        //everything set to null, false or 0.
-        setLayout(null);
-        setVisible(false);
+        width = GridEmblemMk3.WIDTH;
+        height = GridEmblemMk3.HEIGHT;
+        
+        xLoc = 0;
+        yLoc = 0;
     }
     
     //</editor-fold>
@@ -117,8 +123,8 @@ public abstract class Scene extends JPanel
      */
     public void resize()
     {
-        setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
-        setPreferredSize(new Dimension(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT));
+        width = GridEmblemMk3.WIDTH;
+        height = GridEmblemMk3.HEIGHT;
     }
 
     
@@ -148,34 +154,29 @@ public abstract class Scene extends JPanel
     public void visible()
     {
         visible = true;
-        setVisible(true);
     }
     
     public void invisible()
     {
         visible = false;
-        setVisible(false);
     }
     
     public void start()
     {
         active = true;
         visible = true;
-        setVisible(true);
     }
     
     public void stop() //Used to temporarily halt the scene.
     {
         active = false;
         visible = false;
-        setVisible(false);
     }
     
     public void end() //Used to terminate a scene.
     {
         active = false;
         visible = false;
-        setVisible(false);
     }
     
     public boolean getAcitve()

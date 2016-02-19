@@ -35,8 +35,6 @@ public class TopMenuScene extends Scene
     {
         //seup
         super(parent);
-        this.setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
-        
         
         //Initialize menus
         main     = new MainMenu();
@@ -240,8 +238,7 @@ public class TopMenuScene extends Scene
      */
     public void resize()
     {
-        setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
-        setPreferredSize(new Dimension(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT));
+        super.resize();
     }
 
     //</editor-fold>

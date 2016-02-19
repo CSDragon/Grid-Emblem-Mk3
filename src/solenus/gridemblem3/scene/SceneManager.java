@@ -28,20 +28,15 @@ public class SceneManager extends Scene
      */
     public SceneManager()
     {
+        super();
         //boot it up
-        setLayout(null);
-        setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
-        setLocation(0, 0);
-        setPreferredSize(new Dimension(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT));
         start();
         
         //Make the child scenes.
         ms = new MapScene(this);
         tms = new TopMenuScene(this);
         ds = new DialogueScene(this);
-        add(ds);
         hs = new HQScene(this);
-        add(hs);
     }
         
     /**

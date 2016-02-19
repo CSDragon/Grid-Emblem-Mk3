@@ -28,6 +28,7 @@ public class GridEmblemMk3
     private static final double timeBetweenFrames = 1000000000/60.0;
     
     private static JFrame gameFrame;
+    private static GamePanel gamePanel;
     private static SceneManager sceneControl;
     private static InputManager im;
     private static MotionPanel mp;
@@ -61,7 +62,9 @@ public class GridEmblemMk3
         gameFrame.add(mp);
         
         sceneControl = new SceneManager();
-        gameFrame.add(sceneControl);
+        
+        gamePanel = new GamePanel(sceneControl);
+        gameFrame.add(gamePanel);
         
         gameFrame.pack();
         gameFrame.setVisible(true);

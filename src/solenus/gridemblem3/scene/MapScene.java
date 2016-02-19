@@ -84,7 +84,6 @@ public class MapScene extends Scene
     public MapScene(Scene parent)//TEST: make this take an extra arguement, the map id.
     {
         super(parent);
-        this.setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
         controlState = 1;
         
         //TEST: make map take an argument from this method's arguements

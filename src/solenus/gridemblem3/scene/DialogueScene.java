@@ -18,7 +18,5 @@ public class DialogueScene extends Scene
     public DialogueScene(Scene parent)
     {
         super(parent);
-        
-        this.setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
     }
 }

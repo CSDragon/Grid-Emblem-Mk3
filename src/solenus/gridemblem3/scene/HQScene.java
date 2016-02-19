@@ -18,7 +18,5 @@ public class HQScene extends Scene
     public HQScene(Scene parent)
     {
         super(parent);
-        
-        this.setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
     }
 }
