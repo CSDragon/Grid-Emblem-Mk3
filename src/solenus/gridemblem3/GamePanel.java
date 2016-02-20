@@ -7,6 +7,7 @@ package solenus.gridemblem3;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import solenus.gridemblem3.scene.SceneManager;
 
@@ -32,7 +33,8 @@ public class GamePanel extends JPanel
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        sceneControl.paintComponent(g);
+        Graphics2D g2 = (Graphics2D)g;
+        sceneControl.draw(g2);
     }
     
 }

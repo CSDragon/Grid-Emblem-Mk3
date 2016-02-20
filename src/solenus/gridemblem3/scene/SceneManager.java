@@ -5,10 +5,8 @@
  */
 package solenus.gridemblem3.scene;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 
 /**
@@ -55,6 +53,9 @@ public class SceneManager extends Scene
                 case 2:
                     ms.respondControls(im);
                     break;
+                case 3:
+                    ds.respondControls(im);
+                    break;
             }
         }
     }
@@ -86,6 +87,8 @@ public class SceneManager extends Scene
                         case 1:
                             cst1to2();
                             break;
+                        case 2:
+                            cst1to3();
                     }
                 case 2:
                     switch(ms.runFrame())
@@ -114,14 +117,17 @@ public class SceneManager extends Scene
     
     /**
      * Draws the scene.
+     * @param g2 The graphics
      */
-    public void paintComponent(Graphics g)
+    public void draw(Graphics2D g2)
     {
-        Graphics2D g2 = (Graphics2D)g;
-        tms.draw(g2);
-        ms.draw(g2);
-        hs.draw(g2);
-        ds.draw(g2);
+        if(visible)
+        {
+            tms.draw(g2);
+            ms.draw(g2);
+            hs.draw(g2);
+            ds.draw(g2);
+        }
 
     }
     
@@ -149,6 +155,14 @@ public class SceneManager extends Scene
         tms.end();
         ms.start();
         targetScene = ms;
+    }
+    
+    public void cst1to3()
+    {
+        controlState = 3;
+        tms.end();
+        ds.start();
+        targetScene = ds;
     }
     
     //</editor-fold>

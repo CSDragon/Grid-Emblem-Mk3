@@ -118,6 +118,19 @@ public class Rendering
         g.drawString(s, x, y);
     }
     
+    /**
+     * 
+     * @param g The graphics
+     * @param x The x location to render at.
+     * @param y The y location to render at.
+     * @param width The width
+     * @param height The height
+     * @param c The camera.
+     * @param xAdjust Adjustment due to orientation
+     * @param yAdjust Adjustment due to orientation
+     * @param xOrientation the orientation which it should be rendered, left, center or right.
+     * @param yOrientation the orientation which it should be rendered, up, center or down.
+     */
     public static void renderRectAbsolute(Graphics2D g, int x, int y, int width, int height, Color c, int xAdjust, int yAdjust, int xOrientation, int yOrientation)
     {
         //change the orientation

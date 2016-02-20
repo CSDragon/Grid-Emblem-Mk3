@@ -116,8 +116,6 @@ public abstract class Scene
         }
     }
     
-  
-    
     /**
      * resizes the scene to the current app size
      */

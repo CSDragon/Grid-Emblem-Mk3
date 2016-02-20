@@ -62,6 +62,7 @@ public class GridEmblemMk3
         gameFrame.add(mp);
         
         sceneControl = new SceneManager();
+        sceneControl.start();
         
         gamePanel = new GamePanel(sceneControl);
         gameFrame.add(gamePanel);
@@ -74,8 +75,6 @@ public class GridEmblemMk3
         
         gameFrame.addKeyListener(im);
         gameFrame.setLocationRelativeTo(null);
-        
-        
         
         runGame();
 		

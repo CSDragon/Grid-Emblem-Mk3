@@ -5,10 +5,7 @@
  */
 package solenus.gridemblem3.scene;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.ui.menu.MainMenu;
 import solenus.gridemblem3.ui.menu.SettingsMenu;
@@ -132,7 +129,7 @@ public class TopMenuScene extends Scene
                         case MainMenu.NEWGAME:
                             return 1;
                         case MainMenu.CONTINUE:
-                            break;
+                            return 2;
                         case MainMenu.SETTINGS:
                             cst0to3();
                             break;

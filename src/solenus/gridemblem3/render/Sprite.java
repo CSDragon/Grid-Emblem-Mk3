@@ -135,7 +135,9 @@ public class Sprite
         }
     }
     
-    
+    /**
+     * 
+     */
     public void animate()
     {
         frameCount++;

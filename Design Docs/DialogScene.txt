@@ -1,0 +1,9 @@
+DialogScene elements.
+
+Let's start with just 2 portraits. Left and Right.
+
+No log, yet.
+
+Text box is just a box. Has a little place in the upper left for the active name.
+
+There's a blocking image that forces the scene into 720p. There's also an optional background image.
