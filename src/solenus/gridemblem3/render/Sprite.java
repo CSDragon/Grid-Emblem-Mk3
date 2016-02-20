@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -23,11 +24,14 @@ public class Sprite
     private String name;
     private BufferedImage spriteSheet;
     private BufferedImage displaySprite;
+    private ArrayList<BufferedImage> sprites;
     
     private int height;
     private int width;
     private int centerX;
     private int centerY;
+    private int rows;
+    private int cols;
     
     private Animation activeAnimation;
     private int activeFrame;
@@ -44,7 +48,7 @@ public class Sprite
     {
         name = n;
         
-        animationList = new TreeMap<String, Animation>();
+        animationList = new TreeMap<>();
         
         try
         {
@@ -61,6 +65,9 @@ public class Sprite
             width = Integer.decode(in.readLine().substring(7));
             centerX = Integer.decode(in.readLine().substring(9));
             centerY = Integer.decode(in.readLine().substring(9));
+            rows = Integer.decode(in.readLine().substring(6));
+            cols = Integer.decode(in.readLine().substring(6));
+
             
             //discard extra line
             in.readLine();
@@ -115,7 +122,11 @@ public class Sprite
             System.exit(-1);
         }
         
-        displaySprite = spriteSheet.getSubimage(0, 0, width, height);
+        sprites = new ArrayList<>();
+        for(int i = 0; i<rows; i++)
+            for(int j = 0; j<cols; j++)
+                sprites.add(spriteSheet.getSubimage(j*width, i*height, width, height));
+        displaySprite = sprites.get(0);
     }
     
     
@@ -147,7 +158,7 @@ public class Sprite
             activeFrame = 0;
         
         
-        displaySprite = spriteSheet.getSubimage(activeAnimation.getStartX()*width + activeFrame*width, activeAnimation.getStartY()*height, width, height);
+        displaySprite = sprites.get(activeAnimation.getStartY()*rows + activeAnimation.getStartX() + activeFrame);
     }
     
     

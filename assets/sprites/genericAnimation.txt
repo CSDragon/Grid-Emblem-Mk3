@@ -2,6 +2,8 @@ height: 120
 width: 80
 centerX: 40
 centerY: 80
+rows: 5
+cols: 4
 
 animations: 5
 idle,0,0,4,10
