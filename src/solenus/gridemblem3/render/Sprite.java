@@ -157,8 +157,7 @@ public class Sprite
         if(activeFrame%activeAnimation.getNumFrames() == 0)
             activeFrame = 0;
         
-        
-        displaySprite = sprites.get(activeAnimation.getStartY()*rows + activeAnimation.getStartX() + activeFrame);
+        displaySprite = sprites.get(activeAnimation.getStartY()*cols + activeAnimation.getStartX() + activeFrame);
     }
     
     
