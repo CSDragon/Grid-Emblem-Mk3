@@ -95,6 +95,11 @@ public class SceneManager extends Scene
                     {
                         
                     }
+                case 3:
+                    switch(ds.runFrame())
+                    {
+                        
+                    }
             }
         }
         
@@ -161,7 +166,7 @@ public class SceneManager extends Scene
     {
         controlState = 3;
         tms.end();
-        ds.start();
+        ds.start("test");
         targetScene = ds;
     }
     

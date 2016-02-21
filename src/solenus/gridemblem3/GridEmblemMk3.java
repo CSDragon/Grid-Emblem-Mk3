@@ -26,6 +26,7 @@ public class GridEmblemMk3
     //though, if it's having trouble processing the gamestate good gracious it's gonna have trouble rendering.
     private static final int MAX_FRAMESKIP = 5; 
     private static final double timeBetweenFrames = 1000000000/60.0;
+    private static final boolean VISUALDEBUG = true;
     
     private static JFrame gameFrame;
     private static GamePanel gamePanel;
@@ -107,18 +108,24 @@ public class GridEmblemMk3
 
                 //Game Logic
                 sceneControl.runFrame();
-                nextGameTick += timeBetweenFrames;
                 
                 //Run Animations
                 sceneControl.animate();
+                
+                //set the next frame
+                nextGameTick += timeBetweenFrames;
 
+                if(VISUALDEBUG)
                     gameFrame.repaint();
+
 
                 //Graphics: If the graphics step takes too long, the system is designed to skip it, with a minimum of 12fps
                 if(System.currentTimeMillis() > nextGameTick && loops < MAX_FRAMESKIP)
                     loops++;
                 else
                 {
+                    if(!VISUALDEBUG)
+                        gameFrame.repaint();
                     loops = 0;
                 } 
             }

@@ -72,16 +72,21 @@ public class Rendering
     {
         //change the orientation
         if(xOrientation == 1)
-            x = GridEmblemMk3.HALFWIDTH - xAdjust + x;
+            x = GridEmblemMk3.HALFWIDTH + x;
         else if(xOrientation == 2)
-            x = GridEmblemMk3.WIDTH - xAdjust - x;
+            x = GridEmblemMk3.WIDTH - x;
 
         if(yOrientation == 1)
-            y = GridEmblemMk3.HALFHEIGHT - yAdjust + y;
+            y = GridEmblemMk3.HALFHEIGHT + y;
         else if (yOrientation == 2)
-            y = GridEmblemMk3.HEIGHT - yAdjust - y;
+            y = GridEmblemMk3.HEIGHT - y;
 
-        g.drawImage(image, x, y, null);
+        g.drawImage(image, x - xAdjust, y - yAdjust, null);
+    }
+    
+    public static void renderAbsolute(Sprite sprite, Graphics2D g, int x, int y, int xOrientation, int yOrientation)
+    {
+        renderAbsolute(sprite.getDisplaySprite(), g, x, y, sprite.getCenterX(), sprite.getCenterY(), xOrientation, yOrientation);
     }
     
     

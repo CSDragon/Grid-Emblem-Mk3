@@ -21,23 +21,23 @@ import javax.swing.JOptionPane;
  */
 public class Sprite 
 {
-    private String name;
-    private BufferedImage spriteSheet;
-    private BufferedImage displaySprite;
-    private ArrayList<BufferedImage> sprites;
+    protected String name;
+    protected BufferedImage spriteSheet;
+    protected BufferedImage displaySprite;
+    protected ArrayList<BufferedImage> sprites;
     
-    private int height;
-    private int width;
-    private int centerX;
-    private int centerY;
-    private int rows;
-    private int cols;
+    protected int height;
+    protected int width;
+    protected int centerX;
+    protected int centerY;
+    protected int rows;
+    protected int cols;
     
-    private Animation activeAnimation;
-    private int activeFrame;
-    private int frameCount;
+    protected Animation activeAnimation;
+    protected int activeFrame;
+    protected int frameCount;
     
-    private TreeMap<String, Animation> animationList;
+    protected TreeMap<String, Animation> animationList;
     
     
     /**
@@ -47,7 +47,6 @@ public class Sprite
     public Sprite(String n)
     {
         name = n;
-        
         animationList = new TreeMap<>();
         
         try
@@ -57,8 +56,6 @@ public class Sprite
             
             //load animations
             BufferedReader in = new BufferedReader(new FileReader("assets/sprites/"+name+"Animation.txt"));
-            String read;
-            
             
             //get sprite dimensions
             height = Integer.decode(in.readLine().substring(8));
@@ -74,13 +71,11 @@ public class Sprite
             
             
             //get number of animations
-            read = in.readLine();
-            int numAnimations = Integer.decode(read.substring(12));
+            int numAnimations = Integer.decode(in.readLine().substring(12));
             
             for(int i = 0; i<numAnimations; i++)
             {
-                read = in.readLine();
-                String[] arr = read.split(",");    
+                String[] arr = in.readLine().split(",");    
 
                 animationList.put(arr[0], new Animation(arr[0],Integer.decode(arr[1]),Integer.decode(arr[2]),Integer.decode(arr[3]), Integer.decode(arr[4])));
             }
@@ -89,14 +84,11 @@ public class Sprite
             
             
             //load triggers
-            read = in.readLine();
-            
-            int numTransitions = Integer.decode(read.substring(13));
+            int numTransitions = Integer.decode(in.readLine().substring(13));
             
             for(int i = 0; i < numTransitions; i++)
             {
-                read = in.readLine();
-                String[] arr = read.split(",",4); 
+                String[] arr = in.readLine().split(",",4); 
                 if(arr[0].equals("any"))
                     for(Map.Entry<String,Animation> a : animationList.entrySet())
                     {
@@ -128,8 +120,18 @@ public class Sprite
                 sprites.add(spriteSheet.getSubimage(j*width, i*height, width, height));
         displaySprite = sprites.get(0);
     }
+
+    /**
+     * "Default" constructor for child classes. If this is ever called to directly make a sprite, we have a problem.
+     */
+    public Sprite()
+    {
+    }
     
-    
+    /**
+     * Sends a trigger to the animation, telling it to move to a different animation.
+     * @param trigger The name of the trigger specified in the animation file.
+     */
     public void sendTrigger(String trigger)
     {
         Transition t = activeAnimation.getTransition(trigger);
@@ -147,7 +149,7 @@ public class Sprite
     }
     
     /**
-     * 
+     * Advance the sprite's animation 1 frame.
      */
     public void animate()
     {
@@ -161,12 +163,12 @@ public class Sprite
     }
     
     
-    //getters and setters
+    //<editor-fold desc="getters and setters">
+    
     public BufferedImage getDisplaySprite()
     {
         return displaySprite;
     }
-    
     
     public int getCenterX()
     {
@@ -178,4 +180,5 @@ public class Sprite
         return centerY;
     }
     
+    //</editor-fold>
 }
