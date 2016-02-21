@@ -51,6 +51,10 @@ public class DialogueScene extends Scene
     private int curCommand;
     private String displayString;
     
+    private int entryAnimation = 30;
+    private int leftEntryCounter;
+    private int rightEntryCounter;
+    
     public DialogueScene(Scene parent)
     {
         super(parent);
@@ -123,7 +127,12 @@ public class DialogueScene extends Scene
                     nextLine();
                     break;
                 case 3:
-                    controlState = 2;
+                    if(leftEntryCounter > 0)
+                        leftEntryCounter--;
+                    if(rightEntryCounter > 0)
+                        rightEntryCounter--;
+                    if(leftEntryCounter == 0 && rightEntryCounter == 0)
+                        controlState = 2;
                     break;
                 case 4:
                     controlState = 1;
@@ -162,9 +171,9 @@ public class DialogueScene extends Scene
             
             //test
             if(left != null)
-                Rendering.renderAbsolute(left, g, -250, 89, 1, 1);
+                Rendering.renderAbsolute( left, g, -250 - 20*leftEntryCounter,  89, 1, 1);
             if(right != null)
-                Rendering.renderAbsolute(right, g, 250, 89, 1, 1);
+                Rendering.renderAbsolute(right, g,  250 + 20*rightEntryCounter, 89, 1, 1);
             
             Rendering.renderAbsolute(blackout, g, 0, 0, 960, 540, 1, 1);
             Rendering.renderAbsolute(textbox , g, 0, 0, 640, 360, 1, 1);
@@ -197,6 +206,9 @@ public class DialogueScene extends Scene
         nsControl = 0;
         laControl = 0;
         raControl = 0;
+        
+        leftEntryCounter = 0;
+        rightEntryCounter = 0;
 
         curCommand = -1;
         displayString = null;
@@ -297,12 +309,14 @@ public class DialogueScene extends Scene
                 left = speakers.get(leftTransitions.get(ltControl));
                 ltControl++;
                 left.setFlipped(false);
+                leftEntryCounter = entryAnimation;
                 controlState = 3;
                 break;
             case "RT":
                 right = speakers.get(rightTransitions.get(rtControl));
                 rtControl++;
                 right.setFlipped(true);
+                rightEntryCounter = entryAnimation;
                 controlState = 3;
                 break;
                 

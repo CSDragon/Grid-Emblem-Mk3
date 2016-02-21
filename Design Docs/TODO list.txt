@@ -22,12 +22,11 @@ TODOs
 		Everything
 		
 	DialogScene:
-		Graphics
+		Text animations, QOL
 	
 	
 Current TODO Stack:
-	DialogScene
-	Entry Animations, Text Animations
+	
 		
 
 BUGS:
