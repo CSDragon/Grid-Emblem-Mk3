@@ -16,3 +16,7 @@ RS: Blah!
 LT: 3
 RT: 2
 LS: BLAH!
+LA: happy
+RS: Bluh
+RT: 1
+LS: Bluuuuuh

@@ -17,16 +17,17 @@ TODOs
 	
 	FightUI:
 		Graphics
-		
-		
 	
 	AI: 
 		Everything
+		
+	DialogScene:
+		Graphics
 	
 	
 Current TODO Stack:
 	DialogScene
-	Entry Animations, Unit Animations, Text Animations
+	Entry Animations, Text Animations
 		
 
 BUGS:

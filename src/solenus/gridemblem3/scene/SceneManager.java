@@ -173,6 +173,15 @@ public class SceneManager extends Scene
     //</editor-fold>
 
     
+    public void resize()
+    {
+        super.resize();
+        ms.resize();
+        tms.resize();
+        ds.resize();
+        hs.resize();
+    }
+    
 }
 
 

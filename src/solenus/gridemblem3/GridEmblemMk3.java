@@ -5,6 +5,7 @@
  */
 package solenus.gridemblem3;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import solenus.gridemblem3.scene.SceneManager;
@@ -219,18 +220,18 @@ public class GridEmblemMk3
      */
     public static void setResolution(int w, int h)
     {
-        gameFrame.setTitle(gameFrame.getGraphicsConfiguration().getDevice().getIDstring());
-
         WIDTH = w;
         HEIGHT = h;
         HALFWIDTH = w/2;
         HALFHEIGHT = h/2;
         
         sceneControl.resize();
+        
+        mp.setPreferredSize(new Dimension(w,h));
 
         gameFrame.pack();
+        gameFrame.setSize(w,h);
         gameFrame.setLocationRelativeTo(null);
-
         
         saveGraphicsSettings();
         

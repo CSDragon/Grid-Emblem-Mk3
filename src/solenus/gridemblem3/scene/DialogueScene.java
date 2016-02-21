@@ -32,15 +32,21 @@ public class DialogueScene extends Scene
     private ArrayList<DialogSprite> speakers;
     private int numSpeakers;
     
-    private ArrayList<Integer> commands;
+    private ArrayList<String> commands;
     private ArrayList<Integer> leftTransitions;
     private ArrayList<Integer> rightTransitions;
     private ArrayList<String> leftScripts;
     private ArrayList<String> rightScripts;
+    private ArrayList<String> neutralScripts;
+    private ArrayList<String> leftAnimations;
+    private ArrayList<String> rightAnimations;
     private int ltControl;
     private int rtControl;
     private int lsControl;
     private int rsControl;
+    private int nsControl;
+    private int laControl;
+    private int raControl;
     
     private int curCommand;
     private String displayString;
@@ -117,6 +123,10 @@ public class DialogueScene extends Scene
                     nextLine();
                     break;
                 case 3:
+                    controlState = 2;
+                    break;
+                case 4:
+                    controlState = 1;
                     break;
             }
         }
@@ -177,10 +187,16 @@ public class DialogueScene extends Scene
         rightTransitions = new ArrayList<>();
         leftScripts = new ArrayList<>();
         rightScripts = new ArrayList<>();
+        neutralScripts = new ArrayList<>();
+        leftAnimations = new ArrayList<>();
+        rightAnimations = new ArrayList<>();
         ltControl = 0;
         rtControl = 0;
         lsControl = 0;
         rsControl = 0;
+        nsControl = 0;
+        laControl = 0;
+        raControl = 0;
 
         curCommand = -1;
         displayString = null;
@@ -230,26 +246,30 @@ public class DialogueScene extends Scene
             nextCommand = in.readLine();
             while(nextCommand != null)
             {
+                commands.add(nextCommand.substring(0,2));
                 switch(nextCommand.substring(0,2))
                 {
                     case "LT":
-                        commands.add(0);
                         leftTransitions.add(Integer.decode(nextCommand.substring(4)));
                         break;
-
                     case "RT":
-                        commands.add(1);
                         rightTransitions.add(Integer.decode(nextCommand.substring(4)));
                         break;
 
                     case "LS":
-                        commands.add(2);
                         leftScripts.add(nextCommand.substring(4));
                         break;
-
                     case "RS":
-                        commands.add(3);
                         rightScripts.add(nextCommand.substring(4));
+                        break;
+                    case "NS":
+                        neutralScripts.add(nextCommand.substring(4));
+                        
+                    case "LA":
+                        leftAnimations.add(nextCommand.substring(4));
+                        break;
+                    case "RA":
+                        rightAnimations.add(nextCommand.substring(4));
                         break;
                 }
                 
@@ -273,26 +293,44 @@ public class DialogueScene extends Scene
         curCommand++;
         switch(commands.get(curCommand))
         {
-            case 0:
+            case "LT":
                 left = speakers.get(leftTransitions.get(ltControl));
                 ltControl++;
                 left.setFlipped(false);
+                controlState = 3;
                 break;
-            case 1:
+            case "RT":
                 right = speakers.get(rightTransitions.get(rtControl));
                 rtControl++;
                 right.setFlipped(true);
+                controlState = 3;
                 break;
-            case 2:
+                
+            case "LS":
                 displayString = leftScripts.get(lsControl);
                 lsControl++;
-                controlState = 1;
+                controlState = 4;
                 break;
-            case 3:
+            case "RS":
                 displayString = rightScripts.get(rsControl);
                 rsControl++;
-                controlState = 1;
+                controlState = 4;
                 break;
+            case "NS":
+                displayString = neutralScripts.get(nsControl);
+                nsControl++;
+                controlState = 4;
+                break;
+                
+            case "LA":
+                left.sendTrigger(leftAnimations.get(laControl));
+                laControl++;
+                break;
+            case "RA":
+                right.sendTrigger(rightAnimations.get(raControl));
+                raControl++;
+                break;
+                
         }
     }
     
