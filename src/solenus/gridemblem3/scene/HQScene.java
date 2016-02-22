@@ -5,7 +5,7 @@
  */
 package solenus.gridemblem3.scene;
 
-import solenus.gridemblem3.GridEmblemMk3;
+import solenus.gridemblem3.ui.menu.HQMenu;
 
 /**
  *
@@ -13,10 +13,17 @@ import solenus.gridemblem3.GridEmblemMk3;
  */
 public class HQScene extends Scene
 {
-    //TODO
+    private HQMenu hqMenu;
+    
     
     public HQScene(Scene parent)
     {
         super(parent);
+        hqMenu = new HQMenu();
+    }
+    
+    public void start()
+    {
+        hqMenu.start();
     }
 }

@@ -1,0 +1,9 @@
+Items
+Shop
+Manage
+	Award XP
+	Skills
+Support
+Info (News/Conversations)
+Save
+End

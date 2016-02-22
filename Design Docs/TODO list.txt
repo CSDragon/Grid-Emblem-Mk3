@@ -22,8 +22,9 @@ TODOs
 		Everything
 		
 	DialogScene:
-		Text animations, QOL
-	
+		Text animations
+		Fade out when not talking
+		Graphics logic is nonsense right now.
 	
 Current TODO Stack:
 	
