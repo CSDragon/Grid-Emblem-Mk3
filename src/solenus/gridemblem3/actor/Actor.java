@@ -17,11 +17,22 @@ public abstract class Actor extends GridRenderable
 {
     protected boolean passable;
     
-    
+    /**
+     * Creates an actor with a sprite.
+     * @param spriteName The name of the sprtie we're loading in.
+     */
     public Actor(String spriteName)
     {
         super(spriteName);
-        
+        passable = false;
+    }
+    
+    /**
+     * Creates an actor with no sprite.
+     */
+    public Actor()
+    {
+        super();
         passable = false;
     }
     

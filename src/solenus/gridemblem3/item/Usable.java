@@ -5,14 +5,17 @@
  */
 package solenus.gridemblem3.item;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 /**
  * 
  *
  * @author Chris
  */
-public class Usable 
+public class Usable extends Item
 {
-    private String name;
     private int numUses;
     private String effect;
     
@@ -40,6 +43,36 @@ public class Usable
     }
 
     /**
+     * Saves the Usable to a file.
+     * @param bw The file writer.
+     * @throws IOException 
+     */
+    public void save(BufferedWriter bw) throws IOException
+    {
+        bw.write("Name: "+name); bw.newLine();
+        bw.write("Value: "+goldValue); bw.newLine();
+        bw.write("Number of Uses: "+numUses); bw.newLine();
+        bw.write("Effect: "+effect); bw.newLine();
+        bw.newLine();
+    }
+    
+    /**
+     * Creates a new usable from a text file
+     * @param in The text we're reading from.
+     * @throws IOException 
+     */
+    public Usable(BufferedReader in) throws IOException
+    {
+        name = in.readLine().substring(6);
+        goldValue = Integer.parseInt(in.readLine().substring(7));
+        numUses = Integer.parseInt(in.readLine().substring(16));
+        effect = in.readLine().substring(7);
+        in.readLine();
+    }
+    
+    //<editor-fold desc="Getters and Setters">
+    
+    /**
      * @return the name
      */
     public String getName() 
@@ -63,5 +96,6 @@ public class Usable
         return effect;
     }
     
+    //</editor-fold>
     
 }

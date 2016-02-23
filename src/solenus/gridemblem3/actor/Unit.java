@@ -5,6 +5,9 @@
  */
 package solenus.gridemblem3.actor;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import solenus.gridemblem3.item.*;
 import java.util.ArrayList;
 
@@ -84,15 +87,17 @@ public class Unit extends Actor
     private double luckup;
 
     private ArrayList<Weapon> weaponInventory;
-    private ArrayList<Item> inventory;
+    private ArrayList<Usable> inventory;
     
     
     //<editor-fold desc="constructors">
 
-    //defaultConstructor
+    /**
+     * Creates an empty unit.
+     */
     public Unit()
     {
-        super("generic");
+        super();
         
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
@@ -167,14 +172,14 @@ public class Unit extends Actor
     
     /**
      * Ads an item to a character's inventory
-     * @param w add to inventory
+     * @param u add to inventory
      * @return if it was successfully added (if false send to convoy)
      */
-    public boolean addItem(Item w)
+    public boolean addItem(Usable u)
     {
         if(inventory.size() < INVENTORY_LIMIT)
         {
-            inventory.add(w);
+            inventory.add(u);
             return true;
         }
         
@@ -326,7 +331,104 @@ public class Unit extends Actor
     {
         return 1;
     }
+    
+    /**
+     * Writes the unit to a file.
+     * @param bw The file writer.
+     * @throws IOException 
+     */
+    public void save(BufferedWriter bw) throws IOException
+    {
+        bw.write("Name: "+name); bw.newLine();
+        bw.write("Class: "+unitClass); bw.newLine();
+        bw.write("Level: "+level); bw.newLine();
+        bw.write("XP: "+xp); bw.newLine();
+        bw.write("HP: "+hp); bw.newLine();
+        bw.write("STR: "+str); bw.newLine();
+        bw.write("MAG: "+mag); bw.newLine();
+        bw.write("SPD: "+spd); bw.newLine();
+        bw.write("Skill: "+skill); bw.newLine();
+        bw.write("DEF: "+def); bw.newLine();
+        bw.write("RES: "+res); bw.newLine();
+        bw.write("Luck: "+luck); bw.newLine();
+        bw.write("Move: "+move); bw.newLine();
+   
+        bw.write("HPUP: "+hpup); bw.newLine();
+        bw.write("STRUP: "+strup); bw.newLine();
+        bw.write("MAGUP: "+magup); bw.newLine();
+        bw.write("SPDUP: "+spdup); bw.newLine();
+        bw.write("SkillUP: "+skillup); bw.newLine();
+        bw.write("DEFUP: "+defup); bw.newLine();
+        bw.write("RESUP: "+resup); bw.newLine();
+        bw.write("LuckUP: "+luckup);  bw.newLine();
+        
+        bw.write("Move Type: "+transportType); bw.newLine();
+        bw.write("Armor Type: "+armorType); bw.newLine();
+        bw.newLine();
+        
+        bw.write("Num Weapons: "+weaponInventory.size()); bw.newLine();
+        bw.newLine();
+        for(Weapon w: weaponInventory)
+            w.save(bw);
+        
+        bw.write("Num Items: "+inventory.size()); bw.newLine();
+        bw.newLine();
+        for(Usable u: inventory)
+            u.save(bw);
+        
+        bw.newLine();
+    }
+    
+    /**
+     * Creates a new unit from a text file
+     * @param in The text we're reading from.
+     * @throws IOException 
+     */
+    public Unit(BufferedReader in) throws IOException
+    {
+        name = in.readLine().substring(6);
+        unitClass = in.readLine().substring(7);
+        level = Integer.parseInt(in.readLine().substring(7));
+        xp = Integer.parseInt(in.readLine().substring(4));
+        hp  = Double.parseDouble(in.readLine().substring(4));
+        str = Double.parseDouble(in.readLine().substring(5));
+        mag = Double.parseDouble(in.readLine().substring(5));
+        spd = Double.parseDouble(in.readLine().substring(5));
+        skill = Double.parseDouble(in.readLine().substring(7));
+        def = Double.parseDouble(in.readLine().substring(5));
+        res = Double.parseDouble(in.readLine().substring(5));
+        luck = Double.parseDouble(in.readLine().substring(6));
+        move = Integer.parseInt(in.readLine().substring(6));
+        hpup  = Double.parseDouble(in.readLine().substring(6));
+        strup = Double.parseDouble(in.readLine().substring(7));
+        magup = Double.parseDouble(in.readLine().substring(7));
+        spdup = Double.parseDouble(in.readLine().substring(7));
+        skillup = Double.parseDouble(in.readLine().substring(9));
+        defup = Double.parseDouble(in.readLine().substring(7));
+        resup = Double.parseDouble(in.readLine().substring(7));
+        luckup = Double.parseDouble(in.readLine().substring(8));
+        transportType = Integer.parseInt(in.readLine().substring(11));
+        armorType = Integer.parseInt(in.readLine().substring(12));
+        in.readLine();
 
+        weaponInventory = new ArrayList<>();
+        inventory = new ArrayList<>();
+        
+        int numWeapons = Integer.parseInt(in.readLine().substring(13));
+        in.readLine();
+        
+        for(int i = 0; i<numWeapons; i++)
+            weaponInventory.add(new Weapon(in));
+        
+        int numItems = Integer.parseInt(in.readLine().substring(11));
+        in.readLine();
+        
+        for(int i = 0; i<numItems; i++)
+            inventory.add(new Usable(in));
+        
+        in.readLine();
+    }
+    
     
     //<editor-fold desc="getters and setters">
     
@@ -346,6 +448,11 @@ public class Unit extends Actor
     public String getName()
     {
         return name;
+    }
+    
+    public String getUnitClass()
+    {
+        return unitClass;
     }
     
     /**
@@ -668,7 +775,7 @@ public class Unit extends Actor
         return transportType;
     }
     
-    public ArrayList<Item> getInventory()
+    public ArrayList<Usable> getInventory()
     {
         return inventory;
     }

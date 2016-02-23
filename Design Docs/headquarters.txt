@@ -1,8 +1,6 @@
 Items
 Shop
-Manage
-	Award XP
-	Skills
+Skills
 Support
 Info (News/Conversations)
 Save

@@ -45,6 +45,15 @@ public abstract class GridRenderable
     }
     
     /**
+     * Creates a GridRenderable object with no sprite.
+     */
+    public GridRenderable()
+    {
+        visible = true;
+        sprite = null;
+    }
+    
+    /**
      * animates the sprite
      */
     public void animate()

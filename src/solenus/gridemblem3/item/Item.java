@@ -12,5 +12,6 @@ package solenus.gridemblem3.item;
  */
 public abstract class Item 
 {
-    private int goldValue;
+    protected String name;
+    protected int goldValue;
 }

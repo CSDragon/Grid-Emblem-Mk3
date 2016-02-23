@@ -5,12 +5,16 @@
  */
 package solenus.gridemblem3.item;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 /**
  * Weapons are objects of this class
  *
  * @author Chris
  */
-public class Weapon 
+public class Weapon extends Item
 {
     //Weapon types
     private static final int SWORD = 0;
@@ -21,8 +25,6 @@ public class Weapon
     private static final int ELEMENTAL = 5;
     private static final int DARK = 6;
       
-    private String name;
-    
     private int weaponType;
     private int strOrMag;
     private int mastery;
@@ -61,8 +63,54 @@ public class Weapon
     }
     
 
+    /**
+     * Writes a weapon to a file.
+     * @param bw The file writer
+     * @throws IOException 
+     */
+    public void save(BufferedWriter bw) throws IOException
+    {
+        bw.write("Name: "+name); bw.newLine();
+        bw.write("Value: "+goldValue); bw.newLine();
+        bw.write("Weapon Type: "+weaponType); bw.newLine();
+        bw.write("Strenght or Magic: "+strOrMag); bw.newLine();
+        bw.write("Mastery: "+mastery); bw.newLine();
+        bw.write("Damage: "+dmg); bw.newLine();
+        bw.write("Max Uses: "+maxUses); bw.newLine();
+        bw.write("Cur Uses: "+curUses); bw.newLine();
+        bw.write("Hit: "+hit); bw.newLine();
+        bw.write("Weight: "+weight); bw.newLine();
+        bw.write("Crit: "+crit); bw.newLine();
+        bw.write("Min Range: "+minRange); bw.newLine();
+        bw.write("Max Range: "+maxRange); bw.newLine();
+        bw.newLine();
+    }
+    
+    /**
+     * Creates a new weapon from a text file
+     * @param in The text we're reading from.
+     * @throws IOException 
+     */
+    public Weapon(BufferedReader in) throws IOException
+    {
+        name = in.readLine().substring(6);
+        goldValue = Integer.parseInt(in.readLine().substring(7));
+        weaponType = Integer.parseInt(in.readLine().substring(13));
+        strOrMag = Integer.parseInt(in.readLine().substring(19));
+        mastery = Integer.parseInt(in.readLine().substring(9));
+        dmg = Integer.parseInt(in.readLine().substring(8));
+        maxUses = Integer.parseInt(in.readLine().substring(10));
+        curUses = Integer.parseInt(in.readLine().substring(10));
+        hit = Integer.parseInt(in.readLine().substring(5));
+        weight = Integer.parseInt(in.readLine().substring(8));
+        crit = Integer.parseInt(in.readLine().substring(6));
+        minRange = Integer.parseInt(in.readLine().substring(11));
+        maxRange = Integer.parseInt(in.readLine().substring(11));
+        in.readLine();
+    }
 
     
+    //<editor-fold desc="Getters and Setters">
     
     /**
      * 
@@ -148,5 +196,5 @@ public class Weapon
         return maxRange;
     }
     
-    
+    //</editor-fold>
 }

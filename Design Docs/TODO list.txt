@@ -46,9 +46,10 @@ Fixed Bugs:
 	movementArrow Diagonals don't quite work (remove diagonals)
 	During moveMode, pressing A outside the move range shouldn't do anything.
 	Pressing B from 6 runs the same frame of UnitActionBox again
+	Pressing up and right in quick succession does not queue up a right command unless another up command was pressed. -- Pressing buttons in quick succession should now queue up commands
+
 	
 Discarded Bugs:
-	Pressing up and right in quick succession does not queue up a right command unless another up command was pressed. -- Pressing buttons in quick succession should now queue up commands
 	(?) Reweight can crash if it goes out of bounds, but it never should. If this actually ever happens, create a reset button for mapscene.
 	Pathfinding really shouldn't need to see mapscene. Maybe move the unit list into map?
 	resizing has weird effects sometimes. This may not matter, as you should never be able to resize ingame anyway.
