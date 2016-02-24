@@ -12,6 +12,7 @@ import solenus.gridemblem3.ui.menu.SettingsMenu;
 import solenus.gridemblem3.ui.menu.KeybindsMenu;
 import solenus.gridemblem3.ui.menu.GraphicsMenu;
 import solenus.gridemblem3.ui.menu.AudioMenu;
+import solenus.gridemblem3.ui.menu.LoadMenu;
 
 
 /**
@@ -26,6 +27,7 @@ public class TopMenuScene extends Scene
     private KeybindsMenu keybinds;
     private GraphicsMenu graphics;
     private AudioMenu audio;
+    private LoadMenu load; 
     
     
     public TopMenuScene(Scene parent)
@@ -39,6 +41,7 @@ public class TopMenuScene extends Scene
         keybinds = new KeybindsMenu();
         graphics = new GraphicsMenu();
         audio    = new AudioMenu();
+        load     = new LoadMenu(); 
         
         controlState = 0;
         main.start();
@@ -80,6 +83,9 @@ public class TopMenuScene extends Scene
                 //Main Menu
                 case 0:
                     main.respondControls(im);
+                    break;
+                case 2:
+                    load.respondControls(im);
                     break;
                 case 3:
                     settings.respondControls(im);
@@ -129,7 +135,8 @@ public class TopMenuScene extends Scene
                         case MainMenu.NEWGAME:
                             return 1;
                         case MainMenu.CONTINUE:
-                            return 2;
+                            cst0to2();
+                            break;
                         case MainMenu.SETTINGS:
                             cst0to3();
                             break;
@@ -145,6 +152,12 @@ public class TopMenuScene extends Scene
                     
                 //Continue
                 case 2:
+                    switch(load.runFrame())
+                    {
+                        case LoadMenu.BACK:
+                            cst2to0();
+                            break;
+                    }
                     break;
                 
                 //Settings
@@ -228,6 +241,7 @@ public class TopMenuScene extends Scene
         keybinds.draw(g2);
         graphics.draw(g2);
         audio.draw(g2);
+        load.draw(g2);
     }
     
     /**
@@ -245,13 +259,37 @@ public class TopMenuScene extends Scene
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
     
-    //Goes from the main menu to the settings menu
+    /**
+     * Goes from the main menu to the load menu.
+     */
+    public void cst0to2()
+    {
+        controlState = 2;
+        main.end();
+        load.start();
+    }
+    
+    /**
+     * Goes from the main menu to the settings menu
+     */
     public void cst0to3()
     {
         controlState = 3;
         main.end();
         settings.start();
     }
+    
+    /**
+     * Goes from the load menu to the main menu
+     */
+    public void cst2to0()
+    {
+        controlState = 0;
+        load.end();
+        main.start();
+    }
+    
+    
     
     /**
      * Goes back to the main menu from settings

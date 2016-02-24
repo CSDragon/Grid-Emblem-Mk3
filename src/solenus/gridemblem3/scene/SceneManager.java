@@ -56,6 +56,8 @@ public class SceneManager extends Scene
                 case 3:
                     ds.respondControls(im);
                     break;
+                case 4:
+                    hs.respondControls(im);
             }
         }
     }
@@ -75,6 +77,8 @@ public class SceneManager extends Scene
                 0) Game has just opened up.
                 1) TopMenuScene
                 2) MapScene
+                3) DialogScene
+                4) HQ Scene
             */
             switch(controlState)
             {
@@ -89,6 +93,7 @@ public class SceneManager extends Scene
                             break;
                         case 2:
                             cst1to3();
+                            break;
                     }
                 case 2:
                     switch(ms.runFrame())

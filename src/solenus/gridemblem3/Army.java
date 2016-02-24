@@ -14,7 +14,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.actor.Unit;
-import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
 
@@ -35,12 +34,15 @@ public class Army
         itemConvoy = new ArrayList<>();
     }
     
-    public void saveArmy()
+    public void saveArmy(int saveNum)
     {
-        File graphics = new File("test.txt");
+        File saves = new File("saves");
+        saves.mkdir();
+        
+        File saveFile = new File("saves/"+saveNum+".sav");
         try
         {
-            FileOutputStream fos = new FileOutputStream(graphics);
+            FileOutputStream fos = new FileOutputStream(saveFile);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 
             bw.write("Army Size: "+unitList.size()); bw.newLine();
@@ -67,13 +69,13 @@ public class Army
         }
     }
     
-    public static Army loadArmy()
+    public static Army loadArmy(int saveNum)
     {
         Army a = new Army();
         
         try
         {
-            BufferedReader in = new BufferedReader(new FileReader("test.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("saves/"+saveNum+".sav"));
             
             int numUnits = Integer.parseInt(in.readLine().substring(11));
             in.readLine();
@@ -149,15 +151,21 @@ public class Army
     //TEST
     public static void main(String[] args) 
     {
+        File f = new File("saves");
+        for(File fi: f.listFiles())
+            System.out.println(fi.getName());
         
+        /*
         Army a = new Army();
         Unit u = new Unit();
         u.addWeapon(new Weapon("Sheld",0,1,2,3,4,5,6,7,1,2));
         a.addUnit(u);
         a.addWeapon(new Weapon("Sord", 0, 1, 2, 3, 4, 5, 6, 7, 1, 2));
-   //     a.saveArmy();
+        a.saveArmy(9);
         
-        Army b = Army.loadArmy();
+        Army b = Army.loadArmy(9);
         int i = 1;
+        */
+        
     }
 }
