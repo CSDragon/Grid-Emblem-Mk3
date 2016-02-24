@@ -5,8 +5,8 @@
  */
 package solenus.gridemblem3.scene;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.InputManager;
 
 /**
@@ -20,6 +20,8 @@ public class SceneManager extends Scene
     private TopMenuScene tms;
     private DialogueScene ds;
     private HQScene hs;
+    
+    private PlayerData playerArmy;
     
     /**
      * Creates the scene manager and its children
@@ -92,7 +94,7 @@ public class SceneManager extends Scene
                             cst1to2();
                             break;
                         case 2:
-                            cst1to3();
+                            loadGame(tms.getFileNum());
                             break;
                     }
                 case 2:
@@ -177,6 +179,13 @@ public class SceneManager extends Scene
     
     //</editor-fold>
 
+    
+    public void loadGame(int fileNum)
+    {
+        playerArmy = new PlayerData(fileNum);
+        int i = 1;
+        
+    }
     
     public void resize()
     {

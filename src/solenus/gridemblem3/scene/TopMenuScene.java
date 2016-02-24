@@ -21,6 +21,10 @@ import solenus.gridemblem3.ui.menu.LoadMenu;
  */
 public class TopMenuScene extends Scene
 {
+    //Return values
+    public static final int NEWGAME = 1;
+    public static final int CONTINUE = 2;
+    
     //Menus
     private MainMenu main;
     private SettingsMenu settings;
@@ -28,6 +32,8 @@ public class TopMenuScene extends Scene
     private GraphicsMenu graphics;
     private AudioMenu audio;
     private LoadMenu load; 
+    
+    private int fileNum;
     
     
     public TopMenuScene(Scene parent)
@@ -152,11 +158,17 @@ public class TopMenuScene extends Scene
                     
                 //Continue
                 case 2:
-                    switch(load.runFrame())
+                    int loadFrame = load.runFrame();
+                    switch(loadFrame)
                     {
                         case LoadMenu.BACK:
                             cst2to0();
                             break;
+                        case LoadMenu.NOTHING:
+                            break;
+                        default:
+                            fileNum = loadFrame+1;
+                            return CONTINUE;
                     }
                     break;
                 
@@ -363,7 +375,15 @@ public class TopMenuScene extends Scene
     }
     
     //</editor-fold>
+    
+    /**
+     * Returns the number of the file we need to be loading.
+     * @return 
+     */
+    public int getFileNum()
+    {
+        return fileNum;
+    }
 
     
-
 }

@@ -21,20 +21,29 @@ import solenus.gridemblem3.item.Weapon;
  * The data collection of your army. This should only be used for the HQ and for starting a mission. MapScene should NOT use Armies.
  * @author Chris
  */
-public class Army 
+public class PlayerData 
 {
+    private int mapNum;
+    private boolean inBase;
     private ArrayList<Unit> unitList;
     private ArrayList<Weapon> weaponConvoy;
     private ArrayList<Usable> itemConvoy;
     
-    public Army()
+    public PlayerData()
     {
         unitList = new ArrayList<>();
         weaponConvoy = new ArrayList<>();
         itemConvoy = new ArrayList<>();
+        
+        mapNum = 1;
+        inBase = true;
     }
     
-    public void saveArmy(int saveNum)
+    /**
+     * Saves the file
+     * @param saveNum The file number to save to 
+     */
+    public void saveFile(int saveNum)
     {
         File saves = new File("saves");
         saves.mkdir();
@@ -44,17 +53,25 @@ public class Army
         {
             FileOutputStream fos = new FileOutputStream(saveFile);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            
+            //Write the scenario information
+            bw.write("Map Number: "+mapNum); bw.newLine();
+            bw.write("In Base? "+inBase); bw.newLine();
+            bw.newLine();
 
+            //Write the army
             bw.write("Army Size: "+unitList.size()); bw.newLine();
             bw.newLine();
             for(Unit u: unitList)
                 u.save(bw);
             
+            //Write the weapon convoy.
             bw.write("Num Weapons: "+weaponConvoy.size()); bw.newLine();
             bw.newLine();
             for(Weapon w: weaponConvoy)
                 w.save(bw);
             
+            //Write the item convoy
             bw.write("Num Items: "+itemConvoy.size()); bw.newLine();
             bw.newLine();
             for(Usable u: itemConvoy)
@@ -69,31 +86,43 @@ public class Army
         }
     }
     
-    public static Army loadArmy(int saveNum)
+    /**
+     * Loads the player's data from a file.
+     * @param saveNum The file number we're loading the file from
+     */
+    public PlayerData(int saveNum)
     {
-        Army a = new Army();
+        this();
         
         try
         {
             BufferedReader in = new BufferedReader(new FileReader("saves/"+saveNum+".sav"));
             
+            //Get the map data
+            mapNum = Integer.parseInt(in.readLine().substring(12));
+            inBase = in.readLine().substring(10).equals("true");
+            in.readLine();
+            
+            //Get the army data.
             int numUnits = Integer.parseInt(in.readLine().substring(11));
             in.readLine();
             
             for(int i = 0; i<numUnits; i++)
-                a.addUnit(new Unit(in));
+                unitList.add(new Unit(in));
             
+            //Get the weapon convoy data
             int numWeapons = Integer.parseInt(in.readLine().substring(13));
             in.readLine();
             
             for(int i = 0; i<numWeapons; i++)
-                a.addWeapon(new Weapon(in));
-            
+                weaponConvoy.add(new Weapon(in));
+        
+            //Get the item convoy data.
             int numItems = Integer.parseInt(in.readLine().substring(11));
             in.readLine();
             
             for(int i = 0; i<numItems; i++)
-                a.addItem(new Usable(in));
+                itemConvoy.add(new Usable(in));
                 
             
             in.close();
@@ -104,9 +133,6 @@ public class Army
             e.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "Unable to load this file. Something's wrong, and I don't know what. Sorry!");
         }
-        
-        return a;
-        
     }
     
     /**
@@ -156,16 +182,46 @@ public class Army
             System.out.println(fi.getName());
         
         /*
-        Army a = new Army();
+        PlayerData a = new PlayerData();
         Unit u = new Unit();
         u.addWeapon(new Weapon("Sheld",0,1,2,3,4,5,6,7,1,2));
         a.addUnit(u);
         a.addWeapon(new Weapon("Sord", 0, 1, 2, 3, 4, 5, 6, 7, 1, 2));
-        a.saveArmy(9);
+        a.saveFile(9);
         
-        Army b = Army.loadArmy(9);
+        PlayerData b = PlayerData.loadFile(9);
         int i = 1;
         */
         
     }
+
+    //<editor-fold desc="getters and setters">
+    
+    /**
+     * @return the mapNum
+     */
+    public int getMapNum() 
+    {
+        return mapNum;
+    }
+    
+    public void setMapNum(int mn)
+    {
+        mapNum = mn;
+    }
+
+    /**
+     * @return the inBase
+     */
+    public boolean isInBase() 
+    {
+        return inBase;
+    }
+    
+    public void setInBase(boolean ib)
+    {
+        inBase = ib;
+    }
+    
+    //</editor-fold>
 }
