@@ -46,7 +46,15 @@ public class SceneManager extends Scene
     public void respondControls(InputManager im)
     {
         if(active)
-        {
+        {   
+            /*
+            STATES:
+                0) Game has just opened up.
+                1) TopMenuScene
+                2) MapScene
+                3) DialogScene
+                4) HQ Scene
+            */
             switch(controlState)
             {
                 case 1:
@@ -73,7 +81,6 @@ public class SceneManager extends Scene
         //always check this
         if(active)
         {
-            
             /*
             STATES:
                 0) Game has just opened up.
@@ -87,6 +94,7 @@ public class SceneManager extends Scene
                 case 0:
                     cst0to1();
                     break;
+                
                 case 1:
                     switch(tms.runFrame())
                     {
@@ -97,16 +105,29 @@ public class SceneManager extends Scene
                             loadGame(tms.getFileNum());
                             break;
                     }
+                
                 case 2:
                     switch(ms.runFrame())
                     {
                         
                     }
+                    break;
+                
                 case 3:
                     switch(ds.runFrame())
                     {
-                        
+
                     }
+                    break;
+                    
+                case 4:
+                    switch(hs.runFrame())
+                    {
+                        case 1:
+                            cst4to2();
+                            break;
+                    }
+                    break;
             }
         }
         
@@ -154,9 +175,7 @@ public class SceneManager extends Scene
     {
         controlState = 1;
         tms.start();
-        targetScene = tms;
     }
-    
     
     /**
      * Changes from top menu to game map. Probably should never be used outside debugging, but we'll see.
@@ -166,7 +185,6 @@ public class SceneManager extends Scene
         controlState = 2;
         tms.end();
         ms.start();
-        targetScene = ms;
     }
     
     public void cst1to3()
@@ -174,19 +192,41 @@ public class SceneManager extends Scene
         controlState = 3;
         tms.end();
         ds.start("test");
-        targetScene = ds;
+    }
+    
+    public void cst1to4()
+    {
+        controlState = 4;
+        tms.end();
+        hs.start();
+    }
+    
+    public void cst4to2()
+    {
+        controlState = 2;
+        hs.end();
+        ms.start();
     }
     
     //</editor-fold>
 
-    
+    /**
+     * Loads the player's data from a file
+     * @param fileNum The file number to load from.
+     */
     public void loadGame(int fileNum)
     {
         playerArmy = new PlayerData(fileNum);
-        int i = 1;
-        
+        if(playerArmy.isInBase())
+            cst1to4();
+        else
+            cst1to2();
+            
     }
     
+    /**
+     * resizes the scene.
+     */
     public void resize()
     {
         super.resize();

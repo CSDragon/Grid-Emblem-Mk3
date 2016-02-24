@@ -25,6 +25,7 @@ public class PlayerData
 {
     private int mapNum;
     private boolean inBase;
+    
     private ArrayList<Unit> unitList;
     private ArrayList<Weapon> weaponConvoy;
     private ArrayList<Usable> itemConvoy;

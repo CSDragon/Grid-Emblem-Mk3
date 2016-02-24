@@ -11,6 +11,15 @@ package solenus.gridemblem3.ui.menu;
  */
 public class HQMenu extends GenericMenu
 {
+    //shorthands
+    public static final int INVENTORY = 0;
+    public static final int SHOP = 1;
+    public static final int SKILLS = 2;
+    public static final int SUPPORT = 3;
+    public static final int CONVERSATIONS = 4;
+    public static final int SAVE = 5;
+    public static final int END = 6;
+    
     /**
      * Undo Generic Menu later.
      */
@@ -18,43 +27,4 @@ public class HQMenu extends GenericMenu
     {
         super(new String[]{"Inventory", "Shop", "Skills", "Support", "Conversations", "Save", "End"});
     }
-    
-    /**
-     * progresses the game
-     * @return the exit status
-     */
-    public int runFrame()
-    {
-        if(active)
-        {
-            if(upTrigger)
-                cursorLoc--;
-            if(downTrigger)
-                cursorLoc++;
-            if(cursorLoc < 0)
-                cursorLoc = numCommands-1;
-            if(cursorLoc >= numCommands)
-                cursorLoc = 0;
-
-            //If B, exit the unit action box
-            if(bTrigger)
-            {
-                resetTriggers();
-                return BACK;
-            }
-            
-            //If A,select which enemy to attack
-            if(aTrigger)
-            {
-                resetTriggers();
-                switch(cursorLoc)
-                {
-                    
-                }
-            }
-        }
-        
-        return -1;
-    }
-    
 }

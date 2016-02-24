@@ -69,11 +69,6 @@ public class TopMenuScene extends Scene
         //always check this
         if(active)
         {
-            //always do this
-            if(targetScene != null)
-                targetScene.respondControls(im);
-            
-            
              /*
             STATES:
                 0 = Main Menu
@@ -247,13 +242,16 @@ public class TopMenuScene extends Scene
      */
     public void draw(Graphics2D g2)
     {
-        //draw UI
-        main.draw(g2);
-        settings.draw(g2);
-        keybinds.draw(g2);
-        graphics.draw(g2);
-        audio.draw(g2);
-        load.draw(g2);
+        if(visible)
+        {
+            //draw UI
+            main.draw(g2);
+            settings.draw(g2);
+            keybinds.draw(g2);
+            graphics.draw(g2);
+            audio.draw(g2);
+            load.draw(g2);
+        }
     }
     
     /**

@@ -62,7 +62,8 @@ public class HQScene extends Scene
                 case 0:
                     switch(hqMenu.runFrame())
                     {
-                        
+                        case HQMenu.END:
+                            return 1;
                     }
                     break;
             }
@@ -91,6 +92,7 @@ public class HQScene extends Scene
     {
         if(visible)
         {
+            hqMenu.draw(g);
         }
     }
     
@@ -108,6 +110,7 @@ public class HQScene extends Scene
     
     public void start()
     {
+        super.start();
         hqMenu.start();
     }
 }

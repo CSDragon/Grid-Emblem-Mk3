@@ -169,126 +169,119 @@ public class MapScene extends Scene
         //always check this
         if(active)
         {
-            //if a child scene is active, do that instead.
-            if(targetScene != null)
-                targetScene.respondControls(im);
-            //else, this scene responds to controls
-            else
+            /*  
+                Modes:  1)  Cursor. Moving the cursor around. 
+                        2)  Unit Move. Once a unit has been selected, cursor movement.
+                        3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
+                        4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
+                        5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
+                        6)  Select enemy to fight
+                        7)  Select a weapon to fight with. 
+                        8)  Battle
+                        9)  End turn
+                        10) Someone else's turn
+                        11) Player turn Start
+                        12) Unit death
+                        13) Exp
+            */
+
+            //cursor mode
+            switch(controlState)
             {
-                /*  
-                    Modes:  1)  Cursor. Moving the cursor around. 
-                            2)  Unit Move. Once a unit has been selected, cursor movement.
-                            3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
-                            4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
-                            5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
-                            6)  Select enemy to fight
-                            7)  Select a weapon to fight with. 
-                            8)  Battle
-                            9)  End turn
-                            10) Someone else's turn
-                            11) Player turn Start
-                            12) Unit death
-                            13) Exp
-                */
-                
-                //cursor mode
-                switch(controlState)
-                {
-                    case(1):
-                        //A: On a friendly unit, enter move mode, on anything else enter system action box.
-                        if(im.getA() == 1)
-                        {
-                            Unit found = getUnitAtPoint(cursor.getX(), cursor.getY());
+                case(1):
+                    //A: On a friendly unit, enter move mode, on anything else enter system action box.
+                    if(im.getA() == 1)
+                    {
+                        Unit found = getUnitAtPoint(cursor.getX(), cursor.getY());
 
-                            //nothing found, open up the system action box
-                            if(found == null)
+                        //nothing found, open up the system action box
+                        if(found == null)
+                            cst1to4();
+                        else if(found.getTeam() == 1)
+                            addEnemyRange(found);
+                        else if(found.getTeam() == 0)
+                        {
+                            if(!found.getHasMoved())
+                                cst1to2(found);
+                            else
                                 cst1to4();
-                            else if(found.getTeam() == 1)
-                                addEnemyRange(found);
-                            else if(found.getTeam() == 0)
-                            {
-                                if(!found.getHasMoved())
-                                    cst1to2(found);
-                                else
-                                    cst1to4();
-                            }
                         }
-                        //X: Toggles enemy ranges on/off.
-                        if(im.getX() == 1)
-                            toggleEnemyRanges();
-                        //Y: Clears manually set enemy ranges. 
-                        if(im.getY() == 1)
-                            clearRanges();
-                        //L: Move cursor instantly to next unmoved unit.
-                        if(im.getL()%20 == 1)
-                            moveToNextUnmovedUnit();
-                        //R: Open details screen TODO
+                    }
+                    //X: Toggles enemy ranges on/off.
+                    if(im.getX() == 1)
+                        toggleEnemyRanges();
+                    //Y: Clears manually set enemy ranges. 
+                    if(im.getY() == 1)
+                        clearRanges();
+                    //L: Move cursor instantly to next unmoved unit.
+                    if(im.getL()%20 == 1)
+                        moveToNextUnmovedUnit();
+                    //R: Open details screen TODO
 
-                        //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
-                        if (controlState == 1)
-                            cursor.respondControls(im);
-                        break;
-                    
-                    case 2:
-                        //A: When over an available location, move the unit to that location and open the action box
-                        if(im.getA() == 1)
-                            if(allyRangeMap.contains(cursor.getCoord()))
-                                cst2to5();
+                    //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
+                    if (controlState == 1)
+                        cursor.respondControls(im);
+                    break;
 
-                        //B: Return to state 1.
-                        if(im.getB() == 1)
-                            cst2to1();
+                case 2:
+                    //A: When over an available location, move the unit to that location and open the action box
+                    if(im.getA() == 1)
+                        if(allyRangeMap.contains(cursor.getCoord()))
+                            cst2to5();
 
-                        //X: Toggles enemy ranges on/off.
-                        if(im.getX() == 1)
-                            toggleEnemyRanges();
-                        //Y: Clears manually set enemy ranges.
-                        if(im.getY() == 1)
-                            clearRanges();
+                    //B: Return to state 1.
+                    if(im.getB() == 1)
+                        cst2to1();
+
+                    //X: Toggles enemy ranges on/off.
+                    if(im.getX() == 1)
+                        toggleEnemyRanges();
+                    //Y: Clears manually set enemy ranges.
+                    if(im.getY() == 1)
+                        clearRanges();
 
 
-                        //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
-                        if (controlState == 2)
-                            cursor.respondControls(im);
-                        break;
-                
-                    case 3:
-                        unitActionMenu.respondControls(im);
-                        break;
-                        
-                    case 4:
-                        systemAction.respondControls(im);
-                        break;
-                        
-                    case 6:
-                        if(im.getUp() == 1 || im.getRight() == 1)
-                        {
-                            attackableUnitsIndex--;
-                        }
-                        if(im.getDown() == 1 || im.getLeft() == 1)
-                        {
-                            attackableUnitsIndex++;
-                        }
-                        
-                        if(attackableUnitsIndex < 0)
-                            attackableUnitsIndex = attackableUnits.size()-1;
-                        if(attackableUnitsIndex >= attackableUnits.size())
-                            attackableUnitsIndex = 0;
-                        
-                        if(im.getA() == 1)
-                            cst6to7();
-                        if(im.getB() == 1)
-                            cst6to3();
-                        
-                        break;
-                        
-                    case 7:
-                        weaponSelect.respondControls(im);
-                        break;
-                    case 13:
-                        xp.respondControls(im);
-                        break;
-                }
+                    //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
+                    if (controlState == 2)
+                        cursor.respondControls(im);
+                    break;
+
+                case 3:
+                    unitActionMenu.respondControls(im);
+                    break;
+
+                case 4:
+                    systemAction.respondControls(im);
+                    break;
+
+                case 6:
+                    if(im.getUp() == 1 || im.getRight() == 1)
+                    {
+                        attackableUnitsIndex--;
+                    }
+                    if(im.getDown() == 1 || im.getLeft() == 1)
+                    {
+                        attackableUnitsIndex++;
+                    }
+
+                    if(attackableUnitsIndex < 0)
+                        attackableUnitsIndex = attackableUnits.size()-1;
+                    if(attackableUnitsIndex >= attackableUnits.size())
+                        attackableUnitsIndex = 0;
+
+                    if(im.getA() == 1)
+                        cst6to7();
+                    if(im.getB() == 1)
+                        cst6to3();
+
+                    break;
+
+                case 7:
+                    weaponSelect.respondControls(im);
+                    break;
+                case 13:
+                    xp.respondControls(im);
+                    break;
             }
         }
     }

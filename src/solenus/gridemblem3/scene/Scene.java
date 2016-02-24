@@ -18,7 +18,6 @@ import solenus.gridemblem3.InputManager;
  */
 public abstract class Scene
 {
-    protected Scene targetScene;
     protected Scene parent;
     protected boolean active;
     protected boolean visible;
@@ -70,11 +69,6 @@ public abstract class Scene
         //always check this
         if(active)
         {
-            //always do this
-            if(targetScene != null)
-                targetScene.respondControls(im);
-            
-            
         }
     }
     
@@ -125,25 +119,6 @@ public abstract class Scene
         height = GridEmblemMk3.HEIGHT;
     }
 
-    
-    //</editor-fold>
-    
-    /**
-     * This scene gives control priority to one of its children
-     * @param s The scene to receive priority
-     */
-    public void givePriority(Scene s)
-    {
-        targetScene = s;
-    }
-    
-    /**
-     * This scene takes back control priority for itself.
-     */
-    public void getPriority()
-    {
-        targetScene = null;
-    }
     
     //</editor-fold>
     
