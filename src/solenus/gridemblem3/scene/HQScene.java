@@ -9,6 +9,8 @@ import java.awt.Graphics2D;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.ui.menu.HQMenu;
+import solenus.gridemblem3.ui.menu.SaveMenu;
+
 
 /**
  *
@@ -16,13 +18,19 @@ import solenus.gridemblem3.ui.menu.HQMenu;
  */
 public class HQScene extends Scene
 {
-    private HQMenu hqMenu;
+    public static final int SAVE = 1;
+    public static final int GOTOMAP = 2;
     
+    private HQMenu hqMenu;
+    private SaveMenu save;
+    
+    private int saveFile;
     
     public HQScene(Scene parent)
     {
         super(parent);
         hqMenu = new HQMenu();
+        save = new SaveMenu();
     }
 
     
@@ -38,10 +46,19 @@ public class HQScene extends Scene
         //always check this
         if(active)
         {
+            /*
+             STATES:
+                0) HQMenu
+                1) Save Menu
+                
+             */
             switch(controlState)
             {
                 case 0:
                     hqMenu.respondControls(im);
+                    break;
+                case 1:
+                    save.respondControls(im);
                     break;
             }       
         }
@@ -63,7 +80,26 @@ public class HQScene extends Scene
                     switch(hqMenu.runFrame())
                     {
                         case HQMenu.END:
-                            return 1;
+                            return GOTOMAP;
+                        case HQMenu.SAVE:
+                            cst0to1();
+                            break;
+                    }
+                    break;
+                case 1:
+                    int s = save.runFrame();
+                    switch(s)
+                    {
+                        case SaveMenu.BACK:
+                            cst1to0();
+                            break;
+                            
+                        case SaveMenu.NOTHING:
+                            break;
+                            
+                        default:
+                            saveFile = s+1;
+                            return SAVE;
                     }
                     break;
             }
@@ -93,8 +129,21 @@ public class HQScene extends Scene
         if(visible)
         {
             hqMenu.draw(g);
+            save.draw(g);
         }
     }
+    
+    /**
+     * Starts the scene up.
+     */    
+    public void start()
+    {
+        super.start();
+        hqMenu.start();
+    }
+    
+    //</editor-fold>
+
     
     /**
      * resizes the scene to the current app size
@@ -106,11 +155,39 @@ public class HQScene extends Scene
     }
 
     
-    //</editor-fold>
     
-    public void start()
+    //<editor-fold desc="controlState Methods">
+    //Methods who's primary function is to transition the control state from one state to another.
+    //"cst = controlState transition"
+    
+    /**
+     * Goes from the HQ Menu to the save menu.
+     */
+    public void cst0to1()
     {
-        super.start();
+        controlState = 1;
+        hqMenu.end();
+        save.start();
+    }
+    
+    public void cst1to0()
+    {
+        controlState = 0;
+        save.end();
         hqMenu.start();
     }
+    
+    //</editor-fold>
+
+    //<editor-fold desc="Getters and Setters">
+    
+    /**
+     * @return the saveFile
+     */
+    public int getSaveFile() 
+    {
+        return saveFile;
+    }
+    
+    //</editor-fold>
 }

@@ -57,7 +57,7 @@ public class PlayerData
             
             //Write the scenario information
             bw.write("Map Number: "+mapNum); bw.newLine();
-            bw.write("In Base? "+inBase); bw.newLine();
+            bw.write("In Base?: "+inBase); bw.newLine();
             bw.newLine();
 
             //Write the army
@@ -103,7 +103,7 @@ public class PlayerData
             mapNum = Integer.parseInt(in.readLine().substring(12));
             inBase = in.readLine().substring(10).equals("true");
             in.readLine();
-            
+
             //Get the army data.
             int numUnits = Integer.parseInt(in.readLine().substring(11));
             in.readLine();

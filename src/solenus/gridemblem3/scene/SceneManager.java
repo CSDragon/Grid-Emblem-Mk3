@@ -123,7 +123,10 @@ public class SceneManager extends Scene
                 case 4:
                     switch(hs.runFrame())
                     {
-                        case 1:
+                        case HQScene.SAVE:
+                            saveGame(hs.getSaveFile());
+                            break;
+                        case HQScene.GOTOMAP:
                             cst4to2();
                             break;
                     }
@@ -210,6 +213,15 @@ public class SceneManager extends Scene
     
     //</editor-fold>
 
+    /**
+     * Saves the game.
+     * @param fileName The file number to save to.
+     */
+    public void saveGame(int fileName)
+    {
+        playerArmy.saveFile(fileName);
+    }
+    
     /**
      * Loads the player's data from a file
      * @param fileNum The file number to load from.
