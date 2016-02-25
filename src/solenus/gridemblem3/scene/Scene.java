@@ -109,6 +109,8 @@ public abstract class Scene
         {
         }
     }
+
+    //</editor-fold>
     
     /**
      * resizes the scene to the current app size
@@ -119,11 +121,8 @@ public abstract class Scene
         height = GridEmblemMk3.HEIGHT;
     }
 
-    
-    //</editor-fold>
-    
-    
     //<editor-fold desc="on/off control">
+    
     public void visible()
     {
         visible = true;

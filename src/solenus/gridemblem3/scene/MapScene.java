@@ -25,7 +25,7 @@ import solenus.gridemblem3.item.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.ui.FightUI;
 import solenus.gridemblem3.ui.XPBarUI;
-import solenus.gridemblem3.ui.menu.PrebattleMenu;
+import solenus.gridemblem3.ui.menu.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
 import solenus.gridemblem3.ui.menu.SystemActionMenu;
 import solenus.gridemblem3.ui.menu.UnitActionMenu;
@@ -37,6 +37,8 @@ import solenus.gridemblem3.ui.menu.UnitActionMenu;
  */
 public class MapScene extends Scene
 {
+    public static final int RETURNTOBASE = 2;
+    
     //the game map
     private Map map;
     private MapCursor cursor;
@@ -70,7 +72,7 @@ public class MapScene extends Scene
     private SystemActionMenu systemAction;
     private BufferedImage Grid;
     private XPBarUI xp;
-    private PrebattleMenu pbm;
+    private PreBattleScene preBattleScene;
     
     //range UI
     private boolean drawAllyMoveRange;
@@ -95,7 +97,7 @@ public class MapScene extends Scene
         fightUI = new FightUI();
         systemAction = new SystemActionMenu();
         xp = new XPBarUI();
-        pbm = new PrebattleMenu();
+        preBattleScene = new PreBattleScene();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -228,7 +230,7 @@ public class MapScene extends Scene
                     xp.respondControls(im);
                     break;
                 case 14:
-                    pbm.respondControls(im);
+                    preBattleScene.respondControls(im);
             }
         }
     }
@@ -450,11 +452,13 @@ public class MapScene extends Scene
                             break;
                     }
                 case 14:
-                    switch(pbm.runFrame())
+                    switch(preBattleScene.runFrame())
                     {
-                        case PrebattleMenu.START:
+                        case PreBattleScene.START:
                             cst14to1();
                             break;
+                        case PreBattleScene.RETURNTOBASE:
+                            return RETURNTOBASE;
                     }
                     break;
                     
@@ -532,7 +536,7 @@ public class MapScene extends Scene
             systemAction.draw(g2);
             fightUI.draw(g2);
             xp.draw(g2);
-            pbm.draw(g2);
+            preBattleScene.draw(g2);
         }
         
     }
@@ -952,7 +956,7 @@ public class MapScene extends Scene
     public void cst0to14()
     {
         controlState = 14;
-        pbm.start();
+        preBattleScene.start();
     }
     
     /**
@@ -1233,7 +1237,7 @@ public class MapScene extends Scene
     {
         controlState = 1;
         cursor.setVisible(true);
-        pbm.end();
+        preBattleScene.end();
         
     }
     

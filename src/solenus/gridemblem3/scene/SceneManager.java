@@ -109,7 +109,9 @@ public class SceneManager extends Scene
                 case 2:
                     switch(ms.runFrame())
                     {
-                        
+                        case MapScene.RETURNTOBASE:
+                            cst2to4();
+                            break;
                     }
                     break;
                 
@@ -200,6 +202,13 @@ public class SceneManager extends Scene
     {
         controlState = 4;
         tms.end();
+        hs.start(playerArmy);
+    }
+    
+    public void cst2to4()
+    {
+        controlState = 4;
+        ms.end();
         hs.start(playerArmy);
     }
     
