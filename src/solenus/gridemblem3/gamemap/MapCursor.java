@@ -40,6 +40,7 @@ public class MapCursor extends GridRenderable
     public MapCursor(Map m)
     {
         super("cursor");
+        visible = false;
         
         x = m.getCursorStartX();
         xCur = m.getCursorStartX();

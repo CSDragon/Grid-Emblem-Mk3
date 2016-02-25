@@ -47,13 +47,9 @@ public class MovementArrow
     
     /**
      * Standard constructor
-     * @param cu the mapCursor we need to watch
-     * @param m the map it's happening on.
      */
-    public MovementArrow(MapCursor cu, Map m)
+    public MovementArrow()
     {
-        map = m;
-        c = cu;
         areaTraveled = new ArrayList<>();
         active = false;
         
@@ -154,9 +150,13 @@ public class MovementArrow
      * start arrowing
      * @param u the unit moving
      * @param ma the list of points that the arrow and unit can move on
+     * @param cu the mapCursor we need to watch
+     * @param m the map it's happening on.
      */
-    public void start(Unit u, ArrayList<Point> ma)
+    public void start(Unit u, ArrayList<Point> ma, MapCursor cu, Map m)
     {
+        c = cu;
+        map = m;
         active = true;
         areaTraveled.add(c.getCoord());
         movingUnit = u;

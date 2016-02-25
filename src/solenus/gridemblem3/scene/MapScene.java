@@ -18,12 +18,14 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.gamemap.*;
 import solenus.gridemblem3.actor.*;
 import solenus.gridemblem3.item.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.ui.FightUI;
 import solenus.gridemblem3.ui.XPBarUI;
+import solenus.gridemblem3.ui.menu.PrebattleMenu;
 import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
 import solenus.gridemblem3.ui.menu.SystemActionMenu;
 import solenus.gridemblem3.ui.menu.UnitActionMenu;
@@ -53,8 +55,9 @@ public class MapScene extends Scene
     private ArrayList<Unit> attackableUnits;
     private int attackableUnitsIndex;
     private AI ai;
-    boolean fightMode;
+    boolean fightGraphicsMode;
     private int animationFrames;
+    private PlayerData playerArmy;
     
 
     //UI Elements
@@ -67,6 +70,7 @@ public class MapScene extends Scene
     private SystemActionMenu systemAction;
     private BufferedImage Grid;
     private XPBarUI xp;
+    private PrebattleMenu pbm;
     
     //range UI
     private boolean drawAllyMoveRange;
@@ -83,77 +87,15 @@ public class MapScene extends Scene
     public MapScene(Scene parent)//TEST: make this take an extra arguement, the map id.
     {
         super(parent);
-        controlState = 1;
-        
-        //TEST: make map take an argument from this method's arguements
-        map = new Map(1);
-        Pathfinding.setMap(map, this);
-        
-        cursor = new MapCursor(map);
-        camera = new Camera(cursor.getX(), cursor.getY());
-        actorList = new ArrayList<>();
-        unitList = new ArrayList<>();
-        dieingUnits = new ArrayList<>();
-        ai = new AI(unitList);
-        
-        //range objects
-        enemyRangeList = new ArrayList<>();
-        allyRangeMap = new ArrayList<>();
-        selectedEnemyRangeMap = new ArrayList<>();
-        allEnemyRangeMap = new ArrayList<>();
         
         //initialize UI
-        mvArrow = new MovementArrow(cursor, map);
+        mvArrow = new MovementArrow();
         unitActionMenu = new UnitActionMenu();
         weaponSelect = new WeaponSelectionMenu();
-        fightUI = new FightUI(map);
+        fightUI = new FightUI();
         systemAction = new SystemActionMenu();
         xp = new XPBarUI();
-        
-        try
-        {
-            Grid = ImageIO.read(new File("assets/ui/grid.png"));
-        }
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Grid sprite failed to load.");
-            System.out.println(e);
-            System.exit(-1);
-        }
-        
-        //TEST: Don't do this in the final
-        unitList.add(new Unit(0, 6, 1));
-        unitList.get(0).placeOnGrid(15, 7);
-        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(1).placeOnGrid(6, 7);
-        unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        
-        unitList.add(new Unit(0, 6, 1));
-        unitList.get(2).placeOnGrid(10, 7);
-        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
-        unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
-        unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(3).placeOnGrid(7, 8);
-        unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(4).placeOnGrid(7, 7);
-        unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(5).placeOnGrid(7, 6);
-        unitList.get(5).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        getAllEnemyRanges();
-        
-        fightMode = false;
-        
-        numFactions = 2;
-
-        
+        pbm = new PrebattleMenu();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -170,19 +112,22 @@ public class MapScene extends Scene
         if(active)
         {
             /*  
-                Modes:  1)  Cursor. Moving the cursor around. 
-                        2)  Unit Move. Once a unit has been selected, cursor movement.
-                        3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
-                        4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
-                        5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
-                        6)  Select enemy to fight
-                        7)  Select a weapon to fight with. 
-                        8)  Battle
-                        9)  End turn
-                        10) Someone else's turn
-                        11) Player turn Start
-                        12) Unit death
-                        13) Exp
+            STATES:
+                0)  Startup
+                1)  Cursor. Moving the cursor around. 
+                2)  Unit Move. Once a unit has been selected, cursor movement.
+                3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
+                4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
+                5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
+                6)  Select enemy to fight
+                7)  Select a weapon to fight with. 
+                8)  Battle
+                9)  End turn
+                10) Someone else's turn
+                11) Player turn Start
+                12) Unit death
+                13) Exp
+                14) Prebattle Menu
             */
 
             //cursor mode
@@ -282,6 +227,8 @@ public class MapScene extends Scene
                 case 13:
                     xp.respondControls(im);
                     break;
+                case 14:
+                    pbm.respondControls(im);
             }
         }
     }
@@ -300,19 +247,22 @@ public class MapScene extends Scene
             switch(controlState)
             {
                 /*  
-                    Modes:  1)  Cursor. Moving the cursor around. 
-                            2)  Unit Move. Once a unit has been selected, cursor movement.
-                            3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
-                            4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
-                            5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
-                            6)  Select enemy to fight
-                            7)  Select a weapon to fight with. 
-                            8)  Battle
-                            9)  End turn
-                            10) Someone else's turn
-                            11) Player turn Start
-                            12) Unit death
-                            13) Exp
+                STATES:
+                    0)  Startup.
+                    1)  Cursor. Moving the cursor around. 
+                    2)  Unit Move. Once a unit has been selected, cursor movement.
+                    3)  Unit Action Menu. Once a unit has been moved, controling the UnitAction Menu.
+                    4)  System Action Menu. When you select nothing, controlling the SystemAction Menu.
+                    5)  Moving Unit mode. When a unit is curently moving, move the unit and wait for the animation to finish.
+                    6)  Select enemy to fight
+                    7)  Select a weapon to fight with. 
+                    8)  Battle
+                    9)  End turn
+                    10) Someone else's turn
+                    11) Player turn Start
+                    12) Unit death
+                    13) Exp
+                    14) Prebattle Menu
                 */
                 
                 /*  Cursor Mode
@@ -499,6 +449,14 @@ public class MapScene extends Scene
                             cst13to1();
                             break;
                     }
+                case 14:
+                    switch(pbm.runFrame())
+                    {
+                        case PrebattleMenu.START:
+                            cst14to1();
+                            break;
+                    }
+                    break;
                     
             }  
         }
@@ -574,6 +532,7 @@ public class MapScene extends Scene
             systemAction.draw(g2);
             fightUI.draw(g2);
             xp.draw(g2);
+            pbm.draw(g2);
         }
         
     }
@@ -585,6 +544,82 @@ public class MapScene extends Scene
     {
         camera.resize();
         super.resize();
+    }
+    
+    /**
+     * Starts the MapScene.
+     * @param pd The save data.
+     */
+    public void start(PlayerData pd)
+    {
+        super.start();
+        
+        //Control State
+        cst0to14();
+
+        
+
+        //Load up the main grid objects
+        playerArmy = pd;
+        fightGraphicsMode = false;
+        map = new Map(playerArmy.getMapNum());
+        Pathfinding.setMap(map, this);
+
+        cursor = new MapCursor(map);
+        camera = new Camera(cursor.getX(), cursor.getY());
+
+        actorList = new ArrayList<>();
+        unitList = new ArrayList<>();
+        dieingUnits = new ArrayList<>();
+        
+        ai = new AI(unitList);
+        
+        //range objects
+        enemyRangeList = new ArrayList<>();
+        allyRangeMap = new ArrayList<>();
+        selectedEnemyRangeMap = new ArrayList<>();
+        allEnemyRangeMap = new ArrayList<>();
+        
+        try
+        {
+            Grid = ImageIO.read(new File("assets/ui/grid.png"));
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Grid sprite failed to load.");
+            System.out.println(e);
+            System.exit(-1);
+        }
+        
+        //TEST: Don't do this in the final
+        unitList.add(new Unit(0, 6, 1));
+        unitList.get(0).placeOnGrid(15, 7);
+        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(1).placeOnGrid(6, 7);
+        unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(0, 6, 1));
+        unitList.get(2).placeOnGrid(10, 7);
+        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
+        unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
+        unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(3).placeOnGrid(7, 8);
+        unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(4).placeOnGrid(7, 7);
+        unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        
+        unitList.add(new Unit(1, 6, 1));
+        unitList.get(5).placeOnGrid(7, 6);
+        unitList.get(5).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        getAllEnemyRanges();
+        
+        numFactions = 2;
     }
     
     
@@ -911,6 +946,14 @@ public class MapScene extends Scene
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
 
+    /**
+     * Starts the prebattle menu
+     */
+    public void cst0to14()
+    {
+        controlState = 14;
+        pbm.start();
+    }
     
     /**
      * enters move mode with unit U
@@ -922,7 +965,7 @@ public class MapScene extends Scene
         drawAllyMoveRange = true;
         controlState = 2;
         selectedUnit = u;
-        mvArrow.start(u, allyRangeMap);
+        mvArrow.start(u, allyRangeMap, cursor, map);
         cursor.getSprite().sendTrigger("activate");
     }
         
@@ -1079,7 +1122,7 @@ public class MapScene extends Scene
         cursor.setVisible(false);
         selectedUnit.equipWeapon(weaponSelect.getWeapon());
         weaponSelect.end();
-        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightMode);
+        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightGraphicsMode, map);
         mvArrow.end();
     }
     
@@ -1181,6 +1224,17 @@ public class MapScene extends Scene
         selectedUnit.endMovement();
         fightUI.end();
         xp.end();
+    }
+    
+    /**
+     * Temporary CST. Starts the battle from the prebattle menu.
+     */
+    public void cst14to1()
+    {
+        controlState = 1;
+        cursor.setVisible(true);
+        pbm.end();
+        
     }
     
     

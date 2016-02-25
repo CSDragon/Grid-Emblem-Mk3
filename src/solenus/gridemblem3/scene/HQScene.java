@@ -8,6 +8,7 @@ package solenus.gridemblem3.scene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.ui.menu.HQMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
 
@@ -24,6 +25,7 @@ public class HQScene extends Scene
     private HQMenu hqMenu;
     private SaveMenu save;
     
+    PlayerData playerArmy;
     private int saveFile;
     
     public HQScene(Scene parent)
@@ -98,8 +100,8 @@ public class HQScene extends Scene
                             break;
                             
                         default:
-                            saveFile = s+1;
-                            return SAVE;
+                            playerArmy.saveFile(s+1);
+                            break;
                     }
                     break;
             }
@@ -135,10 +137,12 @@ public class HQScene extends Scene
     
     /**
      * Starts the scene up.
+     * @param pd The army data.
      */    
-    public void start()
+    public void start(PlayerData pd)
     {
         super.start();
+        playerArmy = pd;
         hqMenu.start();
     }
     

@@ -25,11 +25,15 @@ public class PlayerData
 {
     private int mapNum;
     private boolean inBase;
+    private int gold;
     
     private ArrayList<Unit> unitList;
     private ArrayList<Weapon> weaponConvoy;
     private ArrayList<Usable> itemConvoy;
     
+    /**
+     * Constructs an empty player data.
+     */
     public PlayerData()
     {
         unitList = new ArrayList<>();
@@ -37,54 +41,7 @@ public class PlayerData
         itemConvoy = new ArrayList<>();
         
         mapNum = 1;
-        inBase = true;
-    }
-    
-    /**
-     * Saves the file
-     * @param saveNum The file number to save to 
-     */
-    public void saveFile(int saveNum)
-    {
-        File saves = new File("saves");
-        saves.mkdir();
-        
-        File saveFile = new File("saves/"+saveNum+".sav");
-        try
-        {
-            FileOutputStream fos = new FileOutputStream(saveFile);
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-            
-            //Write the scenario information
-            bw.write("Map Number: "+mapNum); bw.newLine();
-            bw.write("In Base?: "+inBase); bw.newLine();
-            bw.newLine();
-
-            //Write the army
-            bw.write("Army Size: "+unitList.size()); bw.newLine();
-            bw.newLine();
-            for(Unit u: unitList)
-                u.save(bw);
-            
-            //Write the weapon convoy.
-            bw.write("Num Weapons: "+weaponConvoy.size()); bw.newLine();
-            bw.newLine();
-            for(Weapon w: weaponConvoy)
-                w.save(bw);
-            
-            //Write the item convoy
-            bw.write("Num Items: "+itemConvoy.size()); bw.newLine();
-            bw.newLine();
-            for(Usable u: itemConvoy)
-                u.save(bw);
-            
-            bw.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Unable to save this file. Something's wrong, and I don't know what. Sorry!");
-        }
+        inBase = false;
     }
     
     /**
@@ -104,6 +61,10 @@ public class PlayerData
             inBase = in.readLine().substring(10).equals("true");
             in.readLine();
 
+            //Get how much gold you have
+            gold = Integer.parseInt(in.readLine().substring(6));
+            in.readLine();
+            
             //Get the army data.
             int numUnits = Integer.parseInt(in.readLine().substring(11));
             in.readLine();
@@ -134,6 +95,65 @@ public class PlayerData
             e.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "Unable to load this file. Something's wrong, and I don't know what. Sorry!");
         }
+    }
+    
+    /**
+     * Saves the file
+     * @param saveNum The file number to save to 
+     */
+    public void saveFile(int saveNum)
+    {
+        File saves = new File("saves");
+        saves.mkdir();
+        
+        File saveFile = new File("saves/"+saveNum+".sav");
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(saveFile);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            
+            //Write the scenario information
+            bw.write("Map Number: "+mapNum); bw.newLine();
+            bw.write("In Base?: "+inBase); bw.newLine();
+            bw.newLine();
+
+            //Write Gold
+            bw.write("Gold: "+gold); bw.newLine();
+            bw.newLine();
+            
+            //Write the army
+            bw.write("Army Size: "+unitList.size()); bw.newLine();
+            bw.newLine();
+            for(Unit u: unitList)
+                u.save(bw);
+            
+            //Write the weapon convoy.
+            bw.write("Num Weapons: "+weaponConvoy.size()); bw.newLine();
+            bw.newLine();
+            for(Weapon w: weaponConvoy)
+                w.save(bw);
+            
+            //Write the item convoy
+            bw.write("Num Items: "+itemConvoy.size()); bw.newLine();
+            bw.newLine();
+            for(Usable u: itemConvoy)
+                u.save(bw);
+            
+            bw.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Unable to save this file. Something's wrong, and I don't know what. Sorry!");
+        }
+    }
+    
+    /**
+     * Creates the default units
+     */
+    public void newGame()
+    {
+        
     }
     
     /**

@@ -84,9 +84,8 @@ public class FightUI extends UI
     private FightHealthBarUI attackerHealthBar;
     private FightHealthBarUI defenderHealthBar;
     
-    public FightUI(Map m)
+    public FightUI()
     {
-        map = m;
     }
     
     
@@ -219,10 +218,12 @@ public class FightUI extends UI
      * @param a The attacker
      * @param d The defender
      * @param mode Full animation (true) or no animation (false).
+     * @param m The terrain map.
      */
-    public void start(Unit a, Unit d, boolean mode)
+    public void start(Unit a, Unit d, boolean mode, Map m)
     {
         super.start();
+        map = m;
         controlState = 0;
         attacker = a;
         defender = d;
