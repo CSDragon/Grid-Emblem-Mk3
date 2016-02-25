@@ -7,7 +7,7 @@ package solenus.gridemblem3.scene;
 
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
-import solenus.gridemblem3.ui.menu.PreBattleMenu;
+import solenus.gridemblem3.ui.menu.Pre_BattleMenu;
 
 /**
  *
@@ -23,11 +23,11 @@ public class PreBattleScene extends Scene
     public static final int START = 5;
     public static final int RETURNTOBASE = 6;
     
-    private PreBattleMenu pbm;
+    private Pre_BattleMenu pbm;
     
     public PreBattleScene()
     {
-        pbm = new PreBattleMenu();
+        pbm = new Pre_BattleMenu();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -72,9 +72,9 @@ public class PreBattleScene extends Scene
                 case 1:
                     switch(pbm.runFrame())
                     {
-                        case PreBattleMenu.START:
+                        case Pre_BattleMenu.START:
                             return START;
-                        case PreBattleMenu.RETURNTOBASE:
+                        case Pre_BattleMenu.RETURNTOBASE:
                             return RETURNTOBASE;
                     }
                     break;
