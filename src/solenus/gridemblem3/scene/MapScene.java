@@ -25,7 +25,7 @@ import solenus.gridemblem3.item.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.ui.FightUI;
 import solenus.gridemblem3.ui.XPBarUI;
-import solenus.gridemblem3.ui.menu.Pre_BattleMenu;
+import solenus.gridemblem3.ui.menu.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
 import solenus.gridemblem3.ui.menu.SystemActionMenu;
 import solenus.gridemblem3.ui.menu.UnitActionMenu;

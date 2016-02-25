@@ -9,7 +9,7 @@ package solenus.gridemblem3.ui.menu;
  *
  * @author Chris
  */
-public class Pre_BattleMenu extends GenericMenu
+public class PreBattleMenu extends GenericMenu
 {
     public static final int SELECTUNITS = 0;
     public static final int VIEWMAP = 1;
@@ -19,7 +19,7 @@ public class Pre_BattleMenu extends GenericMenu
     public static final int START = 5;
     public static final int RETURNTOBASE = 6;
     
-    public Pre_BattleMenu()
+    public PreBattleMenu()
     {
         super(new String[]{"Select Units", "View Map", "Inventory", "Skills", "Save", "Start", "Return to Base"});
     }
