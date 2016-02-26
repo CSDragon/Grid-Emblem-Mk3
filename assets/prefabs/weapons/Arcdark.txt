@@ -1,0 +1,15 @@
+Name: Arcdark
+Value: 2800
+Weapon Type: 9
+Strength or Magic: 1
+Mastery Requirement: D
+Damage: 10
+Max Uses: 25
+Cur Uses: 25
+Hit: 70	
+Weight: 8
+Crit: 5
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

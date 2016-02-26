@@ -1,0 +1,15 @@
+Name: Elfire
+Value: 1800
+Weapon Type: 5
+Strength or Magic: 1
+Mastery Requirement: D
+Damage: 7
+Max Uses: 35
+Cur Uses: 35
+Hit: 85
+Weight: 5
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

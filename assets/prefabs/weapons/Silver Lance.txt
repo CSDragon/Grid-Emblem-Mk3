@@ -1,0 +1,15 @@
+Name: Silver Lance
+Value: 2200
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: A
+Damage: 13
+Max Uses: 30
+Cur Uses: 30
+Hit: 80
+Weight: 12
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

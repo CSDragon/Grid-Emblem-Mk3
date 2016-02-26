@@ -1,0 +1,15 @@
+Name: Steel Dagger
+Value: 800
+Weapon Type: 4
+Strength or Magic: 0
+Mastery Requirement: C
+Damage: 9
+Max Uses: 35
+Cur Uses: 35
+Hit: 85
+Weight: 5
+Crit: 5
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

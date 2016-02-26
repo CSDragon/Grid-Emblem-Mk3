@@ -1,0 +1,15 @@
+Name: Steel Bow
+Value: 1100
+Weapon Type: 3
+Strength or Magic: 0
+Mastery Requirement: C
+Damage: 10
+Max Uses: 35
+Cur Uses: 35
+Hit: 80
+Weight: 10
+Crit: 0
+Min Range: 2
+Max Range: 2
+Num Effects: 0
+

@@ -1,0 +1,15 @@
+Name: Dark
+Value: 1000
+Weapon Type: 9
+Strength or Magic: 1
+Mastery Requirement: E
+Damage: 6
+Max Uses: 40
+Cur Uses: 40
+Hit: 80	
+Weight: 4
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

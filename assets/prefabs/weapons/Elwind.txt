@@ -1,0 +1,15 @@
+Name: Elwind
+Value: 1800
+Weapon Type: 6
+Strength or Magic: 1
+Mastery Requirement: D
+Damage: 6
+Max Uses: 35
+Cur Uses: 35
+Hit: 90
+Weight: 4
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

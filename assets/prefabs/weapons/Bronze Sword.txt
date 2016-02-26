@@ -1,0 +1,15 @@
+Name: Bronze Sword
+Value: 350
+Weapon Type: 0
+Strength or Magic: 0
+Mastery Requirement: E
+Damage: 3
+Max Uses: 50
+Cur Uses: 50
+Hit: 95
+Weight: 5
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

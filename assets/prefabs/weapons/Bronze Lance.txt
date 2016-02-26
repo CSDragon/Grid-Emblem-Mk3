@@ -1,0 +1,15 @@
+Name: Bronze Lance
+Value: 450
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: E
+Damage: 4
+Max Uses: 50
+Cur Uses: 50
+Hit: 90
+Weight: 6
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

@@ -1,0 +1,15 @@
+Name: Iron Dagger
+Value: 500
+Weapon Type: 4
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 5
+Max Uses: 40
+Cur Uses: 40
+Hit: 85
+Weight: 3
+Crit: 5
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

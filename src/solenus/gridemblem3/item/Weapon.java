@@ -7,7 +7,13 @@ package solenus.gridemblem3.item;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  * Weapons are objects of this class
@@ -17,17 +23,28 @@ import java.io.IOException;
 public class Weapon extends Item
 {
     //Weapon types
-    private static final int SWORD = 0;
-    private static final int AXE = 1;
-    private static final int LANCE = 2;
-    private static final int BOW = 3;
-    private static final int LIGHT = 4;
-    private static final int ELEMENTAL = 5;
-    private static final int DARK = 6;
+    public static final int SWORD = 0;
+    public static final int LANCE = 1;
+    public static final int AXE = 2;
+    public static final int BOW = 3;
+    public static final int DAGGER = 4;
+    public static final int FIRE = 5;
+    public static final int WIND = 6;
+    public static final int LIGHTNING = 7;
+    public static final int LIGHT = 8;
+    public static final int DARK = 9;
+    public static final int STAFF = 10;
+    
+    public static final int E = 0;
+    public static final int D = 10;
+    public static final int C = 2*D;
+    public static final int B = 2*C;
+    public static final int A = 2*B;
+    public static final int S = 2*A;
       
     private int weaponType;
     private int strOrMag;
-    private int mastery;
+    private char masteryRequirement;
     private int dmg;
     private int maxUses;
     private int curUses;
@@ -36,13 +53,15 @@ public class Weapon extends Item
     private int crit;
     private int minRange;
     private int maxRange;
+    private ArrayList<String> specialEffects;
     
-    public Weapon(String n, int type, int som, int m, int use, int d, int h, int w, int c, int minR, int maxR)
+    public Weapon(String n, int value, int type, int som, char mr, int use, int d, int h, int w, int c, int minR, int maxR)
     {
         name = n;
+        goldValue = value;
         weaponType = type;
         strOrMag = som;
-        mastery = m;
+        masteryRequirement = mr;
         maxUses = use;
         curUses = use;
         dmg = d;
@@ -51,39 +70,6 @@ public class Weapon extends Item
         crit = c;
         minRange = minR;
         maxRange = maxR;
-    }
-    
-    public void dull()
-    {
-        if(curUses == 1)
-            name = name + " (broken)";
-        
-        if(curUses > 0)
-            curUses -= 1;
-    }
-    
-
-    /**
-     * Writes a weapon to a file.
-     * @param bw The file writer
-     * @throws IOException 
-     */
-    public void save(BufferedWriter bw) throws IOException
-    {
-        bw.write("Name: "+name); bw.newLine();
-        bw.write("Value: "+goldValue); bw.newLine();
-        bw.write("Weapon Type: "+weaponType); bw.newLine();
-        bw.write("Strenght or Magic: "+strOrMag); bw.newLine();
-        bw.write("Mastery: "+mastery); bw.newLine();
-        bw.write("Damage: "+dmg); bw.newLine();
-        bw.write("Max Uses: "+maxUses); bw.newLine();
-        bw.write("Cur Uses: "+curUses); bw.newLine();
-        bw.write("Hit: "+hit); bw.newLine();
-        bw.write("Weight: "+weight); bw.newLine();
-        bw.write("Crit: "+crit); bw.newLine();
-        bw.write("Min Range: "+minRange); bw.newLine();
-        bw.write("Max Range: "+maxRange); bw.newLine();
-        bw.newLine();
     }
     
     /**
@@ -97,7 +83,7 @@ public class Weapon extends Item
         goldValue = Integer.parseInt(in.readLine().substring(7));
         weaponType = Integer.parseInt(in.readLine().substring(13));
         strOrMag = Integer.parseInt(in.readLine().substring(19));
-        mastery = Integer.parseInt(in.readLine().substring(9));
+        masteryRequirement = in.readLine().charAt(21);
         dmg = Integer.parseInt(in.readLine().substring(8));
         maxUses = Integer.parseInt(in.readLine().substring(10));
         curUses = Integer.parseInt(in.readLine().substring(10));
@@ -108,7 +94,91 @@ public class Weapon extends Item
         maxRange = Integer.parseInt(in.readLine().substring(11));
         in.readLine();
     }
-
+    
+    /**
+     * Writes a weapon to a file.
+     * @param bw The file writer
+     * @throws IOException 
+     */
+    public void save(BufferedWriter bw) throws IOException
+    {
+        bw.write("Name: "+name); bw.newLine();
+        bw.write("Value: "+goldValue); bw.newLine();
+        bw.write("Weapon Type: "+weaponType); bw.newLine();
+        bw.write("Strength or Magic: "+strOrMag); bw.newLine();
+        bw.write("Mastery Requirement: "+masteryRequirement); bw.newLine();
+        bw.write("Damage: "+dmg); bw.newLine();
+        bw.write("Max Uses: "+maxUses); bw.newLine();
+        bw.write("Cur Uses: "+curUses); bw.newLine();
+        bw.write("Hit: "+hit); bw.newLine();
+        bw.write("Weight: "+weight); bw.newLine();
+        bw.write("Crit: "+crit); bw.newLine();
+        bw.write("Min Range: "+minRange); bw.newLine();
+        bw.write("Max Range: "+maxRange); bw.newLine();
+        bw.write("Num Effects: "+specialEffects.size()); bw.newLine();
+        for(int i = 0; i<specialEffects.size(); i++)
+        {
+            bw.write(specialEffects.get(0)); bw.newLine();
+        }
+        bw.newLine();
+    }
+    
+    /**
+     * Writes a weapon to a file
+     * @param w The weapon to write to.
+     */
+    public static void writeToPrefab(Weapon w)
+    {
+        File saveFile = new File("assets/prefabs/weapons/"+w.getName()+".txt");
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(saveFile);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            
+            w.save(bw);
+            
+            bw.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Weapon Prefab Generation failed");
+        }
+    }
+    
+    /**
+     * Loads a weapon from a prefab.
+     * @param name The weapon prefab to load
+     * @return The loaded weapon.
+     */
+    public static Weapon loadFromPrefab(String name)
+    {
+        Weapon ret = null;
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("assets/prefabs/weapons/"+name+".txt"));
+            ret = new Weapon(in);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Loading weapon prefab "+ name +" failed, file doesn't seem to exist.");
+            System.exit(-1);
+        }
+        
+        return ret;
+    }
+        
+    /**
+     * Dulls the weapon
+     */
+    public void dull()
+    {
+        if(curUses == 1)
+            name = name + " (broken)";
+        
+        if(curUses > 0)
+            curUses -= 1;
+    }
     
     //<editor-fold desc="Getters and Setters">
     
@@ -135,14 +205,6 @@ public class Weapon extends Item
     public int getStrOrMag()
     {
         return strOrMag;
-    }
-
-    /**
-     * @return the mastery
-     */
-    public int getMastery() 
-    {
-        return mastery;
     }
 
     /**

@@ -1,0 +1,15 @@
+Name: Elthunder
+Value: 1800
+Weapon Type: 7
+Strength or Magic: 1
+Mastery Requirement: D
+Damage: 5
+Max Uses: 35
+Cur Uses: 35
+Hit: 80
+Weight: 6
+Crit: 10
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

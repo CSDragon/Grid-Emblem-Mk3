@@ -1,0 +1,15 @@
+Name: Fire
+Value: 900
+Weapon Type: 5
+Strength or Magic: 1
+Mastery Requirement: E
+Damage: 5
+Max Uses: 40
+Cur Uses: 40
+Hit: 95
+Weight: 3
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

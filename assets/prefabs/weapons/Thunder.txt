@@ -1,0 +1,15 @@
+Name: Thunder
+Value: 900
+Weapon Type: 7
+Strength or Magic: 1
+Mastery Requirement: E
+Damage: 3
+Max Uses: 40
+Cur Uses: 40
+Hit: 85
+Weight: 3
+Crit: 5
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

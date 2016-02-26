@@ -1,0 +1,15 @@
+Name: Bronze Bow
+Value: 400
+Weapon Type: 3
+Strength or Magic: 0
+Mastery Requirement: E
+Damage: 3
+Max Uses: 50
+Cur Uses: 50
+Hit: 80
+Weight: 4
+Crit: 0
+Min Range: 2
+Max Range: 2
+Num Effects: 0
+

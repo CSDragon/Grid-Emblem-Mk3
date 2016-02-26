@@ -7,9 +7,14 @@ package solenus.gridemblem3.actor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import solenus.gridemblem3.item.*;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  * Any living creature, human or otherwise, playable or otherwise, that's on the grid.
@@ -83,9 +88,22 @@ public class Unit extends Actor
     private double defup;
     private double resup;
     private double luckup;
+    
+    private int swordMastery;
+    private int axeMastery;
+    private int lanceMastery;
+    private int bowMastery;
+    private int daggerMastery;
+    private int fireMastery;
+    private int windMastery;
+    private int lightningMastery;
+    private int lightMastery;
+    private int darkMastery;
+    private int staffMastery;
 
     private ArrayList<Weapon> weaponInventory;
     private ArrayList<Usable> inventory;
+    private ArrayList<String> skills;
     
     
     //<editor-fold desc="constructors">
@@ -141,7 +159,9 @@ public class Unit extends Actor
         def = Double.parseDouble(in.readLine().substring(5));
         res = Double.parseDouble(in.readLine().substring(5));
         luck = Double.parseDouble(in.readLine().substring(6));
+        
         move = Integer.parseInt(in.readLine().substring(6));
+        
         hpup  = Double.parseDouble(in.readLine().substring(6));
         strup = Double.parseDouble(in.readLine().substring(7));
         magup = Double.parseDouble(in.readLine().substring(7));
@@ -150,12 +170,29 @@ public class Unit extends Actor
         defup = Double.parseDouble(in.readLine().substring(7));
         resup = Double.parseDouble(in.readLine().substring(7));
         luckup = Double.parseDouble(in.readLine().substring(8));
+        
         transportType = Integer.parseInt(in.readLine().substring(11));
         armorType = Integer.parseInt(in.readLine().substring(12));
+        
+        swordMastery = Integer.parseInt(in.readLine().substring(15));
+        axeMastery = Integer.parseInt(in.readLine().substring(13));
+        lanceMastery = Integer.parseInt(in.readLine().substring(15));
+        bowMastery = Integer.parseInt(in.readLine().substring(13));
+        daggerMastery = Integer.parseInt(in.readLine().substring(16));
+        fireMastery = Integer.parseInt(in.readLine().substring(14));
+        windMastery = Integer.parseInt(in.readLine().substring(14));
+        lightningMastery = Integer.parseInt(in.readLine().substring(19));
+        lightMastery = Integer.parseInt(in.readLine().substring(15));
+        darkMastery = Integer.parseInt(in.readLine().substring(14));
+        staffMastery = Integer.parseInt(in.readLine().substring(15));
+
+
+        
         in.readLine();
 
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
+        skills = new ArrayList<>();
         curHP = (int)hp;
         
         int numWeapons = Integer.parseInt(in.readLine().substring(13));
@@ -170,7 +207,85 @@ public class Unit extends Actor
         for(int i = 0; i<numItems; i++)
             inventory.add(new Usable(in));
         
+        //Read in skills.
         in.readLine();
+        int numSkills = Integer.parseInt(in.readLine().substring(12));
+        
+        for(int i = 0; i<numSkills; i++)
+            skills.add(in.readLine());
+        
+        in.readLine();
+    }
+    
+        
+    /**
+     * Writes the unit to a file.
+     * @param bw The file writer.
+     * @throws IOException 
+     */
+    public void save(BufferedWriter bw) throws IOException
+    {
+        bw.write("Name: "+name); bw.newLine();
+        bw.write("Class: "+unitClass); bw.newLine();
+        bw.write("Team: "+team); bw.newLine();
+        
+        bw.write("Level: "+level); bw.newLine();
+        bw.write("XP: "+xp); bw.newLine();
+        
+        bw.write("HP: "+hp); bw.newLine();
+        bw.write("STR: "+str); bw.newLine();
+        bw.write("MAG: "+mag); bw.newLine();
+        bw.write("SPD: "+spd); bw.newLine();
+        bw.write("Skill: "+skill); bw.newLine();
+        bw.write("DEF: "+def); bw.newLine();
+        bw.write("RES: "+res); bw.newLine();
+        bw.write("Luck: "+luck); bw.newLine();
+        
+        bw.write("Move: "+move); bw.newLine();
+   
+        bw.write("HPUP: "+hpup); bw.newLine();
+        bw.write("STRUP: "+strup); bw.newLine();
+        bw.write("MAGUP: "+magup); bw.newLine();
+        bw.write("SPDUP: "+spdup); bw.newLine();
+        bw.write("SkillUP: "+skillup); bw.newLine();
+        bw.write("DEFUP: "+defup); bw.newLine();
+        bw.write("RESUP: "+resup); bw.newLine();
+        bw.write("LuckUP: "+luckup);  bw.newLine();
+        
+        bw.write("Move Type: "+transportType); bw.newLine();
+        bw.write("Armor Type: "+armorType); bw.newLine();
+        
+        bw.write("Sword Mastery: "+swordMastery); bw.newLine();
+        bw.write("Axe Mastery: "+axeMastery); bw.newLine();
+        bw.write("Lance Mastery: "+lanceMastery); bw.newLine();
+        bw.write("Bow Mastery: "+bowMastery); bw.newLine();
+        bw.write("Dagger Mastery: "+daggerMastery); bw.newLine();
+        bw.write("Fire Mastery: "+fireMastery); bw.newLine();
+        bw.write("Wind Mastery: "+windMastery); bw.newLine();
+        bw.write("Lightning Mastery: "+lightningMastery); bw.newLine();
+        bw.write("Light Mastery: "+lightMastery); bw.newLine();
+        bw.write("Dark Mastery: "+darkMastery); bw.newLine();
+        bw.write("Staff Mastery: "+staffMastery); bw.newLine();
+        
+        bw.newLine();
+        bw.write("Num Weapons: "+weaponInventory.size()); bw.newLine();
+        bw.newLine();
+        for(Weapon w: weaponInventory)
+            w.save(bw);
+        
+        bw.write("Num Items: "+inventory.size()); bw.newLine();
+        bw.newLine();
+        for(Usable u: inventory)
+            u.save(bw);
+        
+        bw.write("Skills"); bw.newLine();
+        bw.write("Num Skills: "+skills.size()); bw.newLine();
+        for(String s: skills)
+        {
+            bw.write(s); bw.newLine();
+        }
+        
+        bw.newLine();
     }
     
     //</editor-fold>
@@ -383,51 +498,48 @@ public class Unit extends Actor
     }
     
     /**
-     * Writes the unit to a file.
-     * @param bw The file writer.
-     * @throws IOException 
+     * Writes a Unit to a file
+     * @param u The Unit to write to.
      */
-    public void save(BufferedWriter bw) throws IOException
+    public static void writeToPrefab(Unit u)
     {
-        bw.write("Name: "+name); bw.newLine();
-        bw.write("Class: "+unitClass); bw.newLine();
-        bw.write("Team: "+team); bw.newLine();
-        bw.write("Level: "+level); bw.newLine();
-        bw.write("XP: "+xp); bw.newLine();
-        bw.write("HP: "+hp); bw.newLine();
-        bw.write("STR: "+str); bw.newLine();
-        bw.write("MAG: "+mag); bw.newLine();
-        bw.write("SPD: "+spd); bw.newLine();
-        bw.write("Skill: "+skill); bw.newLine();
-        bw.write("DEF: "+def); bw.newLine();
-        bw.write("RES: "+res); bw.newLine();
-        bw.write("Luck: "+luck); bw.newLine();
-        bw.write("Move: "+move); bw.newLine();
-   
-        bw.write("HPUP: "+hpup); bw.newLine();
-        bw.write("STRUP: "+strup); bw.newLine();
-        bw.write("MAGUP: "+magup); bw.newLine();
-        bw.write("SPDUP: "+spdup); bw.newLine();
-        bw.write("SkillUP: "+skillup); bw.newLine();
-        bw.write("DEFUP: "+defup); bw.newLine();
-        bw.write("RESUP: "+resup); bw.newLine();
-        bw.write("LuckUP: "+luckup);  bw.newLine();
-        
-        bw.write("Move Type: "+transportType); bw.newLine();
-        bw.write("Armor Type: "+armorType); bw.newLine();
-        bw.newLine();
-        
-        bw.write("Num Weapons: "+weaponInventory.size()); bw.newLine();
-        bw.newLine();
-        for(Weapon w: weaponInventory)
-            w.save(bw);
-        
-        bw.write("Num Items: "+inventory.size()); bw.newLine();
-        bw.newLine();
-        for(Usable u: inventory)
+        File saveFile = new File("assets/prefabs/units/"+u.getName()+".txt");
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(saveFile);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            
             u.save(bw);
+            
+            bw.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Unit Prefab Generation failed");
+        }
+    }
+    
+    /**
+     * Loads a Unit from a prefab.
+     * @param name The Unit prefab to load
+     * @return The loaded Unit.
+     */
+    public static Unit loadFromPrefab(String name)
+    {
+        Unit ret = null;
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("assets/prefabs/units/"+name+".txt"));
+            ret = new Unit(in);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Loading Unit prefab "+ name +" failed, file doesn't seem to exist.");
+            System.exit(-1);
+        }
         
-        bw.newLine();
+        return ret;
     }
     
     //<editor-fold desc="getters and setters">
@@ -780,8 +892,184 @@ public class Unit extends Actor
         return inventory;
     }
     
+    /**
+     * @return the swordMastery
+     */
+    public int getSwordMastery()
+    {
+        return swordMastery;
+    }
+
+    /**
+     * @param swordMastery the swordMastery to set
+     */
+    public void setSwordMastery(int swordMastery) 
+    {
+        this.swordMastery = swordMastery;
+    }
+
+    /**
+     * @return the axeMastery
+     */
+    public int getAxeMastery()
+    {
+        return axeMastery;
+    }
+
+    /**
+     * @param axeMastery the axeMastery to set
+     */
+    public void setAxeMastery(int axeMastery) 
+    {
+        this.axeMastery = axeMastery;
+    }
+
+    /**
+     * @return the lanceMastery
+     */
+    public int getLanceMastery()
+    {
+        return lanceMastery;
+    }
+
+    /**
+     * @param lanceMastery the lanceMastery to set
+     */
+    public void setLanceMastery(int lanceMastery)
+    {
+        this.lanceMastery = lanceMastery;
+    }
+
+    /**
+     * @return the bowMastery
+     */
+    public int getBowMastery()
+    {
+        return bowMastery;
+    }
+
+    /**
+     * @param bowMastery the bowMastery to set
+     */
+    public void setBowMastery(int bowMastery)
+    {
+        this.bowMastery = bowMastery;
+    }
+
+    /**
+     * @return the daggerMastery
+     */
+    public int getDaggerMastery()
+    {
+        return daggerMastery;
+    }
+
+    /**
+     * @param daggerMastery the daggerMastery to set
+     */
+    public void setDaggerMastery(int daggerMastery) 
+    {
+        this.daggerMastery = daggerMastery;
+    }
+
+    /**
+     * @return the fireMastery
+     */
+    public int getFireMastery()
+    {
+        return fireMastery;
+    }
+
+    /**
+     * @param fireMastery the fireMastery to set
+     */
+    public void setFireMastery(int fireMastery)
+    {
+        this.fireMastery = fireMastery;
+    }
+
+    /**
+     * @return the windMastery
+     */
+    public int getWindMastery()
+    {
+        return windMastery;
+    }
+
+    /**
+     * @param windMastery the windMastery to set
+     */
+    public void setWindMastery(int windMastery)
+    {
+        this.windMastery = windMastery;
+    }
+
+    /**
+     * @return the lightningMastery
+     */
+    public int getLightningMastery()
+    {
+        return lightningMastery;
+    }
+
+    /**
+     * @param lightningMastery the lightningMastery to set
+     */
+    public void setLightningMastery(int lightningMastery)
+    {
+        this.lightningMastery = lightningMastery;
+    }
+
+    /**
+     * @return the lightMastery
+     */
+    public int getLightMastery()
+    {
+        return lightMastery;
+    }
+
+    /**
+     * @param lightMastery the lightMastery to set
+     */
+    public void setLightMastery(int lightMastery)
+    {
+        this.lightMastery = lightMastery;
+    }
+
+    /**
+     * @return the darkMastery
+     */
+    public int getDarkMastery()
+    {
+        return darkMastery;
+    }
+
+    /**
+     * @param darkMastery the darkMastery to set
+     */
+    public void setDarkMastery(int darkMastery)
+    {
+        this.darkMastery = darkMastery;
+    }
+
+    /**
+     * @return the staffMastery
+     */
+    public int getStaffMastery()
+    {
+        return staffMastery;
+    }
+
+    /**
+     * @param staffMastery the staffMastery to set
+     */
+    public void setStaffMastery(int staffMastery)
+    {
+        this.staffMastery = staffMastery;
+    }
     
     //</editor-fold>
+
 
 
 }

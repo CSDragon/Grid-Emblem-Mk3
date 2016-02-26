@@ -1,0 +1,15 @@
+Name: Steel Lance
+Value: 1000
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: C
+Damage: 10
+Max Uses: 35
+Cur Uses: 35
+Hit: 80
+Weight: 13
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

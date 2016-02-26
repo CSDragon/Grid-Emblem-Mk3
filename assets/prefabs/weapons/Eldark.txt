@@ -1,0 +1,15 @@
+Name: Eldark
+Value: 2000
+Weapon Type: 9
+Strength or Magic: 1
+Mastery Requirement: D
+Damage: 8
+Max Uses: 35
+Cur Uses: 35
+Hit: 75	
+Weight: 6
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

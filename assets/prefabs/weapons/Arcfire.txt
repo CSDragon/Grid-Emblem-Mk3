@@ -1,0 +1,15 @@
+Name: Arcfire
+Value: 2500
+Weapon Type: 7
+Strength or Magic: 1
+Mastery Requirement: B
+Damage: 9
+Max Uses: 25
+Cur Uses: 25
+Hit: 80
+Weight: 7
+Crit: 5
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

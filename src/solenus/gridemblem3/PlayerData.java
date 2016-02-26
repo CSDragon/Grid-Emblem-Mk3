@@ -240,16 +240,18 @@ public class PlayerData
     //TEST
     public static void main(String[] args) 
     {
+       
+        /*
         PlayerData a = new PlayerData();
         ArrayList<Unit> unitList = new ArrayList<>();
         unitList.add(new Unit(0, 6, 1));
-        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        unitList.get(0).addWeapon(new Weapon("Tome", 100, 0, 0, Weapon.LIGHT, 19, 10, 2, 100, 0 ,0, 1, 2));
         
                 
         unitList.add(new Unit(0, 6, 1));
-        unitList.get(1).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
-        unitList.get(1).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
-        unitList.get(1).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
+        unitList.get(1).addWeapon(new Weapon("Tome"  , 100, 0, 0, Weapon.LIGHT, 19, 10, 20, 100, 0 ,0, 1, 2));
+        unitList.get(1).addWeapon(new Weapon("Bow"   , 100, 0, 0, Weapon.BOW  , 19, 10,  2, 100, 0 ,0, 2, 2));
+        unitList.get(1).addWeapon(new Weapon("Sword" , 100, 0, 0, Weapon.SWORD, 19, 10,  2, 100, 0 ,0, 1, 1));
         
         a.addUnit(unitList.get(0));
         a.addUnit(unitList.get(1));
@@ -260,7 +262,7 @@ public class PlayerData
         for(File fi: f.listFiles())
             System.out.println(fi.getName());
         
-        /*
+        
         PlayerData a = new PlayerData();
         Unit u = new Unit();
         u.addWeapon(new Weapon("Sheld",0,1,2,3,4,5,6,7,1,2));

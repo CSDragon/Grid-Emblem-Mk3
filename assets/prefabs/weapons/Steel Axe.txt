@@ -1,0 +1,15 @@
+Name: Steel Axe
+Value: 700
+Weapon Type: 2
+Strength or Magic: 0
+Mastery Requirement: C
+Damage: 11
+Max Uses: 35
+Cur Uses: 35
+Hit: 75
+Weight: 15
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

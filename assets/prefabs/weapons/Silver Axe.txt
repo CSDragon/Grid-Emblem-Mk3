@@ -1,0 +1,15 @@
+Name: Silver Axe
+Value: 1300
+Weapon Type: 2
+Strength or Magic: 0
+Mastery Requirement: A
+Damage: 14
+Max Uses: 25
+Cur Uses: 25
+Hit: 70
+Weight: 14
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+

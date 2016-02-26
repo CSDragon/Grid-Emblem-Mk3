@@ -31,8 +31,7 @@ public class Map
 {
     private int height;
     private int width;
-    private int cursorStartX;
-    private int cursorStartY;
+    private boolean skipSetup;
     private String name;
     private int idNum;
     
@@ -82,6 +81,7 @@ public class Map
             //get sprite dimensions
             width = Integer.decode(in.readLine().substring(7));
             height = Integer.decode(in.readLine().substring(8));
+            skipSetup = in.readLine().substring(12).equals("true");
 
             
             //discard extra lines
@@ -197,6 +197,7 @@ public class Map
             //save dimensions
             bw.write("Width: "+ width); bw.newLine();
             bw.write("Height: "+ height); bw.newLine();
+            bw.write("Skip Setup: "+skipSetup); bw.newLine();
             bw.newLine();
             
             //save terrain
@@ -307,6 +308,7 @@ public class Map
     
     public static void main(String[] args)
     {
+        /*
         Map m = new Map(1, null);
         ArrayList<Point> p = new ArrayList<>();
         p.add(new Point(14, 7));
@@ -320,19 +322,19 @@ public class Map
         
         startingEnemies.add(new Unit(1, 6, 1));
         startingEnemyPoints.add(new Point(6, 7));
-        startingEnemies.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        startingEnemies.get(0).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
 
         startingEnemies.add(new Unit(1, 6, 1));
         startingEnemyPoints.add(new Point(7, 8));
-        startingEnemies.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        startingEnemies.get(1).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
 
         startingEnemies.add(new Unit(1, 6, 1));
         startingEnemyPoints.add(new Point(7, 7));
-        startingEnemies.get(2).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        startingEnemies.get(2).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
 
         startingEnemies.add(new Unit(1, 6, 1));
         startingEnemyPoints.add(new Point(7,6));
-        startingEnemies.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        startingEnemies.get(3).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
 
         m.setStartingUnits(startingEnemies);
         m.setStartingUnitLocations(startingEnemyPoints);
@@ -402,20 +404,9 @@ public class Map
         return width;
     }
     
-    /**
-     * @return the starting location of the cursor on X
-     */
-    public int getCursorStartX()
+    public boolean getSkipSetup()
     {
-        return cursorStartX;
-    }    
-    
-    /**
-     * @return the starting location of the cursor on Y
-     */
-    public int getCursorStartY()
-    {
-        return cursorStartY;
+        return skipSetup;
     }
 
     /**

@@ -1,0 +1,15 @@
+Name: Bronze Axe
+Value: 250
+Weapon Type: 2
+Strength or Magic: 0
+Mastery Requirement: E
+Damage: 5
+Max Uses: 50
+Cur Uses: 50
+Hit: 85
+Weight: 7
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
