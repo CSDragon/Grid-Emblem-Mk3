@@ -41,7 +41,10 @@ public abstract class GridRenderable
     public GridRenderable(String name)
     {
         visible = true;
-        sprite = new Sprite(name);
+        if(name != null && !name.equals("null"))
+            sprite = new Sprite(name);
+        else
+            sprite = new Sprite("generic");
     }
     
     /**
@@ -49,7 +52,7 @@ public abstract class GridRenderable
      */
     public GridRenderable()
     {
-        visible = true;
+        visible = false;
         sprite = null;
     }
     

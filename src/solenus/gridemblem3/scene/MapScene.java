@@ -21,11 +21,9 @@ import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.gamemap.*;
 import solenus.gridemblem3.actor.*;
-import solenus.gridemblem3.item.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.ui.FightUI;
 import solenus.gridemblem3.ui.XPBarUI;
-import solenus.gridemblem3.ui.menu.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
 import solenus.gridemblem3.ui.menu.SystemActionMenu;
 import solenus.gridemblem3.ui.menu.UnitActionMenu;
@@ -130,6 +128,7 @@ public class MapScene extends Scene
                 12) Unit death
                 13) Exp
                 14) Prebattle Menu
+                15) View Map
             */
 
             //cursor mode
@@ -231,6 +230,12 @@ public class MapScene extends Scene
                     break;
                 case 14:
                     preBattleScene.respondControls(im);
+                    break;
+                case 15:
+                    cursor.respondControls(im);
+                    if(im.getB() == 1)
+                        cst15to14();
+                    break;
             }
         }
     }
@@ -265,6 +270,7 @@ public class MapScene extends Scene
                     12) Unit death
                     13) Exp
                     14) Prebattle Menu
+                    15) View Map
                 */
                 
                 /*  Cursor Mode
@@ -451,15 +457,32 @@ public class MapScene extends Scene
                             cst13to1();
                             break;
                     }
+                
+                /*  Pre-battle Menu
+                    Active Object: preBattleScene
+                    Camera Follows: None
+                */
                 case 14:
                     switch(preBattleScene.runFrame())
                     {
+                        case PreBattleScene.VIEWMAP:
+                            cst14to15();
+                            break;
                         case PreBattleScene.START:
                             cst14to1();
                             break;
                         case PreBattleScene.RETURNTOBASE:
                             return RETURNTOBASE;
                     }
+                    break;
+                    
+                /*  View Map
+                    Active Object: cursor
+                    Camera Follows: cursor
+                */
+                case 15:
+                    cursor.runFrame();
+                    camera.moveToRenderable(cursor, map);
                     break;
                     
             }  
@@ -566,7 +589,7 @@ public class MapScene extends Scene
         //Load up the main grid objects
         playerArmy = pd;
         fightGraphicsMode = false;
-        map = new Map(playerArmy.getMapNum());
+        map = new Map(playerArmy.getMapNum(), pd);
         Pathfinding.setMap(map, this);
 
         cursor = new MapCursor(map);
@@ -595,32 +618,16 @@ public class MapScene extends Scene
             System.exit(-1);
         }
         
-        //TEST: Don't do this in the final
-        unitList.add(new Unit(0, 6, 1));
-        unitList.get(0).placeOnGrid(15, 7);
-        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        //Add starting units
+        unitList.addAll(map.getMandatoryPlayerUnits());
+        unitList.addAll(map.getStartingUnits());
         
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(1).placeOnGrid(6, 7);
-        unitList.get(1).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        if(!unitList.isEmpty())
+        {
+            cursor.moveInstantly(unitList.get(0).getCoord());
+            camera.moveInstantly(cursor.getXCur(), cursor.getYCur());
+        }
         
-        unitList.add(new Unit(0, 6, 1));
-        unitList.get(2).placeOnGrid(10, 7);
-        unitList.get(2).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
-        unitList.get(2).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
-        unitList.get(2).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(3).placeOnGrid(7, 8);
-        unitList.get(3).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(4).placeOnGrid(7, 7);
-        unitList.get(4).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
-        
-        unitList.add(new Unit(1, 6, 1));
-        unitList.get(5).placeOnGrid(7, 6);
-        unitList.get(5).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
         getAllEnemyRanges();
         
         numFactions = 2;
@@ -1239,6 +1246,26 @@ public class MapScene extends Scene
         cursor.setVisible(true);
         preBattleScene.end();
         
+    }
+    
+    /**
+     * Switches from the pre-battle menu to View Map mode
+     */
+    public void cst14to15()
+    {
+        controlState = 15;
+        cursor.setVisible(true);
+        preBattleScene.stop();
+    }
+    
+    /**
+     * Switches from the view map mode to the pre-battle menu
+     */
+    public void cst15to14()
+    {
+        controlState = 14;
+        cursor.setVisible(false);
+        preBattleScene.resume();
     }
     
     

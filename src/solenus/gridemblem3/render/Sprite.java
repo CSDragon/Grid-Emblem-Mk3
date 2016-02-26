@@ -110,8 +110,69 @@ public class Sprite
         
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, name +" sprite failed to load. Did you change something?");
-            System.exit(-1);
+            try
+            {
+                //load sheet image
+                spriteSheet = ImageIO.read(new File("assets/sprites/genericSheet.png"));
+
+                //load animations
+                BufferedReader in = new BufferedReader(new FileReader("assets/sprites/genericAnimation.txt"));
+
+                //get sprite dimensions
+                height = Integer.decode(in.readLine().substring(8));
+                width = Integer.decode(in.readLine().substring(7));
+                centerX = Integer.decode(in.readLine().substring(9));
+                centerY = Integer.decode(in.readLine().substring(9));
+                rows = Integer.decode(in.readLine().substring(6));
+                cols = Integer.decode(in.readLine().substring(6));
+
+
+                //discard extra line
+                in.readLine();
+
+
+                //get number of animations
+                int numAnimations = Integer.decode(in.readLine().substring(12));
+
+                for(int i = 0; i<numAnimations; i++)
+                {
+                    String[] arr = in.readLine().split(",");    
+
+                    animationList.put(arr[0], new Animation(arr[0],Integer.decode(arr[1]),Integer.decode(arr[2]),Integer.decode(arr[3]), Integer.decode(arr[4])));
+                }
+                //dispose extra line
+                in.readLine();
+
+
+                //load triggers
+                int numTransitions = Integer.decode(in.readLine().substring(13));
+
+                for(int i = 0; i < numTransitions; i++)
+                {
+                    String[] arr = in.readLine().split(",",4); 
+                    if(arr[0].equals("any"))
+                        for(Map.Entry<String,Animation> a : animationList.entrySet())
+                        {
+                            a.getValue().addTransition(arr[2], new Transition(animationList.get(arr[1]),arr[2],arr[3]));
+                        }
+
+                    else
+                        animationList.get(arr[0]).addTransition(arr[2], new Transition(animationList.get(arr[1]),arr[2],arr[3]));
+                }
+                //dispose extra line
+                in.readLine();
+
+
+                //get default animation
+                activeAnimation = animationList.get(in.readLine().substring(9));
+
+                in.close();
+            }
+            catch(Exception e1)
+            {
+                JOptionPane.showMessageDialog(null, name +" sprite failed to load. Did you change something?");
+                System.exit(-1);
+            }
         }
         
         sprites = new ArrayList<>();

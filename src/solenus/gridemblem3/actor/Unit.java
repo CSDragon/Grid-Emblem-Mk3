@@ -40,8 +40,6 @@ public class Unit extends Actor
     public static final int OTHER = 3;
     
     
-    
-    private String name;
     private String unitClass;
     private int team;
     private boolean hasMoved;
@@ -106,7 +104,7 @@ public class Unit extends Actor
     //Test constructor
     public Unit(int t, int m, int mt)
     {
-        super("generic");
+        super(null);
         
         hp = 10;
         curHP = 10;
@@ -121,6 +119,58 @@ public class Unit extends Actor
         passable = true;
         
         xp = 80;
+    }
+    
+    /**
+     * Creates a new unit from a text file
+     * @param in The text we're reading from.
+     * @throws IOException 
+     */
+    public Unit(BufferedReader in) throws IOException
+    {
+        super(in.readLine().substring(6));
+        unitClass = in.readLine().substring(7);
+        team = Integer.parseInt(in.readLine().substring(6));
+        level = Integer.parseInt(in.readLine().substring(7));
+        xp = Integer.parseInt(in.readLine().substring(4));
+        hp  = Double.parseDouble(in.readLine().substring(4));
+        str = Double.parseDouble(in.readLine().substring(5));
+        mag = Double.parseDouble(in.readLine().substring(5));
+        spd = Double.parseDouble(in.readLine().substring(5));
+        skill = Double.parseDouble(in.readLine().substring(7));
+        def = Double.parseDouble(in.readLine().substring(5));
+        res = Double.parseDouble(in.readLine().substring(5));
+        luck = Double.parseDouble(in.readLine().substring(6));
+        move = Integer.parseInt(in.readLine().substring(6));
+        hpup  = Double.parseDouble(in.readLine().substring(6));
+        strup = Double.parseDouble(in.readLine().substring(7));
+        magup = Double.parseDouble(in.readLine().substring(7));
+        spdup = Double.parseDouble(in.readLine().substring(7));
+        skillup = Double.parseDouble(in.readLine().substring(9));
+        defup = Double.parseDouble(in.readLine().substring(7));
+        resup = Double.parseDouble(in.readLine().substring(7));
+        luckup = Double.parseDouble(in.readLine().substring(8));
+        transportType = Integer.parseInt(in.readLine().substring(11));
+        armorType = Integer.parseInt(in.readLine().substring(12));
+        in.readLine();
+
+        weaponInventory = new ArrayList<>();
+        inventory = new ArrayList<>();
+        curHP = (int)hp;
+        
+        int numWeapons = Integer.parseInt(in.readLine().substring(13));
+        in.readLine();
+        
+        for(int i = 0; i<numWeapons; i++)
+            weaponInventory.add(new Weapon(in));
+        
+        int numItems = Integer.parseInt(in.readLine().substring(11));
+        in.readLine();
+        
+        for(int i = 0; i<numItems; i++)
+            inventory.add(new Usable(in));
+        
+        in.readLine();
     }
     
     //</editor-fold>
@@ -341,6 +391,7 @@ public class Unit extends Actor
     {
         bw.write("Name: "+name); bw.newLine();
         bw.write("Class: "+unitClass); bw.newLine();
+        bw.write("Team: "+team); bw.newLine();
         bw.write("Level: "+level); bw.newLine();
         bw.write("XP: "+xp); bw.newLine();
         bw.write("HP: "+hp); bw.newLine();
@@ -378,57 +429,6 @@ public class Unit extends Actor
         
         bw.newLine();
     }
-    
-    /**
-     * Creates a new unit from a text file
-     * @param in The text we're reading from.
-     * @throws IOException 
-     */
-    public Unit(BufferedReader in) throws IOException
-    {
-        name = in.readLine().substring(6);
-        unitClass = in.readLine().substring(7);
-        level = Integer.parseInt(in.readLine().substring(7));
-        xp = Integer.parseInt(in.readLine().substring(4));
-        hp  = Double.parseDouble(in.readLine().substring(4));
-        str = Double.parseDouble(in.readLine().substring(5));
-        mag = Double.parseDouble(in.readLine().substring(5));
-        spd = Double.parseDouble(in.readLine().substring(5));
-        skill = Double.parseDouble(in.readLine().substring(7));
-        def = Double.parseDouble(in.readLine().substring(5));
-        res = Double.parseDouble(in.readLine().substring(5));
-        luck = Double.parseDouble(in.readLine().substring(6));
-        move = Integer.parseInt(in.readLine().substring(6));
-        hpup  = Double.parseDouble(in.readLine().substring(6));
-        strup = Double.parseDouble(in.readLine().substring(7));
-        magup = Double.parseDouble(in.readLine().substring(7));
-        spdup = Double.parseDouble(in.readLine().substring(7));
-        skillup = Double.parseDouble(in.readLine().substring(9));
-        defup = Double.parseDouble(in.readLine().substring(7));
-        resup = Double.parseDouble(in.readLine().substring(7));
-        luckup = Double.parseDouble(in.readLine().substring(8));
-        transportType = Integer.parseInt(in.readLine().substring(11));
-        armorType = Integer.parseInt(in.readLine().substring(12));
-        in.readLine();
-
-        weaponInventory = new ArrayList<>();
-        inventory = new ArrayList<>();
-        
-        int numWeapons = Integer.parseInt(in.readLine().substring(13));
-        in.readLine();
-        
-        for(int i = 0; i<numWeapons; i++)
-            weaponInventory.add(new Weapon(in));
-        
-        int numItems = Integer.parseInt(in.readLine().substring(11));
-        in.readLine();
-        
-        for(int i = 0; i<numItems; i++)
-            inventory.add(new Usable(in));
-        
-        in.readLine();
-    }
-    
     
     //<editor-fold desc="getters and setters">
     

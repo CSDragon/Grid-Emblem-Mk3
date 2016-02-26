@@ -16,6 +16,7 @@ import solenus.gridemblem3.gamemap.GridRenderable;
 public abstract class Actor extends GridRenderable
 {
     protected boolean passable;
+    protected String name;
     
     /**
      * Creates an actor with a sprite.
@@ -24,6 +25,7 @@ public abstract class Actor extends GridRenderable
     public Actor(String spriteName)
     {
         super(spriteName);
+        name = spriteName;
         passable = false;
     }
     

@@ -139,16 +139,22 @@ public abstract class Scene
         visible = true;
     }
     
+    public void end() //Used to terminate a scene.
+    {
+        active = false;
+        visible = false;
+    }
+    
     public void stop() //Used to temporarily halt the scene.
     {
         active = false;
         visible = false;
     }
     
-    public void end() //Used to terminate a scene.
+    public void resume() //Used to get back to a scene after it has been halted
     {
-        active = false;
-        visible = false;
+        active = true;
+        visible = true;
     }
     
     public boolean getAcitve()

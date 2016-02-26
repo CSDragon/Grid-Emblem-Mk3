@@ -186,8 +186,11 @@ public class SceneManager extends Scene
     {
         controlState = 2;
         tms.end();
-        playerArmy = new PlayerData();
-        playerArmy.newGame();
+        if(playerArmy == null)
+        {
+            playerArmy = new PlayerData();
+            playerArmy.newGame();
+        }
         ms.start(playerArmy);
     }
     

@@ -67,6 +67,17 @@ public class Camera
         y = ytemp;
     }
     
+    /**
+     * Moves the camera instantly to a location.
+     * @param x The x coord
+     * @param y The y coord
+     */
+    public void moveInstantly(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    
     public double getX()
     {
         return x;

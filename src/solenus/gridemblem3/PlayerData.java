@@ -153,7 +153,49 @@ public class PlayerData
      */
     public void newGame()
     {
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("saves/newGame.sav"));
+            
+            //Get the map data
+            mapNum = Integer.parseInt(in.readLine().substring(12));
+            inBase = in.readLine().substring(10).equals("true");
+            in.readLine();
+
+            //Get how much gold you have
+            gold = Integer.parseInt(in.readLine().substring(6));
+            in.readLine();
+            
+            //Get the army data.
+            int numUnits = Integer.parseInt(in.readLine().substring(11));
+            in.readLine();
+            
+            for(int i = 0; i<numUnits; i++)
+                unitList.add(new Unit(in));
+            
+            //Get the weapon convoy data
+            int numWeapons = Integer.parseInt(in.readLine().substring(13));
+            in.readLine();
+            
+            for(int i = 0; i<numWeapons; i++)
+                weaponConvoy.add(new Weapon(in));
         
+            //Get the item convoy data.
+            int numItems = Integer.parseInt(in.readLine().substring(11));
+            in.readLine();
+            
+            for(int i = 0; i<numItems; i++)
+                itemConvoy.add(new Usable(in));
+                
+            
+            in.close();
+        }
+        
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Unable to load this file. Something's wrong, and I don't know what. Sorry!");
+        }
     }
     
     /**
@@ -198,6 +240,22 @@ public class PlayerData
     //TEST
     public static void main(String[] args) 
     {
+        PlayerData a = new PlayerData();
+        ArrayList<Unit> unitList = new ArrayList<>();
+        unitList.add(new Unit(0, 6, 1));
+        unitList.get(0).addWeapon(new Weapon("Tome", 0, 0, 0, 10, 2, 100, 0 ,0, 1, 2));
+        
+                
+        unitList.add(new Unit(0, 6, 1));
+        unitList.get(1).addWeapon(new Weapon("Tome"  , 0, 0, 0, 10, 20, 100, 0 ,0, 1, 2));
+        unitList.get(1).addWeapon(new Weapon("Bow"   , 0, 0, 0, 10, 2, 100, 0 ,0, 2, 2));
+        unitList.get(1).addWeapon(new Weapon("Sword" , 0, 0, 0, 10, 2, 100, 0 ,0, 1, 1));
+        
+        a.addUnit(unitList.get(0));
+        a.addUnit(unitList.get(1));
+        
+        a.saveFile(1);
+        
         File f = new File("saves");
         for(File fi: f.listFiles())
             System.out.println(fi.getName());
@@ -214,6 +272,21 @@ public class PlayerData
         int i = 1;
         */
         
+    }
+    
+    /**
+     * Gets the first unit in your army with this name. Because of this, no units can have duplicate names.
+     * @param name The name of the unit we're searching for.
+     * @return The unit with that name.
+     */
+    public Unit getUnit(String name)
+    {
+        for(Unit u: unitList)
+        {
+            if(u.getName().equals(name))
+                return u;
+        }
+        return null;
     }
 
     //<editor-fold desc="getters and setters">

@@ -72,6 +72,8 @@ public class PreBattleScene extends Scene
                 case 1:
                     switch(pbm.runFrame())
                     {
+                        case PreBattleScene.VIEWMAP:
+                            return VIEWMAP;
                         case PreBattleMenu.START:
                             return START;
                         case PreBattleMenu.RETURNTOBASE:

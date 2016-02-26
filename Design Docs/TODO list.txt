@@ -27,7 +27,7 @@ TODOs
 		Graphics logic is nonsense right now.
 	
 Current TODO Stack:
-	Game flow
+	PreBattleScene
 		
 
 BUGS:
