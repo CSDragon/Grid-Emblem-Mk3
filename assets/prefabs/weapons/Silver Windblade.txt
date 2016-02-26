@@ -1,0 +1,15 @@
+Name: Silver Windblade
+Value: 3000
+Weapon Type: 0
+Strength or Magic: 0
+Mastery Requirement: S
+Damage: 12
+Max Uses: 15
+Cur Uses: 15
+Hit: 65
+Weight: 12
+Crit: 5
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

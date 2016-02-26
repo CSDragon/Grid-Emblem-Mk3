@@ -55,8 +55,16 @@ public class Weapon extends Item
     private int maxRange;
     private ArrayList<String> specialEffects;
     
+    
+    public Weapon()
+    {
+        super();
+        specialEffects = new ArrayList<>();
+    }
+    
     public Weapon(String n, int value, int type, int som, char mr, int use, int d, int h, int w, int c, int minR, int maxR)
     {
+        this();
         name = n;
         goldValue = value;
         weaponType = type;
@@ -79,6 +87,7 @@ public class Weapon extends Item
      */
     public Weapon(BufferedReader in) throws IOException
     {
+        this();
         name = in.readLine().substring(6);
         goldValue = Integer.parseInt(in.readLine().substring(7));
         weaponType = Integer.parseInt(in.readLine().substring(13));
@@ -92,6 +101,9 @@ public class Weapon extends Item
         crit = Integer.parseInt(in.readLine().substring(6));
         minRange = Integer.parseInt(in.readLine().substring(11));
         maxRange = Integer.parseInt(in.readLine().substring(11));
+        int numEffects = Integer.parseInt(in.readLine().substring(13));
+        for(int i = 0; i<numEffects; i++)
+            specialEffects.add(in.readLine());
         in.readLine();
     }
     

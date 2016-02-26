@@ -1,0 +1,7 @@
+Name: Vulnerary
+Value: 500
+Number of Uses: 10
+Remaining Uses: 10
+Num Effects: 2
+Heal 10
+

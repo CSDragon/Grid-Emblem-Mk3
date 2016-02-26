@@ -34,6 +34,7 @@ public class Unit extends Actor
     public static final int FLYING_MOUNT = 4;
     
     //Armor type values
+    public static final int ROBES = 0;
     public static final int LIGHT = 1;
     public static final int MEDIUM = 2;
     public static final int HEAVY = 3;
@@ -56,11 +57,11 @@ public class Unit extends Actor
     private double hp;
     private double str;
     private double mag;
-    private double spd;
     private double skill;
+    private double spd;
+    private double luck;
     private double def;
     private double res;
-    private double luck;
     private int move;
     
     private int curHP;
@@ -72,22 +73,22 @@ public class Unit extends Actor
     private int bonusHP;
     private int bonusStr;
     private int bonusMag;
-    private int bonusSpd;
     private int bonusSkill;
+    private int bonusSpd;
+    private int bonusLuck;
     private int bonusDef;
     private int bonusRes;
-    private int bonusLuck;
     private int bonusMove;
     
     //Level up stat boosts.
     private double hpup;
     private double strup;
     private double magup;
-    private double spdup;
     private double skillup;
+    private double spdup;
+    private double luckup;
     private double defup;
     private double resup;
-    private double luckup;
     
     private int swordMastery;
     private int axeMastery;
@@ -117,6 +118,7 @@ public class Unit extends Actor
         
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
+        skills = new ArrayList<>();
     }
 
     //Test constructor
@@ -132,6 +134,8 @@ public class Unit extends Actor
         
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
+        skills = new ArrayList<>();
+        
         
         hasMoved = false;
         passable = true;
@@ -154,22 +158,22 @@ public class Unit extends Actor
         hp  = Double.parseDouble(in.readLine().substring(4));
         str = Double.parseDouble(in.readLine().substring(5));
         mag = Double.parseDouble(in.readLine().substring(5));
-        spd = Double.parseDouble(in.readLine().substring(5));
         skill = Double.parseDouble(in.readLine().substring(7));
+        spd = Double.parseDouble(in.readLine().substring(5));
+        luck = Double.parseDouble(in.readLine().substring(6));
         def = Double.parseDouble(in.readLine().substring(5));
         res = Double.parseDouble(in.readLine().substring(5));
-        luck = Double.parseDouble(in.readLine().substring(6));
         
         move = Integer.parseInt(in.readLine().substring(6));
         
         hpup  = Double.parseDouble(in.readLine().substring(6));
         strup = Double.parseDouble(in.readLine().substring(7));
         magup = Double.parseDouble(in.readLine().substring(7));
-        spdup = Double.parseDouble(in.readLine().substring(7));
         skillup = Double.parseDouble(in.readLine().substring(9));
+        spdup = Double.parseDouble(in.readLine().substring(7));
+        luckup = Double.parseDouble(in.readLine().substring(8));
         defup = Double.parseDouble(in.readLine().substring(7));
         resup = Double.parseDouble(in.readLine().substring(7));
-        luckup = Double.parseDouble(in.readLine().substring(8));
         
         transportType = Integer.parseInt(in.readLine().substring(11));
         armorType = Integer.parseInt(in.readLine().substring(12));
@@ -193,6 +197,7 @@ public class Unit extends Actor
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
+        
         curHP = (int)hp;
         
         int numWeapons = Integer.parseInt(in.readLine().substring(13));
@@ -235,22 +240,22 @@ public class Unit extends Actor
         bw.write("HP: "+hp); bw.newLine();
         bw.write("STR: "+str); bw.newLine();
         bw.write("MAG: "+mag); bw.newLine();
-        bw.write("SPD: "+spd); bw.newLine();
         bw.write("Skill: "+skill); bw.newLine();
+        bw.write("SPD: "+spd); bw.newLine();
+        bw.write("Luck: "+luck); bw.newLine();
         bw.write("DEF: "+def); bw.newLine();
         bw.write("RES: "+res); bw.newLine();
-        bw.write("Luck: "+luck); bw.newLine();
         
         bw.write("Move: "+move); bw.newLine();
    
         bw.write("HPUP: "+hpup); bw.newLine();
         bw.write("STRUP: "+strup); bw.newLine();
         bw.write("MAGUP: "+magup); bw.newLine();
-        bw.write("SPDUP: "+spdup); bw.newLine();
         bw.write("SkillUP: "+skillup); bw.newLine();
+        bw.write("SPDUP: "+spdup); bw.newLine();
+        bw.write("LuckUP: "+luckup);  bw.newLine();
         bw.write("DEFUP: "+defup); bw.newLine();
         bw.write("RESUP: "+resup); bw.newLine();
-        bw.write("LuckUP: "+luckup);  bw.newLine();
         
         bw.write("Move Type: "+transportType); bw.newLine();
         bw.write("Armor Type: "+armorType); bw.newLine();

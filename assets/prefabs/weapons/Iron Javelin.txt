@@ -1,0 +1,15 @@
+Name: Iron Javelin
+Value: 600
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 7
+Max Uses: 20
+Cur Uses: 20
+Hit: 70
+Weight: 11
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

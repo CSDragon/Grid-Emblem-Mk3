@@ -1,0 +1,15 @@
+Name: Silver Knife
+Value: 1800
+Weapon Type: 4
+Strength or Magic: 0
+Mastery Requirement: C
+Damage: 7
+Max Uses: 15
+Cur Uses: 15
+Hit: 60
+Weight: 4
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

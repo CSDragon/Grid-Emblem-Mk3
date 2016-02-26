@@ -1,0 +1,58 @@
+Name: Garen
+Class: Knight
+Team: 0
+Level: 4
+XP: 0
+HP: 23.5
+STR: 9.5
+MAG: 1.5
+Skill: 6.5
+SPD: 4.5
+Luck: 6.5
+DEF: 9.5
+RES: 4.5
+Move: 4
+HPUP: 0.85
+STRUP: 0.65
+MAGUP: 0.15
+SkillUP: 0.55
+SPDUP: 0.40
+LuckUP: 0.35
+DEFUP: 0.75
+RESUP: 0.3
+Move Type: 1
+Armor Type: 3
+Sword Mastery: 40
+Axe Mastery: -1
+Lance Mastery: -1
+Bow Mastery: -1
+Dagger Mastery: -1
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: -1
+Dark Mastery: -1
+Staff Mastery: -1
+
+Num Weapons: 1
+
+Name: Iron Sword
+Value: 500
+Weapon Type: 0
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 6
+Max Uses: 40
+Cur Uses: 40
+Hit: 90
+Weight: 7
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+

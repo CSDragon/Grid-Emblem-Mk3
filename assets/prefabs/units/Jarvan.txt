@@ -1,0 +1,65 @@
+Name: Jarvan
+Class: Lord
+Team: 0
+Level: 4
+XP: 0
+HP: 23.5
+STR: 8.5
+MAG: 3.5
+Skill: 11.5
+SPD: 9.5
+Luck: 8.5
+DEF: 7.5
+RES: 2.5
+Move: 5
+HPUP: 0.8
+STRUP: 0.55
+MAGUP: 0.35
+SkillUP: 0.45
+SPDUP: 0.55
+LuckUP: 0.50
+DEFUP: 0.35
+RESUP: 0.25
+Move Type: 1
+Armor Type: 2
+Sword Mastery: -1
+Axe Mastery: -1
+Lance Mastery: 40
+Bow Mastery: -1
+Dagger Mastery: -1
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: -1
+Dark Mastery: -1
+Staff Mastery: -1
+
+Num Weapons: 1
+
+Name: Iron Lance
+Value: 600
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 7
+Max Uses: 40
+Cur Uses: 40
+Hit: 85
+Weight: 9
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
+Num Items: 1
+
+Name: Vulnerary
+Value: 500
+Number of Uses: 10
+Remaining Uses: 10
+Num Effects: 1
+Heal 10
+
+Skills
+Num Skills: 0
+

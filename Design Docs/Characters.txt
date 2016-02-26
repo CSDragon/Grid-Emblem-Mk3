@@ -1,0 +1,199 @@
+Heroes, by class
+	Lord			Jarvan
+	Cavalier		Nunu	Sejuani	
+	Knight			Garen	Braum	Taric
+	Myrmidon		Fiora	Ekko	Riven
+	Fighter			Poppy	Jayce
+	Soldier			Xin		Jax		Helmet
+	Berserker		Trynd	Olaf
+	Archer			Vayne	Ashe	Cait	
+	Mercenary		Sivir
+	Thief			Twitch	Kat
+	Pegasus Knight	Kayle	Corki
+	Dracoknight		Galeo
+	Fire Mage		Annie	Ziggs
+	Wind/Ice Mage	Anivia	Janna
+	Lightning Mage	Ryze	Heimer
+	Cleric			Sona	Soraka
+	Light Mage		Lux
+	Mantekete		Shyvana	Udyr
+	Other:			Quinn	Ezreal
+	
+Special: Gragas acts as your shopkeep.
+
+	
+Bosses:
+	Demacia
+		Leblanc as Jarvan - Lord
+		Morgana	- Dark Mage
+		Casseopia - Mage
+		
+	Freljord
+		Aatrox - Swordmaster
+		Trynd under Aatrox's mind control - Berserker
+		Olaf - Berserker
+		Volibear - Knight
+		Sejuani - Cavalier
+		Trundle - Fighter
+		Lissandra - Ice Mage
+	Piltover/Zaun
+		Mundo - Special
+		Jinx - Archer
+		Twitch - Theif
+		Viktor - Lignting Mage
+		Singed - Special/Dark Mage
+		Oriana - Lightning Mage
+		Urgot - Special
+		
+	Noxus
+		Darius Warrior
+		Draven Berserker who only uses throwing axes. 		//Fight both Darius and Draven at first, kill one, fight the other one next map
+		Sion - Knight
+		Talon - Assassin/Swordmaster
+		Leblanc - Mage
+		Katarina - Assassin
+		Vlad - Dark Mage
+		Swain Dark Mage
+	
+	
+Missions:
+	Tutorial
+		Tutorial 1
+			Plot	Training
+			Recruit	Garen, Lux, Quinn, Xin, Jarvan (post)
+			Boss	Jarvan
+		Tutorial 2
+			Plot	Trouble is brewing. Some
+			Recruit Vayne, Fiora
+			Boss	Demacian Insurgents
+		Tutorial 3
+			Recruit	Twitch	
+			Boss	LBJarvan
+	Demacia
+		Chapter 1
+			Recruit Sona, Poppy
+			Boss	None (Bandits)
+		Chapter 2
+			Plot
+			Recruit	Kayle
+			Boss	Morgana
+		Chapter 3:
+			Plot	
+			Recruit	Ryze, Sivir
+			Boss	Cass
+		Chapter 4:
+			Plot
+			Recruit Annie
+			Boss	None (Noxian soldiers)
+		Chapter 5:
+			Plot
+			Recruit Shyvana
+			Boss	Katarina
+	
+	Freljord
+		Chapter 1:
+			Plot	Braum offers to help guide them to Ashe. As they enter the Freljord, the party comes across a bunch of Winter's Claw soldiers lead by Volibear
+			Recruit Braum
+			Boss	None (Winter's Claw)
+		Chapter 2:
+			Plot	The party reaches the Averosans.  But Tryndamere has gone missing, and barbarians are attacking.
+			Recruit Ashe 
+			Boss	Volibear
+		Chapter 3:
+			Plot	Tryndamere has surfaced. And he's leading a combination of Winters Claw troops and his home barbarians.
+			Recruit Nunu, Trynd (Must be killed by Ashe)
+			Boss	Possessed Trynd
+		Chapter 4:
+			Plot	The party goes after the spirit that possessed Tryndamere, finds an army lead by Olaf
+			Recruit Olaf (Must be killed by Trynd)
+			Boss 	Olaf
+		Chapter 5:	
+			Plot	The party continues further into the Freljord. Udyr guards the entrance into Winters Claw Territory at a sacred mountain pass
+			Recruit	Anivia, Udyr (post)
+			Boss	Udyr
+		Chapter 6:	
+			Plot	The party reaches the Winter's Claw HQ. Time to fight Sejuani
+			Recruit	Sejuani (Post)
+			Boss	Sejuani
+		Chapter 7: 	
+			Plot	The winter's claw has been defeated, but the Freljord towns are still being raided by crazed Winter's Claw members, and...trolls?
+			Recruit	Ezreal
+			Boss	Trundle
+		Chapter 8: 	
+			Plot	Aatrox has been cornered. Time to get revenge
+			Recruit	Soraka
+			Boss	Aatrox
+		Chapter 9:	
+			Plot	Lissandra reveals herself as the mastermind behind everything
+			Recruit	None	
+			Boss	Lisandra
+			
+	Piltover and Zuan
+		Chapter 1:	As the party reaches Piltover, they find the city of progress has been thrown into chaos. Viktor has hacked the Piltover robots
+			Recruit	Corki
+			Boss 	Viktor's machines
+		Chapter 2:
+			Plot	It's worse than we initially thought, the robots Blitz and Ori have even been affected, subdue them.
+			Recruit	Heimerdinger
+			Boss	Orianna, Blitzcrank
+		Chapter 3:
+			Plot	Jinx is taking advantage of the chaos and breaking into the bank. Twitch betrays.
+			Recruit	Cait
+			Boss	Jinx
+		Chapter 4: 
+			Plot	Entering Zaun, they are lead by a mysterious woman to the back allies to track down Twitch. The deranged doctor has been experementing on the orphan children and decide to step in
+			Recruit Ekko
+			Boss	Mundo
+		Chapter 5: Twitch betrayed the team! They seek him out.
+			Recruit	Twitch (Post)
+			Boss	Twitch
+		Chapter 6:	Viktor has sent the monster Urgot after them. Urgot begs them to kill him, and will reveal Viktor's location if they do
+			Recruit	Ziggs
+			Boss	Urgot
+		Chapter 7:	They are getting close to Viktor's lab, but find themselves suddenly feeling ill. It's an ambush set by Singed. The mysterious woman shows up and casts monsoon to clear the poison. It's Janna!
+			Recruit	Janna
+			Boss	Singed
+		Chapter 8:	It's time to beat Viktor. Jayce bursts on to the scene at the last moment to "save the day"
+			Recruit	Jayce
+			Boss	Viktor
+	
+	Noxus
+		Chapter 1:
+			Plot	
+			Recruit Riven
+			Boss 	Sion
+		Chapter 2:
+			Plot
+			Recruit	Katarina(post)
+			Boss	Katarina
+		Chapter 3:
+			Plot
+			Recruit	Taric
+			Boss	Talon
+		Chapter 4:
+			Plot
+			Recruit	None
+			Boss	Vlad
+		Chapter 5:
+			Plot
+			Recruit	Helmet Bro
+			Boss	Darius/Draven
+		Chapter 6:
+			Plot
+			Recruit	None
+			Boss	Draven/Darius
+		Chapter 7:
+			Plot
+			Recruit	None
+			Boss	Sion(Even more undead)
+		Chapter 8:
+			Plot
+			Recruit	None
+			Boss	Leblanc
+		Chapter 9:
+			Plot
+			Recruit	None
+			Boss	Swain
+	
+	
+		

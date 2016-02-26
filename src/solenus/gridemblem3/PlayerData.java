@@ -153,49 +153,13 @@ public class PlayerData
      */
     public void newGame()
     {
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader("saves/newGame.sav"));
-            
-            //Get the map data
-            mapNum = Integer.parseInt(in.readLine().substring(12));
-            inBase = in.readLine().substring(10).equals("true");
-            in.readLine();
-
-            //Get how much gold you have
-            gold = Integer.parseInt(in.readLine().substring(6));
-            in.readLine();
-            
-            //Get the army data.
-            int numUnits = Integer.parseInt(in.readLine().substring(11));
-            in.readLine();
-            
-            for(int i = 0; i<numUnits; i++)
-                unitList.add(new Unit(in));
-            
-            //Get the weapon convoy data
-            int numWeapons = Integer.parseInt(in.readLine().substring(13));
-            in.readLine();
-            
-            for(int i = 0; i<numWeapons; i++)
-                weaponConvoy.add(new Weapon(in));
+        mapNum = 1;
+        inBase = false;
         
-            //Get the item convoy data.
-            int numItems = Integer.parseInt(in.readLine().substring(11));
-            in.readLine();
-            
-            for(int i = 0; i<numItems; i++)
-                itemConvoy.add(new Usable(in));
-                
-            
-            in.close();
-        }
-        
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Unable to load this file. Something's wrong, and I don't know what. Sorry!");
-        }
+        unitList.add(Unit.loadFromPrefab("Garen"));
+        unitList.add(Unit.loadFromPrefab("Lux"));
+        unitList.add(Unit.loadFromPrefab("Quinn"));
+        unitList.add(Unit.loadFromPrefab("Xin Zhao"));
     }
     
     /**
@@ -241,6 +205,9 @@ public class PlayerData
     public static void main(String[] args) 
     {
        
+        Unit u = new Unit(0,6,1);
+        Unit.writeToPrefab(u);
+        
         /*
         PlayerData a = new PlayerData();
         ArrayList<Unit> unitList = new ArrayList<>();

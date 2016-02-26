@@ -1,0 +1,15 @@
+Name: Steel Hand Axe
+Value: 1500
+Weapon Type: 2
+Strength or Magic: 0
+Mastery Requirement: B
+Damage: 12
+Max Uses: 20
+Cur Uses: 20
+Hit: 60
+Weight: 13
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

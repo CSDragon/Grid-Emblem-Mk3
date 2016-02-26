@@ -1,0 +1,73 @@
+Name: Quinn
+Class: Ranger
+Team: 0
+Level: 3
+XP: 0
+HP: 17.5
+STR: 7.5
+MAG: 3.5
+Skill: 12.5
+SPD: 10.5
+Luck: 6.5
+DEF: 6.5
+RES: 4.5
+Move: 5
+HPUP: 0.6
+STRUP: 0.5
+MAGUP: 0.2
+SkillUP: 0.75
+SPDUP: 0.35
+LuckUP: 0.65
+DEFUP: 0.4
+RESUP: 0.55
+Move Type: 1
+Armor Type: 1
+Sword Mastery: -1
+Axe Mastery: -1
+Lance Mastery: -1
+Bow Mastery: 40
+Dagger Mastery: 20
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: -1
+Dark Mastery: -1
+Staff Mastery: -1
+
+Num Weapons: 2
+
+Name: Iron Bow
+Value: 800
+Weapon Type: 3
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 6
+Max Uses: 40
+Cur Uses: 40
+Hit: 85
+Weight: 8
+Crit: 0
+Min Range: 2
+Max Range: 2
+Num Effects: 0
+
+Name: Bronze Dagger
+Value: 300
+Weapon Type: 4
+Strength or Magic: 0
+Mastery Requirement: E
+Damage: 2
+Max Uses: 50
+Cur Uses: 50
+Hit: 85
+Weight: 2
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+

@@ -1,0 +1,58 @@
+Name: Lux
+Class: Light Mage
+Team: 0
+Level: 1
+XP: 0
+HP: 15.5
+STR: 2.5
+MAG: 7.5
+Skill: 8.5
+SPD: 7.5
+Luck: 10.5
+DEF: 2.5
+RES: 6.5
+Move: 5
+HPUP: 0.40
+STRUP: 0.15
+MAGUP: 0.8
+SkillUP: 0.4
+SPDUP: 0.45
+LuckUP: 0.8
+DEFUP: 0.4
+RESUP: 0.9
+Move Type: 1
+Armor Type: 0
+Sword Mastery: -1
+Axe Mastery: -1
+Lance Mastery: -1
+Bow Mastery: -1
+Dagger Mastery: -1
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: 40
+Dark Mastery: -1
+Staff Mastery: -1
+
+Num Weapons: 1
+
+Name: Light
+Value: 900
+Weapon Type: 8
+Strength or Magic: 1
+Mastery Requirement: E
+Damage: 3
+Max Uses: 40
+Cur Uses: 40
+Hit: 100
+Weight: 1
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+

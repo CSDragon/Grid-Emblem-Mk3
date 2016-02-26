@@ -1,0 +1,91 @@
+Name: null
+Class: null
+Team: 0
+Level: 0
+XP: 0
+HP: 10.0
+STR: 0.0
+MAG: 0.0
+Skill: 0.0
+SPD: 0.0
+Luck: 0.0
+DEF: 0.0
+RES: 0.0
+Move: 5
+HPUP: 0.0
+STRUP: 0.0
+MAGUP: 0.0
+SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
+DEFUP: 0.0
+RESUP: 0.0
+Move Type: 1
+Armor Type: 0
+Sword Mastery: -1
+Axe Mastery: -1
+Lance Mastery: -1
+Bow Mastery: -1
+Dagger Mastery: -1
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: -1
+Dark Mastery: -1
+Staff Mastery: -1
+
+Num Weapons: 2
+
+Name: Iron Lance
+Value: 600
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 7
+Max Uses: 40
+Cur Uses: 40
+Hit: 85
+Weight: 9
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
+Name: Iron Sword
+Value: 500
+Weapon Type: 0
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 6
+Max Uses: 40
+Cur Uses: 40
+Hit: 90
+Weight: 7
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
+Num Items: 2
+
+Name: Vulnerary
+Value: 500
+Number of Uses: 10
+Remaining Uses: 10
+Num Effects: 2
+Heal 10
+Heal 20
+
+Name: Vulnerary
+Value: 500
+Number of Uses: 10
+Remaining Uses: 10
+Num Effects: 2
+Heal 10
+Heal 20
+
+Skills
+Num Skills: 2
+Heal 10
+Heal 10
+

@@ -1,0 +1,43 @@
+Name: null
+Class: null
+Team: 0
+Level: 0
+XP: 80
+HP: 10.0
+STR: 0.0
+MAG: 0.0
+SPD: 0.0
+Skill: 0.0
+DEF: 0.0
+RES: 0.0
+Luck: 0.0
+Move: 5
+HPUP: 0.0
+STRUP: 0.0
+MAGUP: 0.0
+SPDUP: 0.0
+SkillUP: 0.0
+DEFUP: 0.0
+RESUP: 0.0
+LuckUP: 0.0
+Move Type: 1
+Armor Type: 0
+Sword Mastery: 0
+Axe Mastery: 0
+Lance Mastery: 0
+Bow Mastery: 0
+Dagger Mastery: 0
+Fire Mastery: 0
+Wind Mastery: 0
+Lightning Mastery: 0
+Light Mastery: 0
+Dark Mastery: 0
+Staff Mastery: 0
+
+Num Weapons: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+

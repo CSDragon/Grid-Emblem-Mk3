@@ -35,20 +35,20 @@ XP: 80
 HP: 10.0
 STR: 0.0
 MAG: 0.0
-SPD: 0.0
 Skill: 0.0
+SPD: 0.0
+Luck: 0.0
 DEF: 0.0
 RES: 0.0
-Luck: 0.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
 MAGUP: 0.0
-SPDUP: 0.0
 SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
 DEFUP: 0.0
 RESUP: 0.0
-LuckUP: 0.0
 Move Type: 1
 Armor Type: 0
 Sword Mastery: 20
@@ -78,6 +78,7 @@ Weight: 0
 Crit: 0
 Min Range: 1
 Max Range: 2
+Num Effects: 0
 
 Num Items: 0
 
@@ -92,20 +93,20 @@ XP: 80
 HP: 10.0
 STR: 0.0
 MAG: 0.0
-SPD: 0.0
 Skill: 0.0
+SPD: 0.0
+Luck: 0.0
 DEF: 0.0
 RES: 0.0
-Luck: 0.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
 MAGUP: 0.0
-SPDUP: 0.0
 SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
 DEFUP: 0.0
 RESUP: 0.0
-LuckUP: 0.0
 Move Type: 1
 Armor Type: 0
 Sword Mastery: 20
@@ -135,6 +136,7 @@ Weight: 0
 Crit: 0
 Min Range: 1
 Max Range: 2
+Num Effects: 0
 
 Num Items: 0
 
@@ -149,20 +151,20 @@ XP: 80
 HP: 10.0
 STR: 0.0
 MAG: 0.0
-SPD: 0.0
 Skill: 0.0
+SPD: 0.0
+Luck: 0.0
 DEF: 0.0
 RES: 0.0
-Luck: 0.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
 MAGUP: 0.0
-SPDUP: 0.0
 SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
 DEFUP: 0.0
 RESUP: 0.0
-LuckUP: 0.0
 Move Type: 1
 Armor Type: 0
 Sword Mastery: 20
@@ -192,6 +194,7 @@ Weight: 0
 Crit: 0
 Min Range: 1
 Max Range: 2
+Num Effects: 0
 
 Num Items: 0
 
@@ -206,20 +209,20 @@ XP: 80
 HP: 10.0
 STR: 0.0
 MAG: 0.0
-SPD: 0.0
 Skill: 0.0
+SPD: 0.0
+Luck: 0.0
 DEF: 0.0
 RES: 0.0
-Luck: 0.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
 MAGUP: 0.0
-SPDUP: 0.0
 SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
 DEFUP: 0.0
 RESUP: 0.0
-LuckUP: 0.0
 Move Type: 1
 Armor Type: 0
 Sword Mastery: 20
@@ -249,6 +252,7 @@ Weight: 0
 Crit: 0
 Min Range: 1
 Max Range: 2
+Num Effects: 0
 
 Num Items: 0
 
@@ -270,7 +274,7 @@ Reinforcement Timings
 
 Mandatory Player Units
 Number of Mandatory Player Units: 2
-Jarvan
+Garen
 Quinn
 
 Mandatory Player Units Locations

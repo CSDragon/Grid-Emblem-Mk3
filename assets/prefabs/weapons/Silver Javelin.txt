@@ -1,0 +1,15 @@
+Name: Silver Javelin
+Value: 6000
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: S
+Damage: 13
+Max Uses: 15
+Cur Uses: 15
+Hit: 60
+Weight: 13
+Crit: 5
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+

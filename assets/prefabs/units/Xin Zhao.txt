@@ -1,0 +1,65 @@
+Name: Xin Zhao
+Class: Soldier
+Team: 0
+Level: 3
+XP: 0
+HP: 22.5
+STR: 7.5
+MAG: 1.5
+Skill: 9.5
+SPD: 10.0
+Luck: 7.5
+DEF: 8.5
+RES: 2.0
+Move: 5
+HPUP: 0.55
+STRUP: 0.7
+MAGUP: 0.15
+SkillUP: 0.7
+SPDUP: 0.4
+LuckUP: 0.35
+DEFUP: 0.65
+RESUP: 0.25
+Move Type: 1
+Armor Type: 2
+Sword Mastery: -1
+Axe Mastery: -1
+Lance Mastery: 40
+Bow Mastery: -1
+Dagger Mastery: -1
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: -1
+Dark Mastery: -1
+Staff Mastery: -1
+
+Num Weapons: 1
+
+Name: Iron Lance
+Value: 600
+Weapon Type: 1
+Strength or Magic: 0
+Mastery Requirement: D
+Damage: 7
+Max Uses: 40
+Cur Uses: 40
+Hit: 85
+Weight: 9
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 0
+
+Num Items: 1
+
+Name: Vulnerary
+Value: 500
+Number of Uses: 10
+Remaining Uses: 10
+Num Effects: 1
+Heal 10
+
+Skills
+Num Skills: 0
+
