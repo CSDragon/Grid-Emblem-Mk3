@@ -10,12 +10,8 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
@@ -68,7 +64,8 @@ public class MapScene extends Scene
     private WeaponSelectionMenu weaponSelect;
     private FightUI fightUI;
     private SystemActionMenu systemAction;
-    private BufferedImage Grid;
+    private Grid grid;
+    private UnitCircles unitCircles;
     private XPBarUI xp;
     private PreBattleScene preBattleScene;
     
@@ -529,10 +526,12 @@ public class MapScene extends Scene
         {
             Rendering.renderGrid(map.getMapImage(), camera, g2, 0, 0, (int)(GridEmblemMk3.GRIDSIZE*2.5), (int)(GridEmblemMk3.GRIDSIZE*2.5));
 
-            drawGrid(g2);
+            grid.draw(g2, camera);
 
             drawRanges(g2);
 
+            unitCircles.draw(camera, g2);
+            
             for (Actor al : actorList)
                 al.renderCam(g2, camera);
 
@@ -584,8 +583,6 @@ public class MapScene extends Scene
         //Control State
         cst0to14();
 
-        
-
         //Load up the main grid objects
         playerArmy = pd;
         fightGraphicsMode = false;
@@ -594,10 +591,14 @@ public class MapScene extends Scene
 
         cursor = new MapCursor(map);
         camera = new Camera(cursor.getX(), cursor.getY());
+        grid = new Grid(map.getWidth(), map.getHeight());
 
+        //Unit Lists
         actorList = new ArrayList<>();
         unitList = new ArrayList<>();
         dieingUnits = new ArrayList<>();
+        
+        unitCircles = new UnitCircles(unitList);
         
         ai = new AI(unitList);
         
@@ -606,17 +607,6 @@ public class MapScene extends Scene
         allyRangeMap = new ArrayList<>();
         selectedEnemyRangeMap = new ArrayList<>();
         allEnemyRangeMap = new ArrayList<>();
-        
-        try
-        {
-            Grid = ImageIO.read(new File("assets/ui/grid.png"));
-        }
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Grid sprite failed to load.");
-            System.out.println(e);
-            System.exit(-1);
-        }
         
         //Add starting units
         unitList.addAll(map.getMandatoryPlayerUnits());
@@ -740,25 +730,6 @@ public class MapScene extends Scene
     
     
     //Drawing methods.
-    
-    /**
-     * Draws the grid
-     * @param g The graphics
-     */
-    public void drawGrid(Graphics2D g)
-    {
-        int numW = GridEmblemMk3.WIDTH / GridEmblemMk3.GRIDSIZE;
-        int numh = GridEmblemMk3.HEIGHT / GridEmblemMk3.GRIDSIZE;
-        
-        int a = (int)camera.getX();
-        int b = (int)camera.getY();
-        
-        for(int i = a-numW; i<= numW+a; i++)
-            for(int j = b-numW; j<= numW+b; j++)
-                if(i > -1 && j > -1 && i < map.getWidth() && j < map.getHeight())
-                    Rendering.renderGrid(Grid, camera, g, i, j, 40, 40);
-    }
-    
     
     /**
      * Draws in the ally, enemy and all enemy range indicators
