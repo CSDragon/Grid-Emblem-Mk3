@@ -7,6 +7,8 @@ package solenus.gridemblem3.scene;
 
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.ui.menu.PreBattleMenu;
 
 /**
@@ -23,11 +25,14 @@ public class PreBattleScene extends Scene
     public static final int START = 5;
     public static final int RETURNTOBASE = 6;
     
+    private PlayerData data;
     private PreBattleMenu pbm;
+    private InventoryScene invenScene;
     
     public PreBattleScene()
     {
         pbm = new PreBattleMenu();
+        invenScene = new InventoryScene();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -44,11 +49,15 @@ public class PreBattleScene extends Scene
             /*
             STATES
                 1) Pre-Battle Menu
+                2) Inventory Scene
             */
             switch(controlState)
             {
                 case 1:
                     pbm.respondControls(im);
+                    break;
+                case 2:
+                    invenScene.respondControls(im);
                     break;
             }
         }
@@ -66,13 +75,17 @@ public class PreBattleScene extends Scene
             /*
             STATES
                 1) Pre-Battle Menu
+                2) Inventory Scene
             */
             switch(controlState)
             {
                 case 1:
                     switch(pbm.runFrame())
                     {
-                        case PreBattleScene.VIEWMAP:
+                        case PreBattleMenu.INVENTORY:
+                            cst1to2();
+                            break;
+                        case PreBattleMenu.VIEWMAP:
                             return VIEWMAP;
                         case PreBattleMenu.START:
                             return START;
@@ -80,6 +93,11 @@ public class PreBattleScene extends Scene
                             return RETURNTOBASE;
                     }
                     break;
+                case 2:
+                    switch(invenScene.runFrame())
+                    {
+                        
+                    }
             }
         }
         
@@ -94,6 +112,8 @@ public class PreBattleScene extends Scene
         //always check this
         if(active)
         {
+            pbm.animate();
+            invenScene.animate();
         }
     }
     
@@ -106,17 +126,33 @@ public class PreBattleScene extends Scene
         if(visible)
         {
             pbm.draw(g);
+            invenScene.draw(g);
         }
     }
     
     //</editor-fold>
     
-    public void start()
+    public void start(PlayerData pd)
     {
         super.start();
+        data = pd;
         controlState = 1;
         pbm.start();
     }
+    
+    //<editor-fold desc="controlState Methods">
+    //Methods who's primary function is to transition the control state from one state to another.
+    //"cst = controlState transition"
+    
+    public void cst1to2()
+    {
+        controlState = 2;
+        pbm.end();
+        invenScene.start(data);
+    }
+    
+    //</editor-fold>
+
     
     
     

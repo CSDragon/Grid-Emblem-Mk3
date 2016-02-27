@@ -1,0 +1,28 @@
+What is Inventory
+
+1 menu of all units -> click a unit
+	opens 2 part menu
+		on left, your items
+		on right, all items
+			left/right changes tabs from your items to swords to axes ... to staves to usables to your items. 
+			up/down makes the cursor go up and down + pans the inventory
+			left: click on an item
+				Store
+					puts item in convoy
+				Trade
+					moves cursor to right. Can't enter left till a/b pressed. (limit tabs: Weapon to weapons, usable to usables)
+					a:
+						removes that item form your inventory and adds the seleted one instead. 
+				Equip
+					Equpis weapon.
+				Use
+					Uses a usable, if it's base-usable.
+					
+			Right: click on an item
+				Take
+					Puts weapon in inventory
+				Trade
+					same as above trade, but opposite.
+				Use
+					Same as above use.
+		

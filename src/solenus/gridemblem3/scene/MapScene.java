@@ -568,7 +568,6 @@ public class MapScene extends Scene
      */
     public void resize()
     {
-        camera.resize();
         super.resize();
     }
     
@@ -580,9 +579,6 @@ public class MapScene extends Scene
     {
         super.start();
         
-        //Control State
-        cst0to14();
-
         //Load up the main grid objects
         playerArmy = pd;
         fightGraphicsMode = false;
@@ -621,6 +617,9 @@ public class MapScene extends Scene
         getAllEnemyRanges();
         
         numFactions = 2;
+        
+        //Control State
+        cst0to14();
     }
     
     
@@ -934,7 +933,7 @@ public class MapScene extends Scene
     public void cst0to14()
     {
         controlState = 14;
-        preBattleScene.start();
+        preBattleScene.start(playerArmy);
     }
     
     /**

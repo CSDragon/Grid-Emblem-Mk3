@@ -286,5 +286,13 @@ public class PlayerData
         inBase = ib;
     }
     
+    /**
+     * @return the unitList
+     */
+    public ArrayList<Unit> getUnitList() 
+    {
+        return unitList;
+    }
+
     //</editor-fold>
 }

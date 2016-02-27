@@ -23,19 +23,19 @@ import solenus.gridemblem3.render.Rendering;
  */
 public abstract class GenericMenu extends Menu
 {
-    private BufferedImage spriteSheet;
-    private BufferedImage top;
-    private BufferedImage mid;
-    private BufferedImage bot;
-    private BufferedImage cursor;
-    private BufferedImage oneBox;
+    protected BufferedImage spriteSheet;
+    protected BufferedImage top;
+    protected BufferedImage mid;
+    protected BufferedImage bot;
+    protected BufferedImage cursor;
+    protected BufferedImage oneBox;
     
-    private int height;
-    private int width;
-    private int centerX;
-    private int centerY;
+    protected int height;
+    protected int width;
+    protected int centerX;
+    protected int centerY;
     
-    private String[] actions;
+    protected String[] actions;
     
     
     public GenericMenu(String[] s)
