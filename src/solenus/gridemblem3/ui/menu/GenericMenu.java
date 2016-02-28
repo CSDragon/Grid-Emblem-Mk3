@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileReader;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.render.Rendering;
 
 /**
@@ -24,12 +25,11 @@ import solenus.gridemblem3.render.Rendering;
 public abstract class GenericMenu extends Menu
 {
     protected BufferedImage spriteSheet;
-    protected BufferedImage top;
-    protected BufferedImage mid;
-    protected BufferedImage bot;
     protected BufferedImage cursor;
-    protected BufferedImage oneBox;
+    protected BufferedImage box;
     
+    protected int xLoc;
+    protected int yLoc;
     protected int height;
     protected int width;
     protected int centerX;
@@ -64,16 +64,25 @@ public abstract class GenericMenu extends Menu
             System.exit(-1);
         }
 
-        top    = spriteSheet.getSubimage(0,        0, width, height);
-        mid    = spriteSheet.getSubimage(0,   height, width, height);
-        bot    = spriteSheet.getSubimage(0, 2*height, width, height);
-        cursor = spriteSheet.getSubimage(0, 3*height, width, height);
-        oneBox = spriteSheet.getSubimage(0, 4*height, width, height);
+        box    = spriteSheet.getSubimage(0, 0, width, height);
+        cursor = spriteSheet.getSubimage(0, height, width, height);
 
         actions = s;
         numCommands = actions.length;
-
-
+    }
+    
+    /**
+     * 
+     * @param s The menu options
+     * @param x The x distance AWAY FROM THE CENTER, the menu should be rendered at.
+     * @param y The y distance AWAY FROM THE CENTER, the menu should be rendered at.
+     */
+    public GenericMenu(String[] s, int x, int y)
+    {
+        this(s);
+        
+        xLoc = x;
+        yLoc = y;
     }
     
     /**
@@ -84,22 +93,11 @@ public abstract class GenericMenu extends Menu
     {
         if(visible)
         {
-            if(numCommands > 1)
-            {
-                Rendering.renderAbsolute(top, g, 0, 0, centerX, height, 1, 1);
-                for(int i = 1; i < numCommands-1; i++)
-                    Rendering.renderAbsolute(mid, g, 0, height*i, centerX, height, 1, 1);
-                Rendering.renderAbsolute(bot, g, 0, height*(numCommands-1), centerX, height, 1, 1);
-                Rendering.renderAbsolute(cursor, g, 0, height*cursorLoc, centerX, height, 1, 1);
-            }
+            for(int i = 0; i < numCommands; i++)
+                Rendering.renderAbsolute(box, g, xLoc, yLoc + height*i, centerX, centerY, 1, 1);
+            Rendering.renderAbsolute(cursor, g, xLoc, yLoc + height*cursorLoc, centerX, centerY, 1, 1);
             
-            else
-            {
-                Rendering.renderAbsolute(oneBox, g, 0, 0, centerX, height, 1, 1);
-                Rendering.renderAbsolute(cursor, g, 0, 0, centerX, height, 1, 1);
-            }
-            
-            int textOffset = -11;
+            int textOffset = 19;
             
             //set font
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
@@ -108,7 +106,7 @@ public abstract class GenericMenu extends Menu
             //render text
             for(String s : actions)
             {
-                Rendering.renderTextAbsolute(s, g, 10, textOffset, centerX, 0, 1, 1, 0);
+                Rendering.renderTextAbsolute(s, g, xLoc + 10, yLoc + textOffset, centerX, centerY, 1, 1, 0);
                 textOffset += height;
             }
            

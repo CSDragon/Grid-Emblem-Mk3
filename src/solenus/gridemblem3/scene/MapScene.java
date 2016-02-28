@@ -510,6 +510,7 @@ public class MapScene extends Scene
             
             //UI
             fightUI.animate();
+            preBattleScene.animate();
         }
     }
 

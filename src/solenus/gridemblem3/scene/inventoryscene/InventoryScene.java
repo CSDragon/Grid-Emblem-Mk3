@@ -60,6 +60,17 @@ public class InventoryScene extends Scene
         //always check this
         if(active)
         {
+            /*
+            States:
+                1) Character select menu
+            */
+            switch(controlState)
+            {
+                case 1:
+                    csm.respondControls(im);
+                    break;
+            }
+                
         }
     }
     
@@ -72,6 +83,20 @@ public class InventoryScene extends Scene
         //always check this
         if(active)
         {
+            /*
+            States:
+                1) Character select menu
+            */
+            switch(controlState)
+            {
+                
+                case 1:
+                    switch(csm.runFrame())
+                    {
+                        
+                    }
+                    break;
+            }
         }
         
         return -1;
@@ -86,6 +111,7 @@ public class InventoryScene extends Scene
         //always check this
         if(active)
         {
+            csm.animate();
         }
     }
     
@@ -99,6 +125,7 @@ public class InventoryScene extends Scene
         {
             Rendering.renderAbsolute(blackout  , g, 0, 0, 960, 540, 1, 1);
             Rendering.renderAbsolute(background, g, 0, 0, 640, 360, 1, 1);
+            csm.draw(g);
         }
     }
 
@@ -109,10 +136,15 @@ public class InventoryScene extends Scene
         super.start();
         data = pd;
         
+        controlState = 1;
+        /*
         String[] names = new String[data.getUnitList().size()];
         for(int i = 0; i<data.getUnitList().size(); i++)
             names[i] = data.getUnitList().get(i).getName();
+        */
+        String[] names = new String[]{"A", "B", "B", "B", "B", "B", "B", "B", "B", "B"};
         csm = new CharacterSelectMenu(names);
+        csm.start();
         
         
     }
