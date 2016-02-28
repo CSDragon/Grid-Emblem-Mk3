@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.ui.menu;
+package solenus.gridemblem3.ui.menu.scrollingMenu;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,12 +12,13 @@ import java.awt.Rectangle;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.render.Rendering;
+import solenus.gridemblem3.ui.menu.GenericMenu;
 
 /**
  *
  * @author Chris
  */
-public class GenericScrollingMenu extends GenericMenu 
+public abstract class GenericScrollingMenu extends GenericMenu 
 {
     protected int numChoicesVisible;
     protected int camY;

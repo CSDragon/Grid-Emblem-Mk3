@@ -22,8 +22,6 @@ import javax.swing.JOptionPane;
  */
 public class Usable extends Item
 {
-    private int numUses;
-    private int curUses;
     private ArrayList<String> effects;
     
     public Usable()
@@ -145,22 +143,6 @@ public class Usable extends Item
 
     //<editor-fold desc="Getters and Setters">
     
-    /**
-     * @return the name
-     */
-    public String getName() 
-    {
-        return name;
-    }
-
-    /**
-     * @return the numUses
-     */
-    public int getNumUses() 
-    {
-        return numUses;
-    }
-
     /**
      * @return the effect
      */

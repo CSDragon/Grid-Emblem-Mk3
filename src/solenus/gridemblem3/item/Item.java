@@ -14,4 +14,35 @@ public abstract class Item
 {
     protected String name;
     protected int goldValue;
+    protected int numUses;
+    protected int curUses;
+    
+    
+    public String getName()
+    {
+        return name;
+    }
+    
+    public int getGoldValue()
+    {
+        return goldValue;
+    }
+    
+    /**
+     * Returns the max number of uses. -1 if infinite uses.
+     * @return The max number of uses.
+     */
+    public int getNumUses() 
+    {
+        return numUses;
+    }
+    
+    /**
+     * Returns the number of uses left. -1 if infinite uses.
+     * @return The number of uses left.
+     */
+    public int getCurUses()
+    {
+        return curUses;
+    }
 }

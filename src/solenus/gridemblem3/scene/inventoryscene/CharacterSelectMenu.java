@@ -7,7 +7,7 @@ package solenus.gridemblem3.scene.inventoryscene;
 
 import java.util.ArrayList;
 import solenus.gridemblem3.ui.menu.GenericMenu;
-import solenus.gridemblem3.ui.menu.GenericScrollingMenu;
+import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
 
 /**
  *

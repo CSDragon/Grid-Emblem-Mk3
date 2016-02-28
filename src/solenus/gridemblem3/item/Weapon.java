@@ -46,8 +46,6 @@ public class Weapon extends Item
     private int strOrMag;
     private char masteryRequirement;
     private int dmg;
-    private int maxUses;
-    private int curUses;
     private int hit;
     private int weight;
     private int crit;
@@ -70,7 +68,7 @@ public class Weapon extends Item
         weaponType = type;
         strOrMag = som;
         masteryRequirement = mr;
-        maxUses = use;
+        numUses = use;
         curUses = use;
         dmg = d;
         hit = h;
@@ -94,7 +92,7 @@ public class Weapon extends Item
         strOrMag = Integer.parseInt(in.readLine().substring(19));
         masteryRequirement = in.readLine().charAt(21);
         dmg = Integer.parseInt(in.readLine().substring(8));
-        maxUses = Integer.parseInt(in.readLine().substring(10));
+        numUses = Integer.parseInt(in.readLine().substring(10));
         curUses = Integer.parseInt(in.readLine().substring(10));
         hit = Integer.parseInt(in.readLine().substring(5));
         weight = Integer.parseInt(in.readLine().substring(8));
@@ -120,7 +118,7 @@ public class Weapon extends Item
         bw.write("Strength or Magic: "+strOrMag); bw.newLine();
         bw.write("Mastery Requirement: "+masteryRequirement); bw.newLine();
         bw.write("Damage: "+dmg); bw.newLine();
-        bw.write("Max Uses: "+maxUses); bw.newLine();
+        bw.write("Max Uses: "+numUses); bw.newLine();
         bw.write("Cur Uses: "+curUses); bw.newLine();
         bw.write("Hit: "+hit); bw.newLine();
         bw.write("Weight: "+weight); bw.newLine();
