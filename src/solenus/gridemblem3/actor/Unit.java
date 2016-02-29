@@ -204,13 +204,13 @@ public class Unit extends Actor
         in.readLine();
         
         for(int i = 0; i<numWeapons; i++)
-            weaponInventory.add(new Weapon(in));
+            addWeapon(new Weapon(in));
         
         int numItems = Integer.parseInt(in.readLine().substring(11));
         in.readLine();
         
         for(int i = 0; i<numItems; i++)
-            inventory.add(new Usable(in));
+            addItem(new Usable(in));
         
         //Read in skills.
         in.readLine();
@@ -320,6 +320,7 @@ public class Unit extends Actor
             weaponInventory.remove(w);
         }
         
+        w.setOwner(this);
         weaponInventory.add(0, w);
     }
     
@@ -329,11 +330,12 @@ public class Unit extends Actor
      * @param w add to weapon inventory
      * @return if weapon inventory had room or not.
      */
-    public boolean addWeapon(Weapon w)
+    public final boolean addWeapon(Weapon w)
     {
         if(weaponInventory.size() < WEAPON_LIMIT)
         {
             weaponInventory.add(w);
+            w.setOwner(this);
             return true;
         }
         
@@ -345,10 +347,11 @@ public class Unit extends Actor
      * @param u add to inventory
      * @return if it was successfully added (if false send to convoy)
      */
-    public boolean addItem(Usable u)
+    public final boolean addItem(Usable u)
     {
         if(inventory.size() < INVENTORY_LIMIT)
         {
+            u.setOwner(this);
             inventory.add(u);
             return true;
         }
@@ -891,6 +894,12 @@ public class Unit extends Actor
     {
         return transportType;
     }
+    
+    public ArrayList<Weapon> getWeaponInventory()
+    {
+        return weaponInventory;
+    }
+    
     
     public ArrayList<Usable> getInventory()
     {

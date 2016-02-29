@@ -134,8 +134,8 @@ public abstract class GenericScrollingMenu extends GenericMenu
             g.setClip(GridEmblemMk3.HALFWIDTH + xLoc - centerX,GridEmblemMk3.HALFHEIGHT + yLoc - height, width, height*numChoicesVisible);
             
             for(int i = 0; i < numCommands; i++)
-                Rendering.renderAbsolute(box, g, 0, height*i - camY, centerX, centerY, 1, 1);
-            Rendering.renderAbsolute(cursor, g, 0, height*cursorLoc - camY, centerX, centerY, 1, 1);
+                Rendering.renderAbsolute(box, g, xLoc, yLoc + height*i - camY, centerX, centerY, 1, 1);
+            Rendering.renderAbsolute(cursor, g, xLoc, yLoc + height*cursorLoc - camY, centerX, centerY, 1, 1);
 
             int textOffset = 19;
 
@@ -146,7 +146,7 @@ public abstract class GenericScrollingMenu extends GenericMenu
             //render text
             for(String s : actions)
             {
-                Rendering.renderTextAbsolute(s, g, 10, textOffset - camY, centerX, centerY, 1, 1, 0);
+                Rendering.renderTextAbsolute(s, g, xLoc + 10, yLoc + textOffset - camY, centerX, centerY, 1, 1, 0);
                 textOffset += height;
             }
             

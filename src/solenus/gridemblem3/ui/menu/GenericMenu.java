@@ -14,15 +14,15 @@ import java.io.File;
 import java.io.FileReader;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.render.Rendering;
 
 /**
- * This class is for testing purposes only.
- * No class should extend this class in the end.
+ * For testing purposes some menus can extends this, but it's bad form for anything to extend this in the final product.
+ * Which means, we can have generic menus, but they should be GenericMenu objects.
+ * And we can have menu subclasses that use GenericMenu before they have their own graphics, but once they do they should drop the GenericMenu extension.
  * @author Chris
  */
-public abstract class GenericMenu extends Menu
+public class GenericMenu extends Menu
 {
     protected BufferedImage spriteSheet;
     protected BufferedImage cursor;
@@ -72,7 +72,7 @@ public abstract class GenericMenu extends Menu
     }
     
     /**
-     * 
+     * Constructor with a position.
      * @param s The menu options
      * @param x The x distance AWAY FROM THE CENTER, the menu should be rendered at.
      * @param y The y distance AWAY FROM THE CENTER, the menu should be rendered at.

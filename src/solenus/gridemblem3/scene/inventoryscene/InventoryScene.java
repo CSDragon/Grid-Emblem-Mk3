@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
 
@@ -22,12 +23,16 @@ import solenus.gridemblem3.scene.Scene;
  */
 public class InventoryScene extends Scene
 {
+    public static final int BACK = -1;
+    public static final int NOTHING = 0;
+    
     private PlayerData data;
     
     private CharacterSelectMenu csm;
-    private UnitInventoryUI uiui;
+    private UnitInventoryMenu uim;
     private ConvoyInventoryUI ciui;
     private ItemActionsMenu iom;
+    private TabbedInventoryScene tis;
     
     private BufferedImage blackout;
     private BufferedImage background;
@@ -35,6 +40,9 @@ public class InventoryScene extends Scene
     public InventoryScene()
     {
         super();
+        
+        tis = new TabbedInventoryScene();
+        uim = new UnitInventoryMenu();
         
         try
         {
@@ -63,12 +71,19 @@ public class InventoryScene extends Scene
             /*
             States:
                 1) Character select menu
+                2) Item management: Player
+                3) Item management: ItemList
             */
             switch(controlState)
             {
                 case 1:
                     csm.respondControls(im);
                     break;
+                case 2:
+                    uim.respondControls(im);
+                    break;
+                case 3:
+                    tis.respondControls(im);
             }
                 
         }
@@ -86,20 +101,49 @@ public class InventoryScene extends Scene
             /*
             States:
                 1) Character select menu
+                2) Item management: Player
+                3) Item management: ItemList
             */
             switch(controlState)
             {
                 
                 case 1:
-                    switch(csm.runFrame())
+                    int csmResult = csm.runFrame();
+                    switch(csmResult)
                     {
-                        
+                        case CharacterSelectMenu.BACK:
+                            return BACK;
+                            
+                        case CharacterSelectMenu.NOTHING:
+                            break;
+                            
+                        default:
+                            cst1to2(csm.getUnitAt(csmResult));
+                            break;
+                    }
+                    break;
+                
+                case 2:
+                    switch(uim.runFrame())
+                    {
+                        case UnitInventoryMenu.BACK:
+                            cstXto1();
+                            break;
+                    }
+                    break;
+                    
+                case 3:
+                    switch(tis.runFrame())
+                    {
+                        case TabbedInventoryScene.BACK:
+                            cstXto1();
+                            break;
                     }
                     break;
             }
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**
@@ -112,6 +156,8 @@ public class InventoryScene extends Scene
         if(active)
         {
             csm.animate();
+            uim.animate();
+            tis.animate();
         }
     }
     
@@ -126,6 +172,8 @@ public class InventoryScene extends Scene
             Rendering.renderAbsolute(blackout  , g, 0, 0, 960, 540, 1, 1);
             Rendering.renderAbsolute(background, g, 0, 0, 640, 360, 1, 1);
             csm.draw(g);
+            uim.draw(g);
+            tis.draw(g);
         }
     }
 
@@ -137,18 +185,33 @@ public class InventoryScene extends Scene
         data = pd;
         
         controlState = 1;
-        /*
-        String[] names = new String[data.getUnitList().size()];
-        for(int i = 0; i<data.getUnitList().size(); i++)
-            names[i] = data.getUnitList().get(i).getName();
-        */
-        String[] names = new String[]{"A", "B", "B", "B", "B", "B", "B", "B", "B", "B"};
-        csm = new CharacterSelectMenu(names);
+        csm = new CharacterSelectMenu(data.getUnitList());
         csm.start();
-        
-        
     }
     
+    //<editor-fold desc="controlState Methods">
+    //Methods who's primary function is to transition the control state from one state to another.
+    //"cst = controlState transition"
+
+    public void cst1to2(Unit u)
+    {
+        controlState = 2;
+
+        uim = new UnitInventoryMenu(u, -200, -100);
+        uim.start();
+        csm.end();
+        tis.start(data.getAllWeapons(), data.getAllItems());
+    }
+    
+    public void cstXto1()
+    {
+        controlState = 1;
+        uim.end();
+        tis.end();
+        csm.resume();
+    }
+
+    //</editor-fold>
 
 }
 

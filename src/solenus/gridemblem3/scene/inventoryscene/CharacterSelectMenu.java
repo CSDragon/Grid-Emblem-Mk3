@@ -6,7 +6,7 @@
 package solenus.gridemblem3.scene.inventoryscene;
 
 import java.util.ArrayList;
-import solenus.gridemblem3.ui.menu.GenericMenu;
+import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
 
 /**
@@ -15,15 +15,40 @@ import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
  */
 public class CharacterSelectMenu extends GenericScrollingMenu
 {
-    public CharacterSelectMenu(String[] unitNames)
-    {
-        super(unitNames, 5);
-    }
- 
+    private ArrayList<Unit> units;
     
-    public void start()
+    /**
+     * 
+     * @param units 
+     */
+    public CharacterSelectMenu(ArrayList<Unit> units)
     {
-        super.start();
+        super(unitsToString(units), 5);
+        this.units = units;
+    }
+    
+    /**
+     * 
+     * @param u
+     * @return 
+     */
+    public static String[] unitsToString(ArrayList<Unit> u)
+    {
+        String[] ret = new String[u.size()];
         
+        for(int i = 0; i< u.size(); i++)
+            ret[i] = u.get(i).getName();
+        
+        return ret;
+    }
+    
+    /**
+     * Gets the unit in units at location i.
+     * @param i The location to look
+     * @return The unit at that location.
+     */
+    public Unit getUnitAt(int i)
+    {
+        return units.get(i);
     }
 }

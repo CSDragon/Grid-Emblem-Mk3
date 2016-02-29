@@ -19,6 +19,9 @@ import solenus.gridemblem3.scene.Scene;
  */
 public class TabbedInventoryScene extends Scene
 {
+    public static final int BACK = -2;
+    public static final int NOTHING = -1;
+    
     private ArrayList<Weapon> weaponInventory;
     private ArrayList<Usable> usableInventory;
     
@@ -58,6 +61,9 @@ public class TabbedInventoryScene extends Scene
     public void start(ArrayList<Weapon> weapons, ArrayList<Usable> items)
     {
         super.start();
+        
+        weaponInventory = weapons;
+        usableInventory = items;
 
         swords = new ArrayList<>();
         lances = new ArrayList<>(); 
@@ -127,6 +133,9 @@ public class TabbedInventoryScene extends Scene
         darkMenu = new InventoryScrollingMenu(darks, 10, 100, -100);
         staffMenu = new InventoryScrollingMenu(staves, 10, 100, -100);
         usablesMenu = new InventoryScrollingMenu(usables, 10, 100, -100);
+        
+        activeMenu = swordMenu;
+        activeMenu.start();
     }
     
     
@@ -164,11 +173,12 @@ public class TabbedInventoryScene extends Scene
         {
             switch(activeMenu.runFrame())
             {
-                
+                case InventoryScrollingMenu.BACK:
+                    return BACK;
             }
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**
@@ -206,49 +216,49 @@ public class TabbedInventoryScene extends Scene
     {
         controlState = newCS;
         
-        if(controlState < 1)
-            controlState = 12;
-        if(controlState > 12)
+        if(controlState < 0)
+            controlState = 11;
+        if(controlState > 11)
             controlState = 0;
 
         activeMenu.end();
         
         switch(controlState)
         {
-            case 1:
+            case 0:
                 activeMenu = swordMenu;
                 break;
-            case 2:
+            case 1:
                 activeMenu = lanceMenu;
                 break;
-            case 3:
+            case 2:
                 activeMenu = axeMenu;
                 break;
-            case 4:
+            case 3:
                 activeMenu = bowMenu;
                 break;
-            case 5:
+            case 4:
                 activeMenu = daggerMenu;
                 break;
-            case 6:
+            case 5:
                 activeMenu = lightMenu;
                 break;
-            case 7:
+            case 6:
                 activeMenu = fireMenu;
                 break;
-            case 8:
+            case 7:
                 activeMenu = windMenu;
                 break;
-            case 9:
+            case 8:
                 activeMenu = lightningMenu;
                 break;
-            case 10:
+            case 9:
                 activeMenu = darkMenu;
                 break;
-            case 11:
+            case 10:
                 activeMenu = staffMenu;
                 break;
-            case 12:
+            case 11:
                 activeMenu = usablesMenu;
                 break;
         }

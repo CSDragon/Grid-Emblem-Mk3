@@ -96,7 +96,8 @@ public class PreBattleScene extends Scene
                 case 2:
                     switch(invenScene.runFrame())
                     {
-                        
+                        case InventoryScene.BACK:
+                            cst2to1();
                     }
             }
         }
@@ -149,6 +150,13 @@ public class PreBattleScene extends Scene
         controlState = 2;
         pbm.end();
         invenScene.start(data);
+    }
+    
+    public void cst2to1()
+    {
+        controlState = 1;
+        invenScene.end();
+        pbm.start();
     }
     
     //</editor-fold>

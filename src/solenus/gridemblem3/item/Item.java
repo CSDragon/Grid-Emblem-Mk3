@@ -5,6 +5,8 @@
  */
 package solenus.gridemblem3.item;
 
+import solenus.gridemblem3.actor.Unit;
+
 /**
  * Abstract class for Items
  *
@@ -16,6 +18,8 @@ public abstract class Item
     protected int goldValue;
     protected int numUses;
     protected int curUses;
+    
+    private Unit owner; 
     
     
     public String getName()
@@ -44,5 +48,23 @@ public abstract class Item
     public int getCurUses()
     {
         return curUses;
+    }
+
+    
+    
+    /**
+     * @return the owner. RETURNS NULL IF THERE"S NO OWNER. BE PREPARED FOR THIS.
+     */
+    public Unit getOwner() 
+    {
+        return owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(Unit owner) 
+    {
+        this.owner = owner;
     }
 }

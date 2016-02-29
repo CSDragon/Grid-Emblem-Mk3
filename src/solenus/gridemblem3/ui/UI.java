@@ -54,6 +54,15 @@ public abstract class UI
         visible = false;
     }
     
+    /**
+     * Starts the UI from where it left off. Differs from start in how it's extended.
+     */
+    public void resume()
+    {
+        active = true;
+        visible = true;
+    }
+    
     public void setVisible(boolean b)
     {
         visible = b;

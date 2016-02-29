@@ -160,6 +160,50 @@ public class PlayerData
         unitList.add(Unit.loadFromPrefab("Lux"));
         unitList.add(Unit.loadFromPrefab("Quinn"));
         unitList.add(Unit.loadFromPrefab("Xin Zhao"));
+        
+        //TEST
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Dagger"));
+        
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Dagger"));
+        
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Dagger"));
+        
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Steel Dagger"));
+        
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Dagger"));
+        
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Dagger"));
+        
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Lance"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Axe"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Bow"));
+        weaponConvoy.add(Weapon.loadFromPrefab("Iron Dagger"));
+
     }
     
     /**
@@ -257,6 +301,39 @@ public class PlayerData
         }
         return null;
     }
+    
+    /**
+     * Returns every weapon you have.
+     * @return An ArrayList of every weapon you have.
+     */
+    public ArrayList<Weapon> getAllWeapons()
+    {
+        ArrayList<Weapon> ret = new ArrayList<>();
+        
+        ret.addAll(weaponConvoy);
+        
+        for(Unit u: unitList)
+            ret.addAll(u.getWeaponInventory());
+        
+        return ret;
+    }
+    
+    /**
+     * Returns every item you have.
+     * @return An ArrayList of every item you have.
+     */
+    public ArrayList<Usable> getAllItems()
+    {
+        ArrayList<Usable> ret = new ArrayList<>();
+        
+        ret.addAll(itemConvoy);
+        
+        for(Unit u: unitList)
+            ret.addAll(u.getInventory());
+        
+        return ret;
+    }
+    
 
     //<editor-fold desc="getters and setters">
     
@@ -294,5 +371,22 @@ public class PlayerData
         return unitList;
     }
 
+    /**
+     * @return the weaponConvoy
+     */
+    public ArrayList<Weapon> getWeaponConvoy() 
+    {
+        return weaponConvoy;
+    }
+
+    /**
+     * @return the itemConvoy
+     */
+    public ArrayList<Usable> getItemConvoy() 
+    {
+        return itemConvoy;
+    }
+    
     //</editor-fold>
+
 }
