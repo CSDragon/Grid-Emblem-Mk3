@@ -5,7 +5,11 @@
  */
 package solenus.gridemblem3.scene.inventoryscene;
 
+import java.util.ArrayList;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.item.Item;
+import solenus.gridemblem3.item.Usable;
+import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.ui.menu.GenericMenu;
 
 /**
@@ -14,6 +18,8 @@ import solenus.gridemblem3.ui.menu.GenericMenu;
  */
 public class UnitInventoryMenu extends GenericMenu
 {
+    private Unit inventoryUnit;
+    
     public UnitInventoryMenu()
     {
         super(new String[]{});
@@ -22,6 +28,8 @@ public class UnitInventoryMenu extends GenericMenu
     public UnitInventoryMenu(Unit u, int x, int y)
     {
         super(getInventories(u), x, y);
+        
+        inventoryUnit = u;
     }
     
     public static String[] getInventories(Unit u)
@@ -41,4 +49,25 @@ public class UnitInventoryMenu extends GenericMenu
         return ret;
     }
     
+    public Item getItemAt(int loc)
+    {
+        try
+        {
+            if(loc < Unit.WEAPON_LIMIT)
+            {
+                return inventoryUnit.getWeaponInventory().get(loc);
+            }
+            else
+                return inventoryUnit.getWeaponInventory().get(loc-Unit.WEAPON_LIMIT);
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
+    
+    public void refresh()
+    {
+        actions = getInventories(inventoryUnit);
+    }
 }

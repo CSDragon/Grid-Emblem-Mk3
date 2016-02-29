@@ -172,10 +172,17 @@ public class TabbedInventoryScene extends Scene
         //always check this
         if(active)
         {
-            switch(activeMenu.runFrame())
+            int amResult = activeMenu.runFrame();
+            switch(amResult)
             {
                 case InventoryScrollingMenu.BACK:
                     return BACK;
+                    
+                case InventoryScrollingMenu.NOTHING:
+                    return NOTHING;
+                    
+                default:
+                    return amResult;
             }
         }
         
@@ -265,5 +272,11 @@ public class TabbedInventoryScene extends Scene
         }
         
         activeMenu.start();
+    }
+    
+    
+    public Item getItemAt(int loc)
+    {
+        return activeMenu.getItem(loc);
     }
 }

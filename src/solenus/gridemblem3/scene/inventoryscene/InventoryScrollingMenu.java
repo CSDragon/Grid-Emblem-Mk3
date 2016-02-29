@@ -38,7 +38,14 @@ public class InventoryScrollingMenu extends GenericScrollingMenu
      */
     public Item getItem(int itemNum)
     {
-        return items.get(itemNum);
+        try
+        {
+            return items.get(itemNum);
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
     
     /**

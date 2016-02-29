@@ -334,6 +334,8 @@ public class Unit extends Actor
     {
         if(weaponInventory.size() < WEAPON_LIMIT)
         {
+            if(w.getOwner() != null)
+                w.getOwner().removeWeapon(w);
             weaponInventory.add(w);
             w.setOwner(this);
             return true;
@@ -351,11 +353,44 @@ public class Unit extends Actor
     {
         if(inventory.size() < INVENTORY_LIMIT)
         {
+            if(u.getOwner() != null)
+                u.getOwner().removeItem(u);
             u.setOwner(this);
             inventory.add(u);
             return true;
         }
         
+        return false;
+    }
+    
+    
+    /**
+     * Removes an weapon from this unit's inventory.
+     * @param w the weapon to be removed.
+     * @return Weather this unit even HAD that weapon. 
+     */
+    public boolean removeWeapon(Weapon w)
+    {
+        if(weaponInventory.remove(w))
+        {
+            w.setOwner(null);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes an item from this unit's inventory.
+     * @param u the item to be removed.
+     * @return Weather this unit even HAD that item. 
+     */
+    public boolean removeItem(Usable u)
+    {
+        if(inventory.remove(u))
+        {
+            u.setOwner(null);
+            return true;
+        }
         return false;
     }
     

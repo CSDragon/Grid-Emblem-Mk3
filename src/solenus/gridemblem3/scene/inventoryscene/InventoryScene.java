@@ -14,6 +14,9 @@ import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.item.Item;
+import solenus.gridemblem3.item.Usable;
+import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
 
@@ -30,9 +33,11 @@ public class InventoryScene extends Scene
     
     private CharacterSelectMenu csm;
     private UnitInventoryMenu uim;
-    private ConvoyInventoryUI ciui;
-    private ItemActionsMenu iom;
+    private ItemActionsMenu iam;
     private TabbedInventoryScene tis;
+    
+    Unit activeUnit;
+    Item activeItem;
     
     private BufferedImage blackout;
     private BufferedImage background;
@@ -43,6 +48,7 @@ public class InventoryScene extends Scene
         
         tis = new TabbedInventoryScene();
         uim = new UnitInventoryMenu();
+        iam = new ItemActionsMenu();
         
         try
         {
@@ -73,6 +79,8 @@ public class InventoryScene extends Scene
                 1) Character select menu
                 2) Item management: Player
                 3) Item management: ItemList
+                4) Player item selected
+                5) ItemList item selected.
             */
             switch(getControlState())
             {
@@ -131,6 +139,11 @@ public class InventoryScene extends Scene
                     
                     tis.respondControls(im);
                     break;
+                    
+                case 4:
+                case 5:
+                    iam.respondControls(im);
+                    break;
             }
                 
         }
@@ -150,6 +163,8 @@ public class InventoryScene extends Scene
                 1) Character select menu
                 2) Item management: Player
                 3) Item management: ItemList
+                4) Player item selected
+                5) ItemList item selected.
             */
             switch(getControlState())
             {
@@ -171,22 +186,77 @@ public class InventoryScene extends Scene
                     break;
                 
                 case 2:
-                    switch(uim.runFrame())
+                    int uimResult = uim.runFrame();
+                    switch(uimResult)
                     {
                         case UnitInventoryMenu.BACK:
                             cstXto1();
+                            break;
+                        case UnitInventoryMenu.NOTHING:
+                            break;
+                        
+                        default:
+                            activeItem = uim.getItemAt(uimResult);
+                            if(activeItem != null)
+                                cst2to4();
                             break;
                     }
                     break;
                     
                 case 3:
-                    switch(tis.runFrame())
+                    int tisResult = tis.runFrame();
+                    switch(tisResult)
                     {
                         case TabbedInventoryScene.BACK:
                             cstXto1();
                             break;
+                            
+                        case UnitInventoryMenu.NOTHING:
+                            break;
+                        
+                        default:
+                            activeItem = tis.getItemAt(tisResult);
+                            if(activeItem != null)
+                                cst3to5();
+                            break;
                     }
                     break;
+                    
+                case 4:
+                    switch(iam.runFrame())
+                    {
+                        case ItemActionsMenu.BACK:
+                            cst4to2();
+                            break;
+                    }
+                    break;
+                case 5:
+                    switch(iam.runFrame())
+                    {
+                        case ItemActionsMenu.TAKE:
+                            if(activeItem instanceof Weapon)
+                            {
+                                if(activeUnit.addWeapon((Weapon)activeItem))
+                                {
+                                    cst5to2(true);
+                                    break;
+                                }
+                            }
+                            else if(activeItem instanceof Usable)
+                            {
+                                if(activeUnit.addItem((Usable)activeItem))
+                                {
+                                    cst5to2(false);
+                                    break;
+                                }
+                            }
+                            cst5to3();
+                            break;
+                        
+                        case ItemActionsMenu.BACK:
+                            cst5to3();
+                            break;
+                    }
             }
         }
         
@@ -205,6 +275,7 @@ public class InventoryScene extends Scene
             csm.animate();
             uim.animate();
             tis.animate();
+            iam.animate();
         }
     }
     
@@ -221,6 +292,7 @@ public class InventoryScene extends Scene
             csm.draw(g);
             uim.draw(g);
             tis.draw(g);
+            iam.draw(g);
         }
     }
 
@@ -244,10 +316,48 @@ public class InventoryScene extends Scene
     {
         controlState = 2;
 
-        uim = new UnitInventoryMenu(u, -200, -100);
+        activeUnit = u;
+        
+        uim = new UnitInventoryMenu(activeUnit, -200, -100);
         uim.start();
         csm.end();
         tis.start(data.getAllWeapons(), data.getAllItems());
+    }
+    
+    public void cst2to4()
+    {
+        controlState = 4;
+        iam.start();
+    }
+    
+    public void cst3to5()
+    {
+        controlState = 5;
+        iam.start();
+    }
+    
+    public void cst4to2()
+    {
+        controlState = 2;
+        iam.end();
+    }
+    
+    public void cst5to2(boolean isWeapon)
+    {
+        controlState = 2;
+        if(isWeapon)
+            uim.setCursorLoc(activeUnit.getWeaponInventory().size()-1);
+        else
+            uim.setCursorLoc(Unit.WEAPON_LIMIT + activeUnit.getInventory().size()-1);
+        
+        uim.refresh();
+        iam.end();
+    }
+    
+    public void cst5to3()
+    {
+        controlState = 3;
+        iam.end();
     }
     
     public void cstXto1()
