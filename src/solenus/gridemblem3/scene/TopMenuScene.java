@@ -79,7 +79,7 @@ public class TopMenuScene extends Scene
                 5 = Graphics
                 6 = Audio
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 //Main Menu
                 case 0:
@@ -127,7 +127,7 @@ public class TopMenuScene extends Scene
                 6 = Audio
             */
             
-            switch(controlState)
+            switch(getControlState())
             {
                 //Main Menu
                 case 0:

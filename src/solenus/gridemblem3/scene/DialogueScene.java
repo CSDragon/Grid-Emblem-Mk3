@@ -91,7 +91,7 @@ public class DialogueScene extends Scene
                 2) Get next line
                 3) Animate
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 1:
                     if(im.getA() == 1)
@@ -117,7 +117,7 @@ public class DialogueScene extends Scene
                 3) Entry Animation
                 4) Text Animation
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 1:
                     break;

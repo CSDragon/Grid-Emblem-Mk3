@@ -159,7 +159,7 @@ public class FightUI extends UI
     /**
      * renders the scene.
      */
-    public void aniamte()
+    public void animate()
     {   
         //always check this
         if(active)
@@ -379,6 +379,9 @@ public class FightUI extends UI
         else if(attackPhase == 2)
         {
             attackPhase = 3;
+            attackerTurn = false;
+            defenderTurn = false;
+            
             int speedDef = attacker.getTotalSpd() - defender.getTotalSpd();
             
             //the attacker is fast enough. FIGHT
@@ -401,6 +404,10 @@ public class FightUI extends UI
             else
                 controlState = 1;
         }
+        
+        //We can't get to attack phase 4
+        else
+            controlState = 1;
     }
     
     /**

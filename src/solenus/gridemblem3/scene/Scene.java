@@ -167,5 +167,14 @@ public abstract class Scene
         return visible;
     }
     
+    /**
+     * @return the controlState
+     */
+    public int getControlState() 
+    {
+        return controlState;
+    }
+
     //</editor-fold>
+
 }

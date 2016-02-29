@@ -32,14 +32,14 @@ Class: null
 Team: 1
 Level: 0
 XP: 80
-HP: 10.0
+HP: 20.0
 STR: 0.0
-MAG: 0.0
-Skill: 0.0
+MAG: 8.0
+Skill: 10.0
 SPD: 0.0
 Luck: 0.0
-DEF: 0.0
-RES: 0.0
+DEF: 5.0
+RES: 3.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
@@ -70,10 +70,10 @@ Value: 0
 Weapon Type: 8
 Strength or Magic: 0
 Mastery Requirement: B
-Damage: 2
+Damage: 5
 Max Uses: 10
 Cur Uses: 10
-Hit: 100
+Hit: 200
 Weight: 0
 Crit: 0
 Min Range: 1
@@ -90,14 +90,14 @@ Class: null
 Team: 1
 Level: 0
 XP: 80
-HP: 10.0
+HP: 20.0
 STR: 0.0
-MAG: 0.0
-Skill: 0.0
+MAG: 8.0
+Skill: 10.0
 SPD: 0.0
 Luck: 0.0
-DEF: 0.0
-RES: 0.0
+DEF: 5.0
+RES: 3.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
@@ -128,10 +128,10 @@ Value: 0
 Weapon Type: 8
 Strength or Magic: 0
 Mastery Requirement: B
-Damage: 2
+Damage: 5
 Max Uses: 10
 Cur Uses: 10
-Hit: 100
+Hit: 200
 Weight: 0
 Crit: 0
 Min Range: 1
@@ -148,14 +148,14 @@ Class: null
 Team: 1
 Level: 0
 XP: 80
-HP: 10.0
+HP: 20.0
 STR: 0.0
-MAG: 0.0
-Skill: 0.0
+MAG: 8.0
+Skill: 10.0
 SPD: 0.0
 Luck: 0.0
-DEF: 0.0
-RES: 0.0
+DEF: 5.0
+RES: 3.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
@@ -186,10 +186,10 @@ Value: 0
 Weapon Type: 8
 Strength or Magic: 0
 Mastery Requirement: B
-Damage: 2
+Damage: 5
 Max Uses: 10
 Cur Uses: 10
-Hit: 100
+Hit: 200
 Weight: 0
 Crit: 0
 Min Range: 1
@@ -206,14 +206,14 @@ Class: null
 Team: 1
 Level: 0
 XP: 80
-HP: 10.0
+HP: 20.0
 STR: 0.0
-MAG: 0.0
-Skill: 0.0
+MAG: 8.0
+Skill: 10.0
 SPD: 0.0
 Luck: 0.0
-DEF: 0.0
-RES: 0.0
+DEF: 5.0
+RES: 3.0
 Move: 6
 HPUP: 0.0
 STRUP: 0.0
@@ -244,10 +244,10 @@ Value: 0
 Weapon Type: 8
 Strength or Magic: 0
 Mastery Requirement: B
-Damage: 2
+Damage: 5
 Max Uses: 10
 Cur Uses: 10
-Hit: 100
+Hit: 200
 Weight: 0
 Crit: 0
 Min Range: 1

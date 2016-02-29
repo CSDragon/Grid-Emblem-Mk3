@@ -51,7 +51,7 @@ public class PreBattleScene extends Scene
                 1) Pre-Battle Menu
                 2) Inventory Scene
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 1:
                     pbm.respondControls(im);
@@ -77,7 +77,7 @@ public class PreBattleScene extends Scene
                 1) Pre-Battle Menu
                 2) Inventory Scene
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 1:
                     switch(pbm.runFrame())

@@ -54,7 +54,7 @@ public class HQScene extends Scene
                 1) Save Menu
                 
              */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 0:
                     hqMenu.respondControls(im);
@@ -76,7 +76,7 @@ public class HQScene extends Scene
         //always check this
         if(active)
         {
-            switch(controlState)
+            switch(getControlState())
             {
                 case 0:
                     switch(hqMenu.runFrame())

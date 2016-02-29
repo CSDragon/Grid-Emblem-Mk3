@@ -28,6 +28,8 @@ public abstract class GenericScrollingMenu extends GenericMenu
     {
         super(choices);
         numChoicesVisible = ncv;
+        if(numChoicesVisible > choices.length)
+            numChoicesVisible = choices.length;
     }
     
     public GenericScrollingMenu(String[] choices, int ncv, int x, int y)

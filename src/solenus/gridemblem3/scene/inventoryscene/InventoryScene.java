@@ -74,16 +74,63 @@ public class InventoryScene extends Scene
                 2) Item management: Player
                 3) Item management: ItemList
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 1:
                     csm.respondControls(im);
                     break;
                 case 2:
+                    if(uim.getCursorLoc() < Unit.WEAPON_LIMIT)
+                    {
+                        
+                        if(im.getLeft() == 1)
+                        {
+                            controlState = 3;
+                            tis.controlStateChange(TabbedInventoryScene.MAXTAB-1);
+                            break;
+                        }
+                        
+                        if(im.getRight() == 1)
+                        {
+                            controlState = 3;
+                            tis.controlStateChange(0);
+                            break;
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        if(im.getLeft() == 1 || im.getRight() == 1)
+                        {
+                            controlState = 3;
+                            tis.controlStateChange(TabbedInventoryScene.MAXTAB);
+                            break;
+                        }
+                    }
+                    
                     uim.respondControls(im);
                     break;
                 case 3:
+                    if(uim.getCursorLoc() < Unit.WEAPON_LIMIT)
+                    {
+                        if((im.getLeft() == 1 && tis.getControlState() == 0) || (im.getRight() == 1 && tis.getControlState() == TabbedInventoryScene.MAXTAB-1))
+                        {
+                            controlState = 2;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if(im.getLeft() == 1 || im.getRight() == 1)
+                        {
+                            controlState = 2;
+                            break;
+                        }
+                    }
+                    
                     tis.respondControls(im);
+                    break;
             }
                 
         }
@@ -104,7 +151,7 @@ public class InventoryScene extends Scene
                 2) Item management: Player
                 3) Item management: ItemList
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 
                 case 1:

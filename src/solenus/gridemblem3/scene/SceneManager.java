@@ -55,7 +55,7 @@ public class SceneManager extends Scene
                 3) DialogScene
                 4) HQ Scene
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 1:
                     tms.respondControls(im);
@@ -89,7 +89,7 @@ public class SceneManager extends Scene
                 3) DialogScene
                 4) HQ Scene
             */
-            switch(controlState)
+            switch(getControlState())
             {
                 case 0:
                     cst0to1();

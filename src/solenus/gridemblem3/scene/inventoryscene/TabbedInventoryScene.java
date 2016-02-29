@@ -21,6 +21,7 @@ public class TabbedInventoryScene extends Scene
 {
     public static final int BACK = -2;
     public static final int NOTHING = -1;
+    public static final int MAXTAB = 11;
     
     private ArrayList<Weapon> weaponInventory;
     private ArrayList<Usable> usableInventory;
@@ -153,9 +154,9 @@ public class TabbedInventoryScene extends Scene
         if(active)
         {
             if(im.getLeft() == 1)
-                controlStateChange(controlState-1);
+                controlStateChange(getControlState()-1);
             if(im.getRight() == 1)
-                controlStateChange(controlState+1);
+                controlStateChange(getControlState()+1);
             
             activeMenu.respondControls(im);
         }
@@ -216,14 +217,14 @@ public class TabbedInventoryScene extends Scene
     {
         controlState = newCS;
         
-        if(controlState < 0)
+        if(getControlState() < 0)
             controlState = 11;
-        if(controlState > 11)
+        if(getControlState() > 11)
             controlState = 0;
 
         activeMenu.end();
         
-        switch(controlState)
+        switch(getControlState())
         {
             case 0:
                 activeMenu = swordMenu;

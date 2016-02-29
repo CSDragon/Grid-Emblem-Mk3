@@ -129,7 +129,7 @@ public class MapScene extends Scene
             */
 
             //cursor mode
-            switch(controlState)
+            switch(getControlState())
             {
                 case(1):
                     //A: On a friendly unit, enter move mode, on anything else enter system action box.
@@ -162,7 +162,7 @@ public class MapScene extends Scene
                     //R: Open details screen TODO
 
                     //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
-                    if (controlState == 1)
+                    if (getControlState() == 1)
                         cursor.respondControls(im);
                     break;
 
@@ -185,7 +185,7 @@ public class MapScene extends Scene
 
 
                     //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
-                    if (controlState == 2)
+                    if (getControlState() == 2)
                         cursor.respondControls(im);
                     break;
 
@@ -248,7 +248,7 @@ public class MapScene extends Scene
         if(active)
         {
                 
-            switch(controlState)
+            switch(getControlState())
             {
                 /*  
                 STATES:

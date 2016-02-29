@@ -124,4 +124,16 @@ public abstract class Menu extends UI
         cursorLoc = 0;
     }
     
+    
+    
+    public int getCursorLoc()
+    {
+        return cursorLoc;
+    }
+    
+    public void setCursorLoc(int cl)
+    {
+        cursorLoc = cl;
+    }
+    
 }
