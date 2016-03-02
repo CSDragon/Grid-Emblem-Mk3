@@ -18,6 +18,11 @@ import solenus.gridemblem3.ui.menu.GenericMenu;
  */
 public class UnitInventoryMenu extends GenericMenu
 {
+    public static final int BOTHMODE = 0;
+    public static final int WEAPONMODE = 1;
+    public static final int USABLEMODE = 2;
+    
+    private int mode;
     private Unit inventoryUnit;
     
     public UnitInventoryMenu()
@@ -30,6 +35,58 @@ public class UnitInventoryMenu extends GenericMenu
         super(getInventories(u), x, y);
         
         inventoryUnit = u;
+    }
+    
+    /**
+     * progresses the game
+     * @return the exit status
+     */
+    public int runFrame()
+    {
+        if(active)
+        {
+            if(upTrigger)
+                cursorLoc--;
+            if(downTrigger)
+                cursorLoc++;
+            
+            switch(mode)
+            {
+                case BOTHMODE:
+                    if(cursorLoc < 0)
+                        cursorLoc = numCommands-1;
+                    if(cursorLoc >= numCommands)
+                        cursorLoc = 0;
+                    break;
+                case WEAPONMODE:
+                    if(cursorLoc < 0)
+                        cursorLoc = Unit.WEAPON_LIMIT-1;
+                    if(cursorLoc >= Unit.WEAPON_LIMIT)
+                        cursorLoc = 0;
+                    break;
+                case USABLEMODE:
+                    if(cursorLoc < Unit.WEAPON_LIMIT)
+                        cursorLoc = numCommands-1;
+                    if(cursorLoc >= numCommands)
+                        cursorLoc = Unit.WEAPON_LIMIT;
+                    break;
+            }
+            //If B, exit the unit action box
+            if(bTrigger)
+            {
+                resetTriggers();
+                return BACK;
+            }
+            
+            //If A,select which enemy to attack
+            if(aTrigger)
+            {
+                resetTriggers();
+                return cursorLoc;
+            }
+        }
+        
+        return NOTHING;
     }
     
     public static String[] getInventories(Unit u)
@@ -69,5 +126,20 @@ public class UnitInventoryMenu extends GenericMenu
     public void refresh()
     {
         actions = getInventories(inventoryUnit);
+    }
+    
+    public void setMode(int mode)
+    {
+        this.mode = mode;
+        switch(mode)
+        {
+            case 1:
+                if(cursorLoc >= Unit.WEAPON_LIMIT)
+                    cursorLoc = 0;
+                break;
+            case 2:
+                if(cursorLoc < Unit.WEAPON_LIMIT)
+                    cursorLoc = Unit.WEAPON_LIMIT;
+        }
     }
 }

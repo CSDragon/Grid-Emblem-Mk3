@@ -250,6 +250,23 @@ public class InventoryScene extends Scene
                                     break;
                                 }
                             }
+                            
+                            //error?
+                            cst5to3();
+                            break;
+                            
+                        case ItemActionsMenu.TRADE:
+                            if(activeItem instanceof Weapon)
+                            {
+                                uim.setMode(UnitInventoryMenu.WEAPONMODE);
+                                cst5to7();
+                            }
+                            else if(activeItem instanceof Usable)
+                            {
+                                
+                            }
+                            
+                            //error?
                             cst5to3();
                             break;
                         
@@ -339,6 +356,7 @@ public class InventoryScene extends Scene
     public void cst4to2()
     {
         controlState = 2;
+        uim.refresh();
         iam.end();
     }
     
@@ -357,6 +375,12 @@ public class InventoryScene extends Scene
     public void cst5to3()
     {
         controlState = 3;
+        iam.end();
+    }
+    
+    public void cst5to7()
+    {
+        controlState = 7;
         iam.end();
     }
     
