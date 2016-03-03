@@ -15,6 +15,7 @@ import java.io.OutputStreamWriter;
 import solenus.gridemblem3.item.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import solenus.gridemblem3.PlayerData;
 
 /**
  * Any living creature, human or otherwise, playable or otherwise, that's on the grid.
@@ -222,6 +223,29 @@ public class Unit extends Actor
         in.readLine();
     }
     
+    /**
+     * Loads a Unit from a prefab.
+     * @param name The Unit prefab to load
+     * @return The loaded Unit.
+     */
+    public static Unit loadFromPrefab(String name)
+    {
+        Unit ret = null;
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("assets/prefabs/units/"+name+".txt"));
+            ret = new Unit(in);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Loading Unit prefab "+ name +" failed, file doesn't seem to exist.");
+            System.exit(-1);
+        }
+        
+        return ret;
+    }
+    
         
     /**
      * Writes the unit to a file.
@@ -292,6 +316,29 @@ public class Unit extends Actor
         
         bw.newLine();
     }
+    
+    /**
+     * Writes a Unit to a file
+     * @param u The Unit to write to.
+     */
+    public static void writeToPrefab(Unit u)
+    {
+        File saveFile = new File("assets/prefabs/units/"+u.getName()+".txt");
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(saveFile);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            
+            u.save(bw);
+            
+            bw.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Unit Prefab Generation failed");
+        }
+    }
+    
     
     //</editor-fold>
     
@@ -420,6 +467,45 @@ public class Unit extends Actor
         return ret;
     }
     
+    /**
+     * Uses a usable. This is still very much WIP.
+     * @param use The usable to be used.
+     * @return If it worked
+     */
+    public boolean useItem(Usable use)
+    {
+        use.use();
+        if(use.getCurUses() <= 0)
+        {
+            try
+            {
+                return use.getOwner().removeItem(use);
+            }
+            catch(NullPointerException e)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Uses an item that is possibly in the convoy.
+     * @param use The usable being used.
+     * @param pd The save where the convoy is located.
+     * @return If it worked
+     */
+    public boolean useItemFromConvoy(Usable use, PlayerData pd)
+    {
+        if(use.getOwner() == null)
+        {
+            use.use();
+            return pd.removeItem(use);
+        }
+        else
+            return this.useItem(use);
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="stat mechanics">
@@ -538,51 +624,6 @@ public class Unit extends Actor
     public int numAttacks()
     {
         return 1;
-    }
-    
-    /**
-     * Writes a Unit to a file
-     * @param u The Unit to write to.
-     */
-    public static void writeToPrefab(Unit u)
-    {
-        File saveFile = new File("assets/prefabs/units/"+u.getName()+".txt");
-        try
-        {
-            FileOutputStream fos = new FileOutputStream(saveFile);
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-            
-            u.save(bw);
-            
-            bw.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Unit Prefab Generation failed");
-        }
-    }
-    
-    /**
-     * Loads a Unit from a prefab.
-     * @param name The Unit prefab to load
-     * @return The loaded Unit.
-     */
-    public static Unit loadFromPrefab(String name)
-    {
-        Unit ret = null;
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader("assets/prefabs/units/"+name+".txt"));
-            ret = new Unit(in);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Loading Unit prefab "+ name +" failed, file doesn't seem to exist.");
-            System.exit(-1);
-        }
-        
-        return ret;
     }
     
     //<editor-fold desc="getters and setters">

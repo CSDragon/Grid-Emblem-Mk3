@@ -81,6 +81,8 @@ public class InventoryScene extends Scene
                 3) Item management: ItemList
                 4) Player item selected
                 5) ItemList item selected.
+                6) Player trade (Selecting an item from the convoy to trade with the player)
+                7) Convoy trade (Selecting an item from the player to trade with the convoy
             */
             switch(getControlState())
             {
@@ -144,6 +146,13 @@ public class InventoryScene extends Scene
                 case 5:
                     iam.respondControls(im);
                     break;
+                    
+                case 6:
+                    tis.respondControls(im);
+                    break;
+                case 7:
+                    uim.respondControls(im);
+                    break;
             }
                 
         }
@@ -165,6 +174,8 @@ public class InventoryScene extends Scene
                 3) Item management: ItemList
                 4) Player item selected
                 5) ItemList item selected.
+                6) Player trade (Selecting an item from the convoy to trade with the player)
+                7) Convoy trade (Selecting an item from the player to trade with the convoy
             */
             switch(getControlState())
             {
@@ -186,8 +197,8 @@ public class InventoryScene extends Scene
                     break;
                 
                 case 2:
-                    int uimResult = uim.runFrame();
-                    switch(uimResult)
+                    int res2 = uim.runFrame();
+                    switch(res2)
                     {
                         case UnitInventoryMenu.BACK:
                             cstXto1();
@@ -196,7 +207,7 @@ public class InventoryScene extends Scene
                             break;
                         
                         default:
-                            activeItem = uim.getItemAt(uimResult);
+                            activeItem = uim.getItemAt(res2);
                             if(activeItem != null)
                                 cst2to4();
                             break;
@@ -204,8 +215,8 @@ public class InventoryScene extends Scene
                     break;
                     
                 case 3:
-                    int tisResult = tis.runFrame();
-                    switch(tisResult)
+                    int res3 = tis.runFrame();
+                    switch(res3)
                     {
                         case TabbedInventoryScene.BACK:
                             cstXto1();
@@ -215,7 +226,7 @@ public class InventoryScene extends Scene
                             break;
                         
                         default:
-                            activeItem = tis.getItemAt(tisResult);
+                            activeItem = tis.getItemAt(res3);
                             if(activeItem != null)
                                 cst3to5();
                             break;
@@ -226,6 +237,48 @@ public class InventoryScene extends Scene
                     switch(iam.runFrame())
                     {
                         case ItemActionsMenu.BACK:
+                            cst4to2();
+                            break;
+                            
+                        case ItemActionsMenu.STORE:
+                            if(activeItem instanceof Weapon)
+                            {
+                                activeUnit.removeWeapon((Weapon)activeItem);
+                                data.addWeapon((Weapon)activeItem);
+                                cst4to2();
+                            }
+                            else if(activeItem instanceof Usable)
+                            {
+                                activeUnit.removeItem((Usable)activeItem);
+                                data.addItem((Usable)activeItem);
+                                cst4to2();
+                            }
+                            break;
+                            
+                        case ItemActionsMenu.TRADE:
+                            if(activeItem instanceof Weapon)
+                            {
+                                tis.controlStateChange(((Weapon)activeItem).getWeaponType());
+                                cst4to6();
+                                break;
+                            }
+                            else if(activeItem instanceof Usable)
+                            {
+                                tis.controlStateChange(TabbedInventoryScene.MAXTAB);
+                                cst4to6();
+                                break;
+                            }
+                            break;
+                            
+                        case ItemActionsMenu.EQUIP:
+                            if(activeItem instanceof Weapon)
+                                activeUnit.equipWeapon((Weapon)activeItem);
+                            cst4to2();
+                            break;
+                            
+                        case ItemActionsMenu.USE:
+                            if(activeItem instanceof Usable)
+                                activeUnit.useItem((Usable)activeItem);
                             cst4to2();
                             break;
                     }
@@ -260,13 +313,22 @@ public class InventoryScene extends Scene
                             {
                                 uim.setMode(UnitInventoryMenu.WEAPONMODE);
                                 cst5to7();
+                                break;
                             }
                             else if(activeItem instanceof Usable)
                             {
-                                
+                                uim.setMode(UnitInventoryMenu.USABLEMODE);
+                                cst5to7();
+                                break;
                             }
                             
                             //error?
+                            cst5to3();
+                            break;
+                            
+                        case ItemActionsMenu.USE:
+                            if(activeItem instanceof Usable)
+                                activeUnit.useItemFromConvoy((Usable)activeItem, data);
                             cst5to3();
                             break;
                         
@@ -274,6 +336,79 @@ public class InventoryScene extends Scene
                             cst5to3();
                             break;
                     }
+                    break;
+                
+                case 6:
+                    int res6 = tis.runFrame();
+                    switch(res6)
+                    {
+                        case TabbedInventoryScene.NOTHING:
+                            break;
+                            
+                        case TabbedInventoryScene.BACK:
+                            cst6to2();
+                            break;
+                            
+                        default:
+                            Item item = tis.getItemAt(res6);
+                            if(item instanceof Weapon)
+                            {
+                                activeUnit.removeWeapon((Weapon)activeItem);
+                                data.removeWeapon((Weapon)item);
+                                
+                                activeUnit.addWeapon((Weapon)item);
+                                data.addWeapon((Weapon)activeItem);
+                                cst6to2();
+                            }
+                            
+                            if(item instanceof Usable)
+                            {
+                                activeUnit.removeItem((Usable)activeItem);
+                                data.removeItem((Usable)item);
+                                
+                                activeUnit.addItem((Usable)item);
+                                data.addItem((Usable)activeItem);
+                                cst6to2();
+                            }
+                            break;
+                    }
+                    break;
+                    
+                case 7:
+                    int res7 = uim.runFrame();
+                    switch(res7)
+                    {
+                        case UnitInventoryMenu.NOTHING:
+                            break;
+                            
+                        case UnitInventoryMenu.BACK:
+                            cst7to2();
+                            break;
+                            
+                        default:
+                            Item item = uim.getItemAt(res7);
+                            if(item instanceof Weapon)
+                            {
+                                data.removeWeapon((Weapon)activeItem);
+                                activeUnit.removeWeapon((Weapon)item);
+                                
+                                data.addWeapon((Weapon)item);
+                                activeUnit.addWeapon((Weapon)activeItem);
+                                cst7to2();
+                            }
+                            
+                            if(item instanceof Usable)
+                            {
+                                data.removeItem((Usable)activeItem);
+                                activeUnit.removeItem((Usable)item);
+                                
+                                data.addItem((Usable)item);
+                                activeUnit.addItem((Usable)activeItem);
+                                cst7to2();
+                            }
+                            break;
+                    }
+                    break;
             }
         }
         
@@ -360,6 +495,12 @@ public class InventoryScene extends Scene
         iam.end();
     }
     
+    public void cst4to6()
+    {
+        controlState = 6;
+        iam.end();
+    }
+    
     public void cst5to2(boolean isWeapon)
     {
         controlState = 2;
@@ -382,6 +523,21 @@ public class InventoryScene extends Scene
     {
         controlState = 7;
         iam.end();
+    }
+    
+    public void cst6to2()
+    {
+        controlState = 2;
+        uim.setMode(UnitInventoryMenu.BOTHMODE);
+        uim.refresh();;
+    }
+    
+    public void cst7to2()
+    {
+        controlState = 2;
+        uim.setMode(UnitInventoryMenu.BOTHMODE);
+        uim.refresh();
+        
     }
     
     public void cstXto1()

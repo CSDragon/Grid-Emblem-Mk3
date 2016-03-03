@@ -203,6 +203,12 @@ public class PlayerData
         weaponConvoy.add(Weapon.loadFromPrefab("Iron Axe"));
         weaponConvoy.add(Weapon.loadFromPrefab("Iron Bow"));
         weaponConvoy.add(Weapon.loadFromPrefab("Iron Dagger"));
+        
+        itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
+        itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
+        itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
+        itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
+        itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
 
     }
     
@@ -229,6 +235,7 @@ public class PlayerData
         if(weaponConvoy.contains(w))
             return false;
         weaponConvoy.add(w);
+        w.setOwner(null);
         return true;
     }
     
@@ -242,7 +249,28 @@ public class PlayerData
         if(itemConvoy.contains(u))
             return false;
         itemConvoy.add(u);
+        u.setOwner(null);
         return true;
+    }
+    
+    /**
+     * Removes a weapon from the convoy
+     * @param w The weapon to be removed.
+     * @return If the weapon was even in the convoy to begin with.
+     */
+    public boolean removeWeapon(Weapon w)
+    {
+        return weaponConvoy.remove(w);
+    }
+    
+    /**
+     * Removes a usable item from the convoy
+     * @param u The weapon to be removed.
+     * @return If the usable item was even in the convoy to begin with.
+     */
+    public boolean removeItem(Usable u)
+    {
+        return itemConvoy.remove(u);
     }
     
     //TEST

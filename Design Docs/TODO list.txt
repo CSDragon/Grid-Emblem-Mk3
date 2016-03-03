@@ -26,6 +26,10 @@ TODOs
 		Fade out when not talking
 		Graphics logic is nonsense right now.
 	
+	ItemActionMenu:
+		Limit actions to available actions.
+		Better movement control.
+	
 Current TODO Stack:
 	Prebattle functions
 		

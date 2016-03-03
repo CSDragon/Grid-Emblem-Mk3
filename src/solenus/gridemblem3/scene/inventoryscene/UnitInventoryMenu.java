@@ -115,7 +115,7 @@ public class UnitInventoryMenu extends GenericMenu
                 return inventoryUnit.getWeaponInventory().get(loc);
             }
             else
-                return inventoryUnit.getWeaponInventory().get(loc-Unit.WEAPON_LIMIT);
+                return inventoryUnit.getInventory().get(loc-Unit.WEAPON_LIMIT);
         }
         catch(Exception e)
         {
