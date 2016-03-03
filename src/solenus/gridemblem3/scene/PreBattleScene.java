@@ -10,6 +10,7 @@ import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.ui.menu.PreBattleMenu;
+import solenus.gridemblem3.ui.menu.SaveMenu;
 
 /**
  *
@@ -28,11 +29,13 @@ public class PreBattleScene extends Scene
     private PlayerData data;
     private PreBattleMenu pbm;
     private InventoryScene invenScene;
+    private SaveMenu saveMenu;
     
     public PreBattleScene()
     {
         pbm = new PreBattleMenu();
         invenScene = new InventoryScene();
+        saveMenu = new SaveMenu();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -58,6 +61,9 @@ public class PreBattleScene extends Scene
                     break;
                 case 2:
                     invenScene.respondControls(im);
+                    break;
+                case 4:
+                    saveMenu.respondControls(im);
                     break;
             }
         }
@@ -87,6 +93,9 @@ public class PreBattleScene extends Scene
                             break;
                         case PreBattleMenu.VIEWMAP:
                             return VIEWMAP;
+                        case PreBattleMenu.SAVE:
+                            cst1to4();
+                            break;
                         case PreBattleMenu.START:
                             return START;
                         case PreBattleMenu.RETURNTOBASE:
@@ -99,6 +108,14 @@ public class PreBattleScene extends Scene
                         case InventoryScene.BACK:
                             cst2to1();
                     }
+                    break;
+                case 4:
+                    switch(saveMenu.runFrame())
+                    {
+                        case SaveMenu.BACK:
+                            cst4to1();
+                    }
+                    break;
             }
         }
         
@@ -128,6 +145,7 @@ public class PreBattleScene extends Scene
         {
             pbm.draw(g);
             invenScene.draw(g);
+            saveMenu.draw(g);
         }
     }
     
@@ -152,11 +170,25 @@ public class PreBattleScene extends Scene
         invenScene.start(data);
     }
     
+    public void cst1to4()
+    {
+        controlState = 4;
+        pbm.end();
+        saveMenu.start();
+    }
+    
     public void cst2to1()
     {
         controlState = 1;
         invenScene.end();
-        pbm.start();
+        pbm.resume();
+    }
+    
+    public void cst4to1()
+    {
+        controlState = 1;
+        saveMenu.end();
+        pbm.resume();
     }
     
     //</editor-fold>
