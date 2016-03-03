@@ -16,6 +16,13 @@ public abstract class UI
     protected boolean visible = false;
     protected boolean active = false;
     
+    protected int xLoc;
+    protected int yLoc;
+    protected int height;
+    protected int width;
+    protected int centerX;
+    protected int centerY;
+    
     
     
     /**

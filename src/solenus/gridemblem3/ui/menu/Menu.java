@@ -98,7 +98,7 @@ public abstract class Menu extends UI
     {
         if(visible)
         {
-            
+            super.draw(g);
         }
     }
     

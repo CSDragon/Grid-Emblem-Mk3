@@ -28,13 +28,6 @@ public class GenericMenu extends Menu
     protected BufferedImage cursor;
     protected BufferedImage box;
     
-    protected int xLoc;
-    protected int yLoc;
-    protected int height;
-    protected int width;
-    protected int centerX;
-    protected int centerY;
-    
     protected String[] actions;
     
     
