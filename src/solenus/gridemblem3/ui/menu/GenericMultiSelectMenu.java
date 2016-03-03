@@ -27,6 +27,7 @@ public class GenericMultiSelectMenu extends MultiSelectMenu<String>
     protected BufferedImage cursor;
     protected BufferedImage box;
     protected BufferedImage selectedBox;
+    protected BufferedImage confirmBox;
     
     public GenericMultiSelectMenu()
     {
@@ -58,7 +59,8 @@ public class GenericMultiSelectMenu extends MultiSelectMenu<String>
 
         box         = spriteSheet.getSubimage(0,        0, width, height);
         selectedBox = spriteSheet.getSubimage(0,   height, width, height);
-        cursor      = spriteSheet.getSubimage(0, 2*height, width, height);
+        cursor      = spriteSheet.getSubimage(0, 2*height, width, height); 
+        confirmBox  = spriteSheet.getSubimage(0, 3*height, width, height);
     }
     
     public GenericMultiSelectMenu(int x, int y)
@@ -84,6 +86,8 @@ public class GenericMultiSelectMenu extends MultiSelectMenu<String>
                     Rendering.renderAbsolute(box, g, xLoc, yLoc + height*i, centerX, centerY, 1, 1);
 
             }
+            Rendering.renderAbsolute(confirmBox, g, xLoc, yLoc + height*numCommands, centerX, centerY, 1, 1);
+            
             Rendering.renderAbsolute(cursor, g, xLoc, yLoc + height*cursorLoc, centerX, centerY, 1, 1);
             
             int textOffset = 19;
