@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.scene.gamemap;
+package solenus.gridemblem3.scene.prebattlescene;
 
 import java.util.ArrayList;
+import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.scene.gamemap.Map;
 import solenus.gridemblem3.ui.menu.GenericChecklistMenu;
 
 /**
@@ -20,8 +22,22 @@ public class ChooseUnitsChecklistMenu extends GenericChecklistMenu
     
     public ChooseUnitsChecklistMenu()
     {
-        
+        super();
     }
+    
+    //REMOVE LATER
+    public void start()
+    {
+        super.start(new String[]{"asdf","jkl;"});
+    }
+    
+    public void start(PlayerData pd, Map m)
+    {
+        ArrayList<String> names = new ArrayList<>();
+        for(Unit u:army)
+            names.add(u.getName());
+    }
+    
     
     
 }

@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.scene;
+package solenus.gridemblem3.scene.prebattlescene;
 
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.scene.Scene;
+import solenus.gridemblem3.scene.prebattlescene.ChooseUnitsChecklistMenu;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.ui.menu.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
@@ -30,12 +32,14 @@ public class PreBattleScene extends Scene
     private PreBattleMenu pbm;
     private InventoryScene invenScene;
     private SaveMenu saveMenu;
+    private ChooseUnitsChecklistMenu cucm;
     
     public PreBattleScene()
     {
         pbm = new PreBattleMenu();
         invenScene = new InventoryScene();
         saveMenu = new SaveMenu();
+        cucm = new ChooseUnitsChecklistMenu();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -53,6 +57,8 @@ public class PreBattleScene extends Scene
             STATES
                 1) Pre-Battle Menu
                 2) Inventory Scene
+                3) Selecting Units
+                4) Save menu
             */
             switch(getControlState())
             {
@@ -61,6 +67,9 @@ public class PreBattleScene extends Scene
                     break;
                 case 2:
                     invenScene.respondControls(im);
+                    break;
+                case 3: 
+                    cucm.respondControls(im);
                     break;
                 case 4:
                     saveMenu.respondControls(im);
@@ -82,12 +91,17 @@ public class PreBattleScene extends Scene
             STATES
                 1) Pre-Battle Menu
                 2) Inventory Scene
+                3) Selecting Units
+                4) Save menu
             */
             switch(getControlState())
             {
                 case 1:
                     switch(pbm.runFrame())
                     {
+                        case PreBattleMenu.SELECTUNITS:
+                            cst1to3();
+                            break;
                         case PreBattleMenu.INVENTORY:
                             cst1to2();
                             break;
@@ -109,6 +123,16 @@ public class PreBattleScene extends Scene
                             cst2to1();
                     }
                     break;
+                case 3:
+                    switch(cucm.runFrame())
+                    {
+                        case ChooseUnitsChecklistMenu.BACK:
+                            cst3to1();
+                            break;
+                        case ChooseUnitsChecklistMenu.CONFIRM:
+                            cst3to1();
+                            break;
+                    }
                 case 4:
                     switch(saveMenu.runFrame())
                     {
@@ -146,6 +170,7 @@ public class PreBattleScene extends Scene
             pbm.draw(g);
             invenScene.draw(g);
             saveMenu.draw(g);
+            cucm.draw(g);
         }
     }
     
@@ -170,6 +195,13 @@ public class PreBattleScene extends Scene
         invenScene.start(data);
     }
     
+    public void cst1to3()
+    {
+        controlState = 3;
+        pbm.end();
+        cucm.start();
+    }
+    
     public void cst1to4()
     {
         controlState = 4;
@@ -181,6 +213,13 @@ public class PreBattleScene extends Scene
     {
         controlState = 1;
         invenScene.end();
+        pbm.resume();
+    }
+    
+    public void cst3to1()
+    {
+        controlState = 1;
+        cucm.end();
         pbm.resume();
     }
     

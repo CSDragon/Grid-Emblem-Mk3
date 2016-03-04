@@ -6,6 +6,7 @@
 package solenus.gridemblem3.scene;
 
 
+import solenus.gridemblem3.scene.prebattlescene.PreBattleScene;
 import solenus.gridemblem3.scene.gamemap.UnitCircles;
 import solenus.gridemblem3.scene.gamemap.Camera;
 import solenus.gridemblem3.scene.gamemap.Pathfinding;
@@ -52,7 +53,6 @@ public class MapScene extends Scene
     //game control
     private int numFactions;
     private int turn;
-    private boolean cinematicMode = false;
     private Unit selectedUnit;
     private int lastUnitIndexSearched;
     private ArrayList<Unit> attackableUnits;
