@@ -86,6 +86,7 @@ public class MapScene extends Scene
     private boolean drawAllEnemyRanges;
     private ArrayList<Point> allEnemyRangeMap;
     
+    private ArrayList<Point> playerStartingLocations;
 
     
     public MapScene(Scene parent)//TEST: make this take an extra arguement, the map id.
@@ -237,8 +238,30 @@ public class MapScene extends Scene
                     break;
                 case 15:
                     cursor.respondControls(im);
+                    if(im.getA() == 1)
+                    {
+                        if(playerStartingLocations.contains(cursor.getCoord()))
+                        {
+                            if (selectedUnit == null)
+                                selectedUnit = getUnitAtPoint(cursor.getCoord());
+                            else
+                            {
+                                Unit tempU = getUnitAtPoint(cursor.getCoord());
+                                Point temp = selectedUnit.getCoord();
+                                selectedUnit.moveInstantly(cursor.getCoord());
+                                if(tempU != null)
+                                    tempU.moveInstantly(temp);
+                                selectedUnit = null;
+                            }
+                        }
+                    }
                     if(im.getB() == 1)
-                        cst15to14();
+                    {
+                        if(selectedUnit == null)
+                            cst15to14();
+                        else
+                            selectedUnit = null;
+                    }
                     break;
             }
         }
@@ -617,6 +640,8 @@ public class MapScene extends Scene
         allyRangeMap = new ArrayList<>();
         selectedEnemyRangeMap = new ArrayList<>();
         allEnemyRangeMap = new ArrayList<>();
+        playerStartingLocations = map.getStartingPlayerLocations();
+
         
         //Add starting units
         setStartingUnits();
@@ -767,9 +792,16 @@ public class MapScene extends Scene
             
             g.setColor(new Color(63,63,225,127));
             for(Point p : allyRangeMap)
-            drawRangeSquare(g, p);
+                drawRangeSquare(g, p);
         }
         
+        //player locations
+        if(controlState == 14 || controlState == 15)
+        {
+            g.setColor(new Color(63,63,225,127));
+            for(Point p : playerStartingLocations)
+                drawRangeSquare(g, p);
+        }
     }
     
     /**

@@ -50,8 +50,8 @@ TODOs
 	Visually design all menus
 	
 Current TODO Stack:
-	Prebattle functions
-		Swap starting locations
+	Prebattle/HQ functions
+		Shop
 	
 		
 
