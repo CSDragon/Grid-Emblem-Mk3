@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Chris
  */
-public abstract class MultiSelectMenu<T> extends Menu
+public abstract class ChecklistMenu<T> extends Menu
 {
     public static final int CONFIRM = 1;
     

@@ -6,6 +6,14 @@
 package solenus.gridemblem3.scene;
 
 
+import solenus.gridemblem3.scene.gamemap.UnitCircles;
+import solenus.gridemblem3.scene.gamemap.Camera;
+import solenus.gridemblem3.scene.gamemap.Pathfinding;
+import solenus.gridemblem3.scene.gamemap.Grid;
+import solenus.gridemblem3.scene.gamemap.MovementArrow;
+import solenus.gridemblem3.scene.gamemap.AI;
+import solenus.gridemblem3.scene.gamemap.MapCursor;
+import solenus.gridemblem3.scene.gamemap.Map;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,7 +23,6 @@ import java.util.HashSet;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
-import solenus.gridemblem3.gamemap.*;
 import solenus.gridemblem3.actor.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.ui.FightUI;

@@ -26,12 +26,33 @@ TODOs
 		Fade out when not talking
 		Graphics logic is nonsense right now.
 	
+	HQScene:
+		Shop
+		Skills
+		Support
+		Events
+	
+	PreBattleMenu
+		Select Units
+		Skills
+		
+	SystemActionMenu
+		Units
+		Options
+		
+	UnitActionMenu
+		A bunch of stuff.
+	
 	ItemActionMenu:
 		Limit actions to available actions.
 		Better movement control.
+		
+	Visually design all menus
 	
 Current TODO Stack:
 	Prebattle functions
+		SelectUnits.
+	
 		
 
 BUGS:

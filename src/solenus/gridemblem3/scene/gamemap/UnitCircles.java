@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.gamemap;
+package solenus.gridemblem3.scene.gamemap;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

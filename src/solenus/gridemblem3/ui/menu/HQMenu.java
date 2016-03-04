@@ -16,7 +16,7 @@ public class HQMenu extends GenericMenu
     public static final int SHOP = 1;
     public static final int SKILLS = 2;
     public static final int SUPPORT = 3;
-    public static final int CONVERSATIONS = 4;
+    public static final int EVENTS = 4;
     public static final int SAVE = 5;
     public static final int END = 6;
     
@@ -25,6 +25,6 @@ public class HQMenu extends GenericMenu
      */
     public HQMenu()
     {
-        super(new String[]{"Inventory", "Shop", "Skills", "Support", "Conversations", "Save", "End"});
+        super(new String[]{"Inventory", "Shop", "Skills", "Support", "Events", "Save", "End"});
     }
 }

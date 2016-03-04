@@ -21,7 +21,7 @@ import solenus.gridemblem3.render.Rendering;
  *
  * @author Chris
  */
-public class GenericMultiSelectMenu extends MultiSelectMenu<String>
+public class GenericChecklistMenu extends ChecklistMenu<String>
 {
     protected BufferedImage spriteSheet;
     protected BufferedImage cursor;
@@ -29,7 +29,7 @@ public class GenericMultiSelectMenu extends MultiSelectMenu<String>
     protected BufferedImage selectedBox;
     protected BufferedImage confirmBox;
     
-    public GenericMultiSelectMenu()
+    public GenericChecklistMenu()
     {
         super();
         
@@ -63,7 +63,7 @@ public class GenericMultiSelectMenu extends MultiSelectMenu<String>
         confirmBox  = spriteSheet.getSubimage(0, 3*height, width, height);
     }
     
-    public GenericMultiSelectMenu(int x, int y)
+    public GenericChecklistMenu(int x, int y)
     {
         this();
         xLoc = x;
