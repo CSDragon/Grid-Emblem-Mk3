@@ -51,7 +51,7 @@ TODOs
 	
 Current TODO Stack:
 	Prebattle functions
-		SelectUnits.
+		Swap starting locations
 	
 		
 

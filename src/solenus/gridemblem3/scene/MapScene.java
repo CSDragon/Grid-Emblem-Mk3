@@ -99,7 +99,7 @@ public class MapScene extends Scene
         fightUI = new FightUI();
         systemAction = new SystemActionMenu();
         xp = new XPBarUI();
-        preBattleScene = new PreBattleScene();
+        preBattleScene = new PreBattleScene(this);
     }
     
     // <editor-fold desc="Scene control methods">
@@ -475,6 +475,9 @@ public class MapScene extends Scene
                         case PreBattleScene.START:
                             cst14to1();
                             break;
+                        case PreBattleScene.UPDATEUNITS:
+                            setStartingUnits();
+                            break;
                         case PreBattleScene.RETURNTOBASE:
                             return RETURNTOBASE;
                     }
@@ -592,6 +595,9 @@ public class MapScene extends Scene
         fightGraphicsMode = false;
         map = new Map(playerArmy.getMapNum(), pd);
         Pathfinding.setMap(map, this);
+        
+        //Control State
+        cst0to14();
 
         cursor = new MapCursor(map);
         camera = new Camera(cursor.getX(), cursor.getY());
@@ -613,8 +619,7 @@ public class MapScene extends Scene
         allEnemyRangeMap = new ArrayList<>();
         
         //Add starting units
-        unitList.addAll(map.getMandatoryPlayerUnits());
-        unitList.addAll(map.getStartingUnits());
+        setStartingUnits();
         
         if(!unitList.isEmpty())
         {
@@ -625,9 +630,6 @@ public class MapScene extends Scene
         getAllEnemyRanges();
         
         numFactions = 2;
-        
-        //Control State
-        cst0to14();
     }
     
     
@@ -892,6 +894,9 @@ public class MapScene extends Scene
     
     //</editor-fold>
 
+    /**
+     * Starts a new turn
+     */
     public void startTurn()
     {
         for(Unit u : unitList)
@@ -902,7 +907,7 @@ public class MapScene extends Scene
     }
     
     /**
-     * 
+     * Ends the curent turn
      */
     public void endTurn()
     {
@@ -910,6 +915,10 @@ public class MapScene extends Scene
         turn %= numFactions;
     }
     
+    /**
+     * Removes dead units from the board after a fight.
+     * @param whoDied Who died. 1 = attacker died. 2 = defender died, 3 = both died.
+     */
     public void resolveBattle(int whoDied)
     {
         if(whoDied !=2)
@@ -931,6 +940,29 @@ public class MapScene extends Scene
         }
     }
     
+    /**
+     * Redoes the starting units based on the selected units.
+     */
+    public void setStartingUnits()
+    {
+        ArrayList<Point> manP = map.getMandatoryPlayerUnitLocations();
+        ArrayList<Point> choP = map.getStartingPlayerLocations();
+        ArrayList<Unit> sel = preBattleScene.getSelectedUnits();
+        
+        unitList.clear();
+        
+        for(int i = 0; i< sel.size(); i++)
+        {
+            if(i < manP.size())
+                sel.get(i).moveInstantly(manP.get(i));
+            else
+                sel.get(i).moveInstantly(choP.get(i-manP.size()));
+        }
+        
+        unitList.addAll(sel);
+        unitList.addAll(map.getStartingUnits());
+    }
+    
     //<editor-fold desc="controlState Methods">
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
@@ -941,7 +973,7 @@ public class MapScene extends Scene
     public void cst0to14()
     {
         controlState = 14;
-        preBattleScene.start(playerArmy);
+        preBattleScene.start(playerArmy, map);
     }
     
     /**

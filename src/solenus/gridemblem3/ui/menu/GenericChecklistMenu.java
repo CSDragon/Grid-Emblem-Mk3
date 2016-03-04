@@ -28,6 +28,8 @@ public class GenericChecklistMenu extends ChecklistMenu<String>
     protected BufferedImage box;
     protected BufferedImage selectedBox;
     protected BufferedImage confirmBox;
+    protected BufferedImage mandatoryBox;
+
     
     public GenericChecklistMenu()
     {
@@ -57,10 +59,11 @@ public class GenericChecklistMenu extends ChecklistMenu<String>
             System.exit(-1);
         }
 
-        box         = spriteSheet.getSubimage(0,        0, width, height);
-        selectedBox = spriteSheet.getSubimage(0,   height, width, height);
-        cursor      = spriteSheet.getSubimage(0, 2*height, width, height); 
-        confirmBox  = spriteSheet.getSubimage(0, 3*height, width, height);
+        box          = spriteSheet.getSubimage(0,        0, width, height);
+        selectedBox  = spriteSheet.getSubimage(0,   height, width, height);
+        mandatoryBox = spriteSheet.getSubimage(0, 2*height, width, height); 
+        cursor       = spriteSheet.getSubimage(0, 3*height, width, height); 
+        confirmBox   = spriteSheet.getSubimage(0, 4*height, width, height);
     }
     
     public GenericChecklistMenu(int x, int y)
@@ -80,7 +83,9 @@ public class GenericChecklistMenu extends ChecklistMenu<String>
         {
             for(int i = 0; i < numCommands; i++)
             {
-                if(selected[i])
+                if(mandatory[i])
+                    Rendering.renderAbsolute(mandatoryBox, g, xLoc, yLoc + height*i, centerX, centerY, 1, 1);
+                else if(selected[i])
                     Rendering.renderAbsolute(selectedBox, g, xLoc, yLoc + height*i, centerX, centerY, 1, 1);
                 else
                     Rendering.renderAbsolute(box, g, xLoc, yLoc + height*i, centerX, centerY, 1, 1);
@@ -113,8 +118,6 @@ public class GenericChecklistMenu extends ChecklistMenu<String>
     
     public void start(ArrayList<String> s)
     {
-        super.start(s.size());
-        actions = new String[numCommands];
-        actions = (String[])s.toArray();
+        start(s.toArray(new String[s.size()]));
     }
 }

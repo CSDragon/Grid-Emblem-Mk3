@@ -433,7 +433,7 @@ public class Map
         return mapImage;
     }
     
-    public ArrayList<Point> getStartingPoints()
+    public ArrayList<Point> getStartingPlayerLocations()
     {
         return startingPlayerLocations;
     }

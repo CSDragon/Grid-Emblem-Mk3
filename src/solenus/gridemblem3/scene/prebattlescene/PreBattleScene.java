@@ -6,10 +6,12 @@
 package solenus.gridemblem3.scene.prebattlescene;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.scene.Scene;
-import solenus.gridemblem3.scene.prebattlescene.ChooseUnitsChecklistMenu;
+import solenus.gridemblem3.scene.gamemap.Map;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.ui.menu.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
@@ -27,15 +29,21 @@ public class PreBattleScene extends Scene
     public static final int SAVE = 4;
     public static final int START = 5;
     public static final int RETURNTOBASE = 6;
+    public static final int UPDATEUNITS = 7;
     
+    //data
     private PlayerData data;
+    private Map map;
+    
+    //ui
     private PreBattleMenu pbm;
     private InventoryScene invenScene;
     private SaveMenu saveMenu;
     private ChooseUnitsChecklistMenu cucm;
     
-    public PreBattleScene()
+    public PreBattleScene(Scene parent)
     {
+        super(parent);
         pbm = new PreBattleMenu();
         invenScene = new InventoryScene();
         saveMenu = new SaveMenu();
@@ -131,7 +139,7 @@ public class PreBattleScene extends Scene
                             break;
                         case ChooseUnitsChecklistMenu.CONFIRM:
                             cst3to1();
-                            break;
+                            return UPDATEUNITS;
                     }
                 case 4:
                     switch(saveMenu.runFrame())
@@ -176,12 +184,22 @@ public class PreBattleScene extends Scene
     
     //</editor-fold>
     
-    public void start(PlayerData pd)
+    public void start(PlayerData pd, Map m)
     {
         super.start();
         data = pd;
+        map = m;
         controlState = 1;
         pbm.start();
+        
+        //this was a flaw in my design;
+        cucm.start(pd, m);
+        cucm.end();
+    }
+    
+    public ArrayList<Unit> getSelectedUnits()
+    {
+        return cucm.getSelectedUnits();
     }
     
     //<editor-fold desc="controlState Methods">
@@ -199,7 +217,8 @@ public class PreBattleScene extends Scene
     {
         controlState = 3;
         pbm.end();
-        cucm.start();
+        cucm.resume();
+        
     }
     
     public void cst1to4()

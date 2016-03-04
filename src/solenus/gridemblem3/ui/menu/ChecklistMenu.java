@@ -16,6 +16,7 @@ public abstract class ChecklistMenu<T> extends Menu
     public static final int CONFIRM = 1;
     
     protected boolean[] selected;
+    protected boolean[] mandatory;
     protected T[] actions;
     
     
@@ -64,6 +65,7 @@ public abstract class ChecklistMenu<T> extends Menu
         super.start();
         numCommands = numOptions;
         selected = new boolean[numCommands];
+        mandatory = new boolean[numCommands];
     }
     
     public ArrayList<T> getSelectedObjects()
@@ -71,7 +73,7 @@ public abstract class ChecklistMenu<T> extends Menu
         ArrayList<T> ret = new ArrayList<>();
         
         for(int i = 0; i < numCommands; i++)
-            if(selected[i])
+            if(selected[i] || mandatory[i])
                 ret.add(actions[i]);
         
         return ret;
