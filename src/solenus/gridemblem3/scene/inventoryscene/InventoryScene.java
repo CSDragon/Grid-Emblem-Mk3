@@ -5,6 +5,7 @@
  */
 package solenus.gridemblem3.scene.inventoryscene;
 
+import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;

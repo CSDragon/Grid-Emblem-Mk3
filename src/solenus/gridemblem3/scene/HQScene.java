@@ -10,6 +10,7 @@ import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
+import solenus.gridemblem3.scene.shopscene.ShopScene;
 import solenus.gridemblem3.ui.menu.HQMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
 
@@ -26,6 +27,7 @@ public class HQScene extends Scene
     private HQMenu hqMenu;
     private SaveMenu save;
     private InventoryScene invenScene;
+    private ShopScene shopScene;
     
     PlayerData playerArmy;
     private int saveFile;
@@ -36,6 +38,7 @@ public class HQScene extends Scene
         hqMenu = new HQMenu();
         save = new SaveMenu();
         invenScene = new InventoryScene();
+        shopScene = new ShopScene();
     }
 
     
@@ -55,8 +58,8 @@ public class HQScene extends Scene
              STATES:
                 0) HQMenu
                 1) Save Menu
-                2) InventoryScene
-                
+                2) Inventory Scene
+                3) Shop Scene
              */
             switch(getControlState())
             {
@@ -68,6 +71,9 @@ public class HQScene extends Scene
                     break;
                 case 2:
                     invenScene.respondControls(im);
+                    break;
+                case 3:
+                    shopScene.respondControls(im);
                     break;
             }       
         }
@@ -85,6 +91,13 @@ public class HQScene extends Scene
         {
             switch(getControlState())
             {
+                /*
+                 STATES:
+                    0) HQMenu
+                    1) Save Menu
+                    2) Inventory Scene
+                    3) Shop Scene
+                 */
                 case 0:
                     switch(hqMenu.runFrame())
                     {
@@ -95,6 +108,9 @@ public class HQScene extends Scene
                             break;
                         case HQMenu.INVENTORY:
                             cst0to2();
+                            break;
+                        case HQMenu.SHOP:
+                            cst0to3();
                             break;
                     }
                     break;
@@ -119,6 +135,13 @@ public class HQScene extends Scene
                     {
                         case InventoryScene.BACK:
                             cst2to0();
+                            break;
+                    }
+                case 3:
+                    switch(shopScene.runFrame())
+                    {
+                        case ShopScene.BACK:
+                            cst3to0();
                             break;
                     }
             }
@@ -150,6 +173,7 @@ public class HQScene extends Scene
             hqMenu.draw(g);
             save.draw(g);
             invenScene.draw(g);
+            shopScene.draw(g);
         }
     }
     
@@ -199,6 +223,13 @@ public class HQScene extends Scene
         invenScene.start(playerArmy);
     }
     
+    public void cst0to3()
+    {
+        controlState = 3;
+        hqMenu.end();
+        shopScene.start(playerArmy);
+    }
+    
     public void cst1to0()
     {
         controlState = 0;
@@ -210,6 +241,13 @@ public class HQScene extends Scene
     {
         controlState = 0;
         invenScene.end();
+        hqMenu.resume();
+    }
+    
+    public void cst3to0()
+    {
+        controlState = 0;
+        shopScene.end();
         hqMenu.resume();
     }
     
