@@ -29,10 +29,14 @@ public class GenericMenu extends Menu
     protected BufferedImage box;
     
     protected String[] actions;
+
     
-    
-    public GenericMenu(String[] s)
+    /**
+     * The Generic Constructor. If it calls this one, it must manually update actions and numCommands.
+     */
+    public GenericMenu()
     {
+        super();
         try
         {
             //load sheet image
@@ -59,7 +63,11 @@ public class GenericMenu extends Menu
 
         box    = spriteSheet.getSubimage(0, 0, width, height);
         cursor = spriteSheet.getSubimage(0, height, width, height);
-
+    }
+    
+    public GenericMenu(String[] s)
+    {
+        this();
         actions = s;
         numCommands = actions.length;
     }

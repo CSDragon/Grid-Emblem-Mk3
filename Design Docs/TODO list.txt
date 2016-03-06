@@ -46,8 +46,10 @@ TODOs
 	ItemActionMenu:
 		Limit actions to available actions.
 		Better movement control.
-		
-	Visually design all menus
+	
+	Other
+		Visually design all menus
+		Staff logic
 	
 Current TODO Stack:
 	Prebattle/HQ functions

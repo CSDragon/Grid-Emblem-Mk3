@@ -15,27 +15,49 @@ import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
  */
 public class CharacterSelectMenu extends GenericScrollingMenu
 {
+    public static final int CONVOYMODE = -3;
+    
     private ArrayList<Unit> units;
+    boolean convoyMode;
     
     /**
-     * 
-     * @param units 
+     * The standard constructor. 
+     * @param units The list of units
      */
     public CharacterSelectMenu(ArrayList<Unit> units)
     {
-        super(unitsToString(units), 5);
+        this(units, false);
+    }
+    
+     /**
+     * 
+     * @param units The list of units.
+     * @param convoyMode Should it include a convoy.
+     */
+    public CharacterSelectMenu(ArrayList<Unit> units, boolean convoyMode)
+    {
+        super(unitsToString(units, convoyMode), 5);
         this.units = units;
+        this.convoyMode = convoyMode;
     }
     
     /**
-     * 
-     * @param u
-     * @return 
+     * Translate the list of units to a list of strings.
+     * @param u The unit list.
+     * @param convoyMode Whether or not we should include the convoy.
+     * @return Weather or not the convoy should be included.
      */
-    public static String[] unitsToString(ArrayList<Unit> u)
+    public static String[] unitsToString(ArrayList<Unit> u, boolean convoyMode)
     {
-        String[] ret = new String[u.size()];
-        
+        String[] ret;
+        if(convoyMode)
+        {
+            ret = new String[u.size()+1];
+            ret[u.size()]  = "Convoy";
+        }
+        else
+            ret = new String[u.size()];
+
         for(int i = 0; i< u.size(); i++)
             ret[i] = u.get(i).getName();
         
@@ -49,6 +71,8 @@ public class CharacterSelectMenu extends GenericScrollingMenu
      */
     public Unit getUnitAt(int i)
     {
+        if(convoyMode && i == units.size())
+            return null;
         return units.get(i);
     }
 }

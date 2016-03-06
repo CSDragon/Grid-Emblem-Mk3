@@ -159,6 +159,7 @@ public class HQScene extends Scene
         //always check this
         if(active)
         {
+            shopScene.animate();
         }
     }
     

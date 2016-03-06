@@ -22,6 +22,7 @@ public class ShopScene extends Scene
     
     private PlayerData data;
     private CharacterSelectMenu csm;
+    private ShopMenu shopMenu;
     
     
     public ShopScene()
@@ -50,6 +51,9 @@ public class ShopScene extends Scene
             {
                 case 1:
                     csm.respondControls(im);
+                    break;
+                case 2:
+                    shopMenu.respondControls(im);
                     break;
             }
         }
@@ -80,7 +84,14 @@ public class ShopScene extends Scene
                         case CharacterSelectMenu.NOTHING:
                             break;
                         default:
+                            cst1to2();
                             break;
+                    }
+                    break;
+                case 2:
+                    switch(shopMenu.runFrame())
+                    {
+                        
                     }
                     break;
             }
@@ -98,6 +109,7 @@ public class ShopScene extends Scene
         if(active)
         {
             csm.animate();
+            shopMenu.animate();
         }
     }
     
@@ -110,6 +122,7 @@ public class ShopScene extends Scene
         if(visible)
         {
             csm.draw(g);
+            shopMenu.draw(g);
         }
     }
 
@@ -120,7 +133,15 @@ public class ShopScene extends Scene
         super.start();
         data = pd;
         controlState = 1;
-        csm = new CharacterSelectMenu(data.getUnitList());
+        csm = new CharacterSelectMenu(data.getUnitList(), true);
         csm.start();
+        shopMenu = new ShopMenu(pd.getMapNum());
+    }
+    
+    public void cst1to2()
+    {
+        controlState = 2;
+        csm.end();
+        shopMenu.start();
     }
 }

@@ -1,0 +1,20 @@
+Weapons: 16
+Iron Sword
+Steel Sword
+Iron Lance
+Steel Lance
+Iron Axe
+Steel Axe
+Iron Bow
+Steel Bow
+Iron Dagger
+Steel Dagger
+Light
+Fire
+Wind
+Thunder
+Dark
+Heal
+
+Items: 1
+Vulnerary

@@ -24,6 +24,16 @@ public abstract class GenericScrollingMenu extends GenericMenu
     protected int camY;
     protected int topY;
     
+    /**
+     * The most generic ScrollingMenu constructor. If called, you MUST manually set actions, numCommands and make sure numChoicesVisible <= numCommands.
+     * @param ncv The number of choices visible.
+     */
+    public GenericScrollingMenu(int ncv)
+    {
+        super();
+        numChoicesVisible = ncv;
+    }
+    
     public GenericScrollingMenu(String[] choices, int ncv)
     {
         super(choices);
