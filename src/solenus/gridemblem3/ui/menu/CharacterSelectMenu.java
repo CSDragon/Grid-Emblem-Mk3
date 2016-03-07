@@ -75,4 +75,13 @@ public class CharacterSelectMenu extends GenericScrollingMenu
             return null;
         return units.get(i);
     }
+    
+    /**
+     * Gets the unit at the cursorLoc
+     * @return The unit at that location
+     */
+    public Unit getSelectedUnit()
+    {
+        return getUnitAt(cursorLoc);
+    }
 }

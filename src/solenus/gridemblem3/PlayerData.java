@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
 
@@ -155,6 +156,7 @@ public class PlayerData
     {
         mapNum = 1;
         inBase = false;
+        gold = 30000;
         
         unitList.add(Unit.loadFromPrefab("Garen"));
         unitList.add(Unit.loadFromPrefab("Lux"));
@@ -361,6 +363,66 @@ public class PlayerData
         
         return ret;
     }
+
+    /**
+     * Checks if you can buy an item
+     * @param i The item we're checking the price of
+     * @return Whether we can buy it or not.
+     */
+    public boolean canBuyItem(Item i)
+    {
+        return (gold >= i.getGoldValue());
+    }
+    
+    /**
+     * Buys an item. But does not add it to an invnetory. 
+     * @param i The item to be purchased. 
+     * @return Whether you can actually buy the item in the first place
+     */
+    public boolean buyItem(Item i)
+    {
+        if(canBuyItem(i))
+        {
+            gold -= i.getGoldValue();
+            return true;
+        }
+        else
+            return false;
+    }
+        
+    /**
+     * Gives a Weapon to a Unit. 
+     * @param u The unit getting the weapon. u can be null, in which case send it directly to the convoy.
+     * @param weapon The weapon the unit is getting
+     * @return Returns true is the weapon was accepted. False if it was sent to convoy because of inventory limits.
+     */
+    public boolean giveWeapon(Unit u, Weapon weapon)
+    {
+        if(u != null && u.addWeapon(weapon))
+            return true;
+        else
+        {
+            weaponConvoy.add(weapon);
+            return false;
+        }
+    }
+    
+    /**
+     * Gives a Usable to a Unit. 
+     * @param u The unit getting the item
+     * @param item The item the unit is getting
+     * @return Returns true is the item was accepted. False if it was sent to convoy because of inventory limits.
+     */
+    public boolean giveItem(Unit u, Usable item)
+    {
+        if(u != null && u.addItem(item))
+            return true;
+        else
+        {
+            itemConvoy.add(item);
+            return false;
+        }
+    }
     
 
     //<editor-fold desc="getters and setters">
@@ -413,6 +475,14 @@ public class PlayerData
     public ArrayList<Usable> getItemConvoy() 
     {
         return itemConvoy;
+    }
+    
+    /**
+     * Returns the amount of gold you have
+     */
+    public int getGold()
+    {
+        return gold;
     }
     
     //</editor-fold>

@@ -47,9 +47,14 @@ TODOs
 		Limit actions to available actions.
 		Better movement control.
 	
+	ShopScene
+		Selling
+	
 	Other
 		Visually design all menus
 		Staff logic
+		Usables
+		
 	
 Current TODO Stack:
 	Prebattle/HQ functions

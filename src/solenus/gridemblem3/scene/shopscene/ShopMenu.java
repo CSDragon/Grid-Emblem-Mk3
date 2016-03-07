@@ -9,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import solenus.gridemblem3.item.Item;
+import solenus.gridemblem3.item.Usable;
+import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
 
 /**
@@ -60,5 +63,20 @@ public class ShopMenu extends GenericScrollingMenu
         
         if(numChoicesVisible > numCommands)
             numChoicesVisible = numCommands;
+    }
+    
+    /**
+     * Gets an item from the shop.
+     * @return The item to be made
+     */
+    public Item createItem()
+    {
+        Item i;
+        if(cursorLoc < weapons.size())
+            i = Weapon.loadFromPrefab(weapons.get(cursorLoc));
+        else
+            i = Usable.loadFromPrefab(usables.get(cursorLoc - weapons.size()));
+            
+        return i;
     }
 }

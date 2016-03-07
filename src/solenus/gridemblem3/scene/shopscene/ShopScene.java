@@ -8,6 +8,10 @@ package solenus.gridemblem3.scene.shopscene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.item.Item;
+import solenus.gridemblem3.item.Usable;
+import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 
@@ -23,7 +27,7 @@ public class ShopScene extends Scene
     private PlayerData data;
     private CharacterSelectMenu csm;
     private ShopMenu shopMenu;
-    
+    private Unit buyer;
     
     public ShopScene()
     {
@@ -84,6 +88,7 @@ public class ShopScene extends Scene
                         case CharacterSelectMenu.NOTHING:
                             break;
                         default:
+                            buyer = csm.getSelectedUnit();
                             cst1to2();
                             break;
                     }
@@ -91,7 +96,13 @@ public class ShopScene extends Scene
                 case 2:
                     switch(shopMenu.runFrame())
                     {
-                        
+                        case ShopMenu.BACK:
+                            cst2to1();
+                            break;
+                        case ShopMenu.NOTHING:
+                            break;
+                        default:
+                            buyItem();
                     }
                     break;
             }
@@ -138,10 +149,37 @@ public class ShopScene extends Scene
         shopMenu = new ShopMenu(pd.getMapNum());
     }
     
+    
+    /**
+     * Buys the weapon and place it in the buyer's inventory.
+     * @return Weather it worked or not.
+     */
+    public boolean buyItem()
+    {
+        Item i = shopMenu.createItem();
+        if(!data.buyItem(i))
+            return false;
+        if(i instanceof Weapon)
+            data.giveWeapon(buyer, (Weapon)i);
+        else if(i instanceof Usable)
+            data.giveItem(buyer, (Usable)i);
+        else
+            return false;
+        return true;
+    }
+    
     public void cst1to2()
     {
         controlState = 2;
         csm.end();
         shopMenu.start();
+    }
+    
+    public void cst2to1()
+    {
+        controlState = 1;
+        csm.resume();
+        shopMenu.end();
+        buyer = null;
     }
 }
