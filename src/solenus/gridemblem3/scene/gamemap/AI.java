@@ -54,7 +54,7 @@ public class AI
      */
     public void act(Unit u)
     {
-        u.endMovement();
+        u.setHasMoved(true);
     }
     
     /**
