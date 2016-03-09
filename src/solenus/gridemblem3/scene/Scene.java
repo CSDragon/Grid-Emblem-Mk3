@@ -5,9 +5,7 @@
  */
 package solenus.gridemblem3.scene;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import javax.swing.JPanel;
 import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 
@@ -18,6 +16,9 @@ import solenus.gridemblem3.InputManager;
  */
 public abstract class Scene
 {
+    public static final int NOTHING = -1;
+    public static final int BACK = -2;
+    
     protected Scene parent;
     protected boolean active;
     protected boolean visible;

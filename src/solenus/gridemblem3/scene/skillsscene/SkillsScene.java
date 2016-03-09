@@ -8,6 +8,7 @@ package solenus.gridemblem3.scene.skillsscene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 
@@ -18,8 +19,10 @@ import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 public class SkillsScene extends Scene
 {
     private CharacterSelectMenu csm;
-    private SkillMenu skillMenu;
+    private SkillsMenu skillsMenu;
+    private SkillsReserveScrollingMenu srsm;
     private PlayerData data;
+    private Unit selectedUnit;
     
     public SkillsScene()
     {
@@ -49,7 +52,7 @@ public class SkillsScene extends Scene
                     csm.respondControls(im);
                     break;
                 case 2:
-                    skillMenu.respondControls(im);
+                    skillsMenu.respondControls(im);
                     break;
             }
         }
@@ -72,7 +75,17 @@ public class SkillsScene extends Scene
                     2) Skill Menu
                 */
                 case 1:
-                    csm.runFrame();
+                    switch(csm.runFrame())
+                    {
+                        case CharacterSelectMenu.BACK:
+                            return BACK;
+                        case CharacterSelectMenu.NOTHING:
+                            break;
+                        default:
+                            selectedUnit = csm.getSelectedUnit();
+                            cst1to2();
+                            break;
+                    }
                     break;
                 case 2:
                     csm.runFrame();
@@ -92,7 +105,10 @@ public class SkillsScene extends Scene
         if(active)
         {
             csm.animate();
-            skillMenu.animate();
+            if(skillsMenu != null)
+                skillsMenu.animate();
+            if(srsm != null)
+                srsm.animate();
         }
     }
     
@@ -105,7 +121,10 @@ public class SkillsScene extends Scene
         if(visible)
         {
             csm.draw(g);
-            skillMenu.draw(g);
+            if(skillsMenu != null)
+                skillsMenu.draw(g);
+            if(srsm != null)
+                srsm.draw(g);
         }
     }
     
@@ -113,11 +132,22 @@ public class SkillsScene extends Scene
     
     public void start(PlayerData pd)
     {
+        super.start();
         data = pd;
         
         controlState = 1;
         csm = new CharacterSelectMenu(data.getUnitList());
         csm.start();
+    }
+    
+    public void cst1to2()
+    {
+        csm.end();
+        skillsMenu = new SkillsMenu(selectedUnit.getSkills());
+        skillsMenu.start();
+        
+        srsm = new SkillsReserveScrollingMenu(selectedUnit.getSkillsReserve(), 5);
+        skillsMenu.start();
     }
     
     

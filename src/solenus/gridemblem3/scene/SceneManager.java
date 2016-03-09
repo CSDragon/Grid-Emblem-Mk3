@@ -133,7 +133,7 @@ public class SceneManager extends Scene
             }
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**

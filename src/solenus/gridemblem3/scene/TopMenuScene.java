@@ -221,7 +221,7 @@ public class TopMenuScene extends Scene
             
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**

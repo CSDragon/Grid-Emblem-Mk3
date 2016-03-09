@@ -518,7 +518,7 @@ public class MapScene extends Scene
             }  
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**

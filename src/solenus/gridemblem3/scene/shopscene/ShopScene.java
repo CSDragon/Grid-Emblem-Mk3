@@ -21,9 +21,6 @@ import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
  */
 public class ShopScene extends Scene
 {
-    public static final int BACK = -2;
-    public static final int NOTHING = -1;
-    
     private PlayerData data;
     private CharacterSelectMenu csm;
     private ShopMenu shopMenu;

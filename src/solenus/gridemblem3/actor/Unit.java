@@ -107,6 +107,7 @@ public class Unit extends Actor
     private ArrayList<Weapon> weaponInventory;
     private ArrayList<Usable> inventory;
     private ArrayList<String> skills;
+    private ArrayList<String> skillsReserve;
     
     
     //<editor-fold desc="constructors">
@@ -121,6 +122,7 @@ public class Unit extends Actor
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
+        skillsReserve = new ArrayList<>();
     }
 
     //Test constructor
@@ -137,6 +139,7 @@ public class Unit extends Actor
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
+        skillsReserve = new ArrayList<>();
         
         
         hasMoved = false;
@@ -199,7 +202,8 @@ public class Unit extends Actor
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
-        
+        skillsReserve = new ArrayList<>();
+
         curHP = (int)hp;
         
         int numWeapons = Integer.parseInt(in.readLine().substring(13));
@@ -533,6 +537,54 @@ public class Unit extends Actor
     {
         return skills.remove(s);
     }
+    
+    /**
+     * Puts a skill in your skill bank, so you can add it back later.
+     * @param s The skill to be put in the bank.
+     * @return If it worked.
+     */
+    public boolean addSkillToReserve(String s)
+    {
+        return skillsReserve.add(s);
+    }
+    
+    /**
+     * Removes a skill from your skill bank.
+     * @param s The skill to remove
+     * @return If it worked.
+     */
+    public boolean removeSkillFromReserve(String s)
+    {
+        return skillsReserve.remove(s);
+    }
+    
+    /**
+     * Moves a skill from the skill bank to the skills list.
+     * @param s The skill to move
+     * @return If it worked
+     */
+    public boolean moveSkillToReserve(String s)
+    {
+        if(removeSkill(s))
+            return addSkillToReserve(s);
+        return false;
+    }
+    
+    /**
+     * Moves a skill from this unit's skills list to the reserve.
+     * @param s The skill to move
+     * @return If it worked.
+     */
+    public boolean moveSkillFromReserve(String s)
+    {
+        if(skillsReserve.contains(s))
+        {
+            if(addSkill(s))
+                return removeSkillFromReserve(s);
+        }
+        return false;
+    }
+    
     
     //</editor-fold>
     
@@ -1015,6 +1067,11 @@ public class Unit extends Actor
     public ArrayList<String> getSkills()
     {
         return skills;
+    }
+    
+    public ArrayList<String> getSkillsReserve()
+    {
+        return skillsReserve;
     }
     
     /**

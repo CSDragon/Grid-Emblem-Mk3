@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.render.Rendering;
@@ -112,5 +113,16 @@ public class GenericMenu extends Menu
             }
            
         }
+    }
+    
+        
+    /**
+     * Takes an arrayList of strings and makes it an array 
+     * @param strings The arrayList
+     * @return The array of strings.
+     */
+    public static String[] arrayListToString(ArrayList<String> strings)
+    {
+        return strings.toArray(new String[strings.size()]);
     }
 }
