@@ -71,7 +71,7 @@ public class CharacterSelectMenu extends GenericScrollingMenu
      */
     public Unit getUnitAt(int i)
     {
-        if(convoyMode && i == units.size())
+        if((convoyMode && i == units.size()) || i >= units.size())
             return null;
         return units.get(i);
     }

@@ -63,3 +63,5 @@ Heal 10
 Skills
 Num Skills: 0
 
+Num Skills Bank: 0
+

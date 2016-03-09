@@ -54,5 +54,10 @@ Num Effects: 0
 Num Items: 0
 
 Skills
-Num Skills: 0
+Num Skills: 3
+Demacia
+Judgement
+Spin2Win
+
+Num Skills Bank: 0
 

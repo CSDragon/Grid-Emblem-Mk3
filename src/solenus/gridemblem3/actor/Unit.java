@@ -221,10 +221,13 @@ public class Unit extends Actor
         //Read in skills.
         in.readLine();
         int numSkills = Integer.parseInt(in.readLine().substring(12));
-        
         for(int i = 0; i<numSkills; i++)
             skills.add(in.readLine());
+        in.readLine();
         
+        int numSkillsReserve = Integer.parseInt(in.readLine().substring(17));
+        for(int i = 0; i<numSkillsReserve; i++)
+            skillsReserve.add(in.readLine());
         in.readLine();
     }
     
@@ -318,7 +321,13 @@ public class Unit extends Actor
         {
             bw.write(s); bw.newLine();
         }
+        bw.newLine();
         
+        bw.write("Num Skill Bank: "+skillsReserve.size()); bw.newLine();
+        for(String s: skillsReserve)
+        {
+            bw.write(s); bw.newLine();
+        }
         bw.newLine();
     }
     

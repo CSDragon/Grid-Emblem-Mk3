@@ -115,7 +115,6 @@ public class GenericMenu extends Menu
         }
     }
     
-        
     /**
      * Takes an arrayList of strings and makes it an array 
      * @param strings The arrayList
@@ -124,5 +123,31 @@ public class GenericMenu extends Menu
     public static String[] arrayListToString(ArrayList<String> strings)
     {
         return strings.toArray(new String[strings.size()]);
+    }
+    
+    /**
+     * Gets the action in actions at location i.
+     * @param i The location to look
+     * @return The action at that location.
+     */
+    public String getActionAt(int i)
+    {
+        try
+        {
+            return actions[i];
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
+    }
+    
+    /**
+     * Gets the action at the cursorLoc
+     * @return The action at that location
+     */
+    public String getSelectedAction()
+    {
+        return getActionAt(cursorLoc);
     }
 }

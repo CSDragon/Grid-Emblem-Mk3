@@ -6,6 +6,7 @@
 package solenus.gridemblem3.ui;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 /**
  *
@@ -73,6 +74,27 @@ public abstract class UI
     public void setVisible(boolean b)
     {
         visible = b;
+    }
+    
+    /**
+     * Sets location relative the the center of the screen.
+     * @param x The xLoc we're setting it at.
+     * @param y The yLoc we're setting it at.
+     */
+    public void setLocation(int x, int y)
+    {
+        xLoc = x;
+        yLoc = y;
+    }
+    
+    /**
+     * Sets location reletive to the center of the screen.
+     * @param p the (x,y) coord we're setting it at.
+     */
+    public void setLocation(Point p)
+    {
+        xLoc = p.x;
+        yLoc = p.y;
     }
     
     

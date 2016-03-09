@@ -83,12 +83,13 @@ public class SkillsScene extends Scene
                             break;
                         default:
                             selectedUnit = csm.getSelectedUnit();
-                            cst1to2();
+                            if(selectedUnit != null)
+                                cst1to2();
                             break;
                     }
                     break;
                 case 2:
-                    csm.runFrame();
+                    skillsMenu.runFrame();
                     break;
             }
         }
@@ -142,12 +143,16 @@ public class SkillsScene extends Scene
     
     public void cst1to2()
     {
+        controlState = 2;
         csm.end();
+
         skillsMenu = new SkillsMenu(selectedUnit.getSkills());
         skillsMenu.start();
+        skillsMenu.setLocation(-150, 100);
         
         srsm = new SkillsReserveScrollingMenu(selectedUnit.getSkillsReserve(), 5);
-        skillsMenu.start();
+        srsm.start();
+        srsm.setLocation(150, -100);
     }
     
     

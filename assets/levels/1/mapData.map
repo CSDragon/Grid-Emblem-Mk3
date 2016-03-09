@@ -85,63 +85,7 @@ Num Items: 0
 Skills
 Num Skills: 0
 
-Name: null
-Class: null
-Team: 1
-Level: 0
-XP: 80
-HP: 20.0
-STR: 0.0
-MAG: 7.0
-Skill: 10.0
-SPD: 0.0
-Luck: 0.0
-DEF: 5.0
-RES: 3.0
-Move: 6
-HPUP: 0.0
-STRUP: 0.0
-MAGUP: 0.0
-SkillUP: 0.0
-SPDUP: 0.0
-LuckUP: 0.0
-DEFUP: 0.0
-RESUP: 0.0
-Move Type: 1
-Armor Type: 0
-Sword Mastery: 20
-Axe Mastery: 20
-Lance Mastery: 20
-Bow Mastery: 20
-Dagger Mastery: 20
-Fire Mastery: 20
-Wind Mastery: 20
-Lightning Mastery: 20
-Light Mastery: 20
-Dark Mastery: 20
-Staff Mastery: 20
-
-Num Weapons: 1
-
-Name: Light
-Value: 0
-Weapon Type: 8
-Strength or Magic: 0
-Mastery Requirement: B
-Damage: 5
-Max Uses: 10
-Cur Uses: 10
-Hit: 200
-Weight: 0
-Crit: 0
-Min Range: 1
-Max Range: 2
-Num Effects: 0
-
-Num Items: 0
-
-Skills
-Num Skills: 0
+Num Skills Bank: 0
 
 Name: null
 Class: null
@@ -201,63 +145,7 @@ Num Items: 0
 Skills
 Num Skills: 0
 
-Name: null
-Class: null
-Team: 1
-Level: 0
-XP: 80
-HP: 20.0
-STR: 0.0
-MAG: 7.0
-Skill: 10.0
-SPD: 0.0
-Luck: 0.0
-DEF: 5.0
-RES: 3.0
-Move: 6
-HPUP: 0.0
-STRUP: 0.0
-MAGUP: 0.0
-SkillUP: 0.0
-SPDUP: 0.0
-LuckUP: 0.0
-DEFUP: 0.0
-RESUP: 0.0
-Move Type: 1
-Armor Type: 0
-Sword Mastery: 20
-Axe Mastery: 20
-Lance Mastery: 20
-Bow Mastery: 20
-Dagger Mastery: 20
-Fire Mastery: 20
-Wind Mastery: 20
-Lightning Mastery: 20
-Light Mastery: 20
-Dark Mastery: 20
-Staff Mastery: 20
-
-Num Weapons: 1
-
-Name: Light
-Value: 0
-Weapon Type: 8
-Strength or Magic: 0
-Mastery Requirement: B
-Damage: 5
-Max Uses: 10
-Cur Uses: 10
-Hit: 200
-Weight: 0
-Crit: 0
-Min Range: 1
-Max Range: 2
-Num Effects: 0
-
-Num Items: 0
-
-Skills
-Num Skills: 0
+Num Skills Bank: 0
 
 Name: null
 Class: null
@@ -317,63 +205,7 @@ Num Items: 0
 Skills
 Num Skills: 0
 
-Name: null
-Class: null
-Team: 1
-Level: 0
-XP: 80
-HP: 20.0
-STR: 0.0
-MAG: 7.0
-Skill: 10.0
-SPD: 0.0
-Luck: 0.0
-DEF: 5.0
-RES: 3.0
-Move: 6
-HPUP: 0.0
-STRUP: 0.0
-MAGUP: 0.0
-SkillUP: 0.0
-SPDUP: 0.0
-LuckUP: 0.0
-DEFUP: 0.0
-RESUP: 0.0
-Move Type: 1
-Armor Type: 0
-Sword Mastery: 20
-Axe Mastery: 20
-Lance Mastery: 20
-Bow Mastery: 20
-Dagger Mastery: 20
-Fire Mastery: 20
-Wind Mastery: 20
-Lightning Mastery: 20
-Light Mastery: 20
-Dark Mastery: 20
-Staff Mastery: 20
-
-Num Weapons: 1
-
-Name: Light
-Value: 0
-Weapon Type: 8
-Strength or Magic: 0
-Mastery Requirement: B
-Damage: 5
-Max Uses: 10
-Cur Uses: 10
-Hit: 200
-Weight: 0
-Crit: 0
-Min Range: 1
-Max Range: 2
-Num Effects: 0
-
-Num Items: 0
-
-Skills
-Num Skills: 0
+Num Skills Bank: 0
 
 Name: null
 Class: null
@@ -433,6 +265,8 @@ Num Items: 0
 Skills
 Num Skills: 0
 
+Num Skills Bank: 0
+
 Name: null
 Class: null
 Team: 1
@@ -490,6 +324,188 @@ Num Items: 0
 
 Skills
 Num Skills: 0
+
+Num Skills Bank: 0
+
+Name: null
+Class: null
+Team: 1
+Level: 0
+XP: 80
+HP: 20.0
+STR: 0.0
+MAG: 7.0
+Skill: 10.0
+SPD: 0.0
+Luck: 0.0
+DEF: 5.0
+RES: 3.0
+Move: 6
+HPUP: 0.0
+STRUP: 0.0
+MAGUP: 0.0
+SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
+DEFUP: 0.0
+RESUP: 0.0
+Move Type: 1
+Armor Type: 0
+Sword Mastery: 20
+Axe Mastery: 20
+Lance Mastery: 20
+Bow Mastery: 20
+Dagger Mastery: 20
+Fire Mastery: 20
+Wind Mastery: 20
+Lightning Mastery: 20
+Light Mastery: 20
+Dark Mastery: 20
+Staff Mastery: 20
+
+Num Weapons: 1
+
+Name: Light
+Value: 0
+Weapon Type: 8
+Strength or Magic: 0
+Mastery Requirement: B
+Damage: 5
+Max Uses: 10
+Cur Uses: 10
+Hit: 200
+Weight: 0
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+
+Num Skills Bank: 0
+
+Name: null
+Class: null
+Team: 1
+Level: 0
+XP: 80
+HP: 20.0
+STR: 0.0
+MAG: 7.0
+Skill: 10.0
+SPD: 0.0
+Luck: 0.0
+DEF: 5.0
+RES: 3.0
+Move: 6
+HPUP: 0.0
+STRUP: 0.0
+MAGUP: 0.0
+SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
+DEFUP: 0.0
+RESUP: 0.0
+Move Type: 1
+Armor Type: 0
+Sword Mastery: 20
+Axe Mastery: 20
+Lance Mastery: 20
+Bow Mastery: 20
+Dagger Mastery: 20
+Fire Mastery: 20
+Wind Mastery: 20
+Lightning Mastery: 20
+Light Mastery: 20
+Dark Mastery: 20
+Staff Mastery: 20
+
+Num Weapons: 1
+
+Name: Light
+Value: 0
+Weapon Type: 8
+Strength or Magic: 0
+Mastery Requirement: B
+Damage: 5
+Max Uses: 10
+Cur Uses: 10
+Hit: 200
+Weight: 0
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+
+Num Skills Bank: 0
+
+Name: null
+Class: null
+Team: 1
+Level: 0
+XP: 80
+HP: 20.0
+STR: 0.0
+MAG: 7.0
+Skill: 10.0
+SPD: 0.0
+Luck: 0.0
+DEF: 5.0
+RES: 3.0
+Move: 6
+HPUP: 0.0
+STRUP: 0.0
+MAGUP: 0.0
+SkillUP: 0.0
+SPDUP: 0.0
+LuckUP: 0.0
+DEFUP: 0.0
+RESUP: 0.0
+Move Type: 1
+Armor Type: 0
+Sword Mastery: 20
+Axe Mastery: 20
+Lance Mastery: 20
+Bow Mastery: 20
+Dagger Mastery: 20
+Fire Mastery: 20
+Wind Mastery: 20
+Lightning Mastery: 20
+Light Mastery: 20
+Dark Mastery: 20
+Staff Mastery: 20
+
+Num Weapons: 1
+
+Name: Light
+Value: 0
+Weapon Type: 8
+Strength or Magic: 0
+Mastery Requirement: B
+Damage: 5
+Max Uses: 10
+Cur Uses: 10
+Hit: 200
+Weight: 0
+Crit: 0
+Min Range: 1
+Max Range: 2
+Num Effects: 0
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+
+Num Skills Bank: 0
 
 Unit Starting Locations
 6, 7

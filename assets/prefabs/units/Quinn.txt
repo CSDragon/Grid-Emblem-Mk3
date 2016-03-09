@@ -71,3 +71,5 @@ Num Items: 0
 Skills
 Num Skills: 0
 
+Num Skills Bank: 0
+

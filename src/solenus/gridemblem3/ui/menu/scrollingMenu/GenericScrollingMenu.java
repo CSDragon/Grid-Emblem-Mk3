@@ -39,7 +39,7 @@ public abstract class GenericScrollingMenu extends GenericMenu
         super(choices);
         numChoicesVisible = ncv;
         if(numChoicesVisible > choices.length)
-            numChoicesVisible = choices.length;
+            numCommands = numChoicesVisible;
     }
     
     public GenericScrollingMenu(String[] choices, int ncv, int x, int y)
@@ -47,7 +47,8 @@ public abstract class GenericScrollingMenu extends GenericMenu
         super(choices, x, y);
         numChoicesVisible = ncv;
         if(numChoicesVisible > choices.length)
-            numChoicesVisible = choices.length;
+            numCommands = numChoicesVisible;
+
     }
     
     /**

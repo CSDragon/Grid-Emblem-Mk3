@@ -89,3 +89,6 @@ Num Skills: 2
 Heal 10
 Heal 10
 
+Num Skills Bank: 2
+Heal 3
+Heal 3
