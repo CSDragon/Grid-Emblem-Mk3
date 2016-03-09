@@ -27,6 +27,7 @@ public class Unit extends Actor
     //inventory limits
     public static final int WEAPON_LIMIT = 5;
     public static final int INVENTORY_LIMIT = 5;
+    public static final int SKILL_LIMIT = 5;
     
     //transport values
     public static final int ON_FOOT = 1;
@@ -508,6 +509,33 @@ public class Unit extends Actor
     
     //</editor-fold>
     
+    //<editor-fold desc="skills">
+    
+    /**
+     * Adds a skill to the skills list if the skills list is not full
+     * @param s The skill to add.
+     * @return Returns if it was added successfully.
+     */
+    public boolean addSkill(String s)
+    {
+        if(skills.size() < SKILL_LIMIT)
+            return(skills.add(s));
+        
+        return false;
+    }
+    
+    /**
+     * Removes a Skill from the skills list.
+     * @param s The skill to remove
+     * @return Whether or not it worked.
+     */
+    public boolean removeSkill(String s)
+    {
+        return skills.remove(s);
+    }
+    
+    //</editor-fold>
+    
     //<editor-fold desc="stat mechanics">
     
     /**
@@ -569,14 +597,6 @@ public class Unit extends Actor
     public void beginTurn()
     {
         hasMoved = false;
-    }
-    
-    /**
-     * Signals that the unit has finished moving
-     */
-    public void endMovement()
-    {
-        hasMoved = true;
     }
     
     /**
@@ -955,6 +975,16 @@ public class Unit extends Actor
     }
     
     /**
+     * Signals that the unit has finished moving
+     * @param b IF it has moved or not.
+     */
+    public void setHasMoved(boolean b)
+    {
+        hasMoved = b;
+    }
+    
+    
+    /**
      * Gets the equipped weapon. Returns null if no weapon is equipped 
      * @return The first item in weaponInventory. if it's an equpiable weapon.
      */
@@ -980,6 +1010,11 @@ public class Unit extends Actor
     public ArrayList<Usable> getInventory()
     {
         return inventory;
+    }
+    
+    public ArrayList<String> getSkills()
+    {
+        return skills;
     }
     
     /**

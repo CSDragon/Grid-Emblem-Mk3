@@ -798,9 +798,20 @@ public class MapScene extends Scene
         //player locations
         if(controlState == 14 || controlState == 15)
         {
-            g.setColor(new Color(63,63,225,127));
+            Color normal = new Color(63,63,225,127);
+            Color selected = new Color(63,255,63);
+            g.setColor(normal);
             for(Point p : playerStartingLocations)
-                drawRangeSquare(g, p);
+            {
+                if(this.getUnitAtPoint(p) == null || this.getUnitAtPoint(p) != selectedUnit)
+                    drawRangeSquare(g, p);
+                else
+                {
+                    g.setColor(selected);
+                    drawRangeSquare(g, p);
+                    g.setColor(normal);
+                }
+            }
         }
     }
     
@@ -1071,7 +1082,7 @@ public class MapScene extends Scene
         drawAllyMoveRange = true;
         getAllyMoveRange(null);
         controlState = 1;
-        selectedUnit.endMovement();
+        selectedUnit.setHasMoved(true);
         selectedUnit = null;
         mvArrow.end();
         unitActionMenu.end();
@@ -1201,7 +1212,7 @@ public class MapScene extends Scene
                 cursor.setVisible(true);
                 cursor.moveInstantly(selectedUnit.getCoord());
                 cursor.getSprite().sendTrigger("deactivate");
-                selectedUnit.endMovement();
+                selectedUnit.setHasMoved(true);
                 fightUI.end();
                 break;
         }
@@ -1274,7 +1285,7 @@ public class MapScene extends Scene
         cursor.setVisible(true);
         cursor.moveInstantly(selectedUnit.getCoord());
         cursor.getSprite().sendTrigger("deactivate");
-        selectedUnit.endMovement();
+        selectedUnit.setHasMoved(true);
         fightUI.end();
         xp.end();
     }
