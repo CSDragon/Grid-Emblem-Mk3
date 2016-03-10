@@ -7,9 +7,7 @@ package solenus.gridemblem3.scene.infoscene;
 
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
-import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.scene.Scene;
-import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 
 /**
  *
@@ -17,9 +15,9 @@ import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
  */
 public class InfoScene extends Scene
 {
-    private CharacterSelectMenu csm;
-    private PlayerData data;
-    
+    private int mapNum;
+    private ArrayList<InfoEvent> events;
+
     public InfoScene()
     {
         super();
@@ -39,12 +37,6 @@ public class InfoScene extends Scene
         {
             switch(controlState)
             {
-                /*
-                STATES:
-                    1) Character Select Menu
-                */
-                case 1:
-                    csm.respondControls(im);
             }
         }
     }
@@ -61,16 +53,6 @@ public class InfoScene extends Scene
         {
             switch(controlState)
             {
-                /*
-                STATES:
-                    1) Character Select Menu
-                */
-                case 1:
-                    switch(csm.runFrame())
-                    {
-                        case CharacterSelectMenu.BACK:
-                            return InfoScene.BACK;
-                    }
             }
         }
         
@@ -86,7 +68,6 @@ public class InfoScene extends Scene
         //always check this
         if(active)
         {
-            csm.animate();
         }
     }
     
@@ -98,7 +79,6 @@ public class InfoScene extends Scene
     {
         if(visible)
         {
-            csm.draw(g);
         }
     }
 
@@ -106,15 +86,13 @@ public class InfoScene extends Scene
     
     /**
      * Starts the scene up.
-     * @param pd The save file.
+     * @param mapNum the map we're loading the events for.
      */
-    public void start(PlayerData pd)
+    public void start(int mapNum)
     {
         super.start();
-        data = pd;
-        
         controlState = 1;
-        csm = new CharacterSelectMenu(data.getUnitList());
-        csm.start();
+        
+        this.mapNum = mapNum;
     }
 }
