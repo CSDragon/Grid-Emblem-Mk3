@@ -58,7 +58,7 @@ TODOs
 	
 Current TODO Stack:
 	Prebattle/HQ functions
-		Shop
+		Info
 	
 		
 

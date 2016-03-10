@@ -15,12 +15,23 @@ import solenus.gridemblem3.ui.menu.GenericMenu;
  */
 class SkillsMenu extends GenericMenu
 {
-    public SkillsMenu(ArrayList<String> skills)
+    private Unit selectedUnit;
+    
+    public SkillsMenu(Unit u)
     {
         //create the menu
-        super(arrayListToString(skills));
+        super(arrayListToString(u.getSkills()));
+        selectedUnit = u;
         
         //Make sure it's exactly 5
         numCommands = Unit.SKILL_LIMIT;
+    }
+    
+    /**
+     * Refreshes the skill list.
+     */
+    public void refresh()
+    {
+        actions = arrayListToString(selectedUnit.getSkills());
     }
 }

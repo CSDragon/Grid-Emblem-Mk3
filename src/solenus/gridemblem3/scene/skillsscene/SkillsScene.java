@@ -52,7 +52,17 @@ public class SkillsScene extends Scene
                     csm.respondControls(im);
                     break;
                 case 2:
-                    skillsMenu.respondControls(im);
+                    if(im.getLeft() == 1|| im.getRight() == 1)
+                        controlState = 3;
+                    else
+                        skillsMenu.respondControls(im);
+                    break;
+                    
+                case 3:
+                    if(im.getLeft() == 1 || im.getRight() == 1)
+                        controlState = 2;
+                    else
+                        srsm.respondControls(im);
                     break;
             }
         }
@@ -73,6 +83,7 @@ public class SkillsScene extends Scene
                 STATES:
                     1) Character select menu.
                     2) Skill Menu
+                    3) Skill bank menu
                 */
                 case 1:
                     switch(csm.runFrame())
@@ -89,7 +100,47 @@ public class SkillsScene extends Scene
                     }
                     break;
                 case 2:
-                    skillsMenu.runFrame();
+                    switch(skillsMenu.runFrame())
+                    {
+                        case SkillsMenu.BACK:
+                            cstXto1();
+                            break;
+                            
+                        case SkillsMenu.NOTHING:
+                            break;
+                            
+                        default:
+                            if(skillsMenu.getSelectedAction() != null)
+                            {
+                                selectedUnit.moveSkillToReserve(skillsMenu.getSelectedAction());
+                                skillsMenu.refresh();
+                                srsm.refresh();
+                            }
+                            break;
+                    }
+                    break;
+                    
+                case 3:
+                    switch(srsm.runFrame())
+                    {
+                        case SkillsReserveScrollingMenu.BACK:
+                            cstXto1();
+                            break;
+                            
+                        case SkillsReserveScrollingMenu.NOTHING:
+                            break;
+                            
+                        default:
+                            if(srsm.getSelectedAction() != null)
+                            {
+                                selectedUnit.moveSkillFromReserve(srsm.getSelectedAction());
+                                skillsMenu.refresh();
+                                srsm.refresh();
+                            }
+                            break;
+                            
+                            
+                    }
                     break;
             }
         }
@@ -146,15 +197,22 @@ public class SkillsScene extends Scene
         controlState = 2;
         csm.end();
 
-        skillsMenu = new SkillsMenu(selectedUnit.getSkills());
+        skillsMenu = new SkillsMenu(selectedUnit);
         skillsMenu.start();
         skillsMenu.setLocation(-150, 100);
         
-        srsm = new SkillsReserveScrollingMenu(selectedUnit.getSkillsReserve(), 5);
+        srsm = new SkillsReserveScrollingMenu(selectedUnit, 5);
         srsm.start();
         srsm.setLocation(150, -100);
     }
     
-    
+    public void cstXto1()
+    {
+        controlState = 1;
+        skillsMenu.end();
+        srsm.end();
+        
+        csm.resume();
+    }
     
 }

@@ -5,7 +5,7 @@
  */
 package solenus.gridemblem3.scene.skillsscene;
 
-import java.util.ArrayList;
+import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
 
 /**
@@ -14,10 +14,25 @@ import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
  */
 public class SkillsReserveScrollingMenu extends GenericScrollingMenu
 {
+    private Unit selectedUnit;
 
-    public SkillsReserveScrollingMenu(ArrayList<String> skills, int ncv) 
+    public SkillsReserveScrollingMenu(Unit u, int ncv) 
     {
-        super(arrayListToString(skills), ncv);
+        super(arrayListToString(u.getSkillsReserve()), ncv);
+        selectedUnit = u;
+    }
+    
+    /**
+     * Refreshes the skill list
+     */
+    public void refresh()
+    {
+        actions = arrayListToString(selectedUnit.getSkillsReserve());
+        
+        numCommands = actions.length;
+        
+        if(numCommands < numChoicesVisible)
+            numCommands = numChoicesVisible;
     }
     
 }

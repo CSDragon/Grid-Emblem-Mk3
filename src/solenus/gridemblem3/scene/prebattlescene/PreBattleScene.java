@@ -13,6 +13,7 @@ import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.scene.gamemap.Map;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
+import solenus.gridemblem3.scene.skillsscene.SkillsScene;
 import solenus.gridemblem3.ui.menu.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
 
@@ -40,6 +41,7 @@ public class PreBattleScene extends Scene
     private InventoryScene invenScene;
     private SaveMenu saveMenu;
     private ChooseUnitsChecklistMenu cucm;
+    private SkillsScene skillsScene; 
     
     public PreBattleScene(Scene parent)
     {
@@ -48,6 +50,7 @@ public class PreBattleScene extends Scene
         invenScene = new InventoryScene();
         saveMenu = new SaveMenu();
         cucm = new ChooseUnitsChecklistMenu();
+        skillsScene = new SkillsScene();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -67,6 +70,7 @@ public class PreBattleScene extends Scene
                 2) Inventory Scene
                 3) Selecting Units
                 4) Save menu
+                5) Skills Scene
             */
             switch(getControlState())
             {
@@ -81,6 +85,9 @@ public class PreBattleScene extends Scene
                     break;
                 case 4:
                     saveMenu.respondControls(im);
+                    break;
+                case 5:
+                    skillsScene.respondControls(im);
                     break;
             }
         }
@@ -122,6 +129,9 @@ public class PreBattleScene extends Scene
                             return START;
                         case PreBattleMenu.RETURNTOBASE:
                             return RETURNTOBASE;
+                        case PreBattleMenu.SKILLS:
+                            cst1to5();
+                            break;
                     }
                     break;
                 case 2:
@@ -146,8 +156,17 @@ public class PreBattleScene extends Scene
                     {
                         case SaveMenu.BACK:
                             cst4to1();
+                            break;
                     }
                     break;
+                    
+                case 5:
+                    switch(skillsScene.runFrame())
+                    {
+                        case SkillsScene.BACK:
+                            cst5to1();
+                            break;
+                    }
             }
         }
         
@@ -164,6 +183,7 @@ public class PreBattleScene extends Scene
         {
             pbm.animate();
             invenScene.animate();
+            skillsScene.animate();
         }
     }
     
@@ -179,6 +199,7 @@ public class PreBattleScene extends Scene
             invenScene.draw(g);
             saveMenu.draw(g);
             cucm.draw(g);
+            skillsScene.draw(g);
         }
     }
     
@@ -228,6 +249,13 @@ public class PreBattleScene extends Scene
         saveMenu.start();
     }
     
+    public void cst1to5()
+    {
+        controlState = 5;
+        pbm.end();
+        skillsScene.start(data);
+    }
+    
     public void cst2to1()
     {
         controlState = 1;
@@ -246,6 +274,13 @@ public class PreBattleScene extends Scene
     {
         controlState = 1;
         saveMenu.end();
+        pbm.resume();
+    }
+    
+    public void cst5to1()
+    {
+        controlState = 1;
+        skillsScene.end();
         pbm.resume();
     }
     
