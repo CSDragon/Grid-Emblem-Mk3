@@ -36,7 +36,8 @@ public class InfoEvent
         int numItems = Integer.parseInt(in.readLine().substring(10));
         for(int i = 0; i<numItems; i++)
             itemRewards.add(Usable.loadFromPrefab(in.readLine()));
-        
+      
+        in.readLine();
     }
     
 }

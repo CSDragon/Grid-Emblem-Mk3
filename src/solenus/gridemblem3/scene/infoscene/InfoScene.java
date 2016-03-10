@@ -6,6 +6,10 @@
 package solenus.gridemblem3.scene.infoscene;
 
 import java.awt.Graphics2D;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.scene.Scene;
 
@@ -94,5 +98,25 @@ public class InfoScene extends Scene
         controlState = 1;
         
         this.mapNum = mapNum;
+        events = new ArrayList<>();
+        
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+mapNum+"/events.txt"));
+            
+            int numEvents = Integer.parseInt(in.readLine().substring(11));
+            in.readLine();
+            
+            for(int i = 0; i<numEvents; i++)
+                events.add(new InfoEvent(in));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Loading Events for map "+ mapNum +"didn't work.");
+            System.exit(-1);
+        }
+        
+        int i = 0;
     }
 }
