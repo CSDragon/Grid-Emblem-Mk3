@@ -1,0 +1,17 @@
+NumCharacters: 2
+generic
+test
+
+Background: test
+
+Pick which character should be on the left, and on the right. -1 if you want none.
+Left: 0
+Right: 1
+
+Key: LS = Left Speak, RS = Right Speak, NT = No Speaker (narration), LT = Left Transition, RT = Right Transition, LT = Left Animate, RT = Right Animate.
+LS: Your Highness! It's been quite a long time.
+RS: Blah!
+LS: BLAH!
+LA: happy
+RS: Bluh
+LS: Bluuuuuh
