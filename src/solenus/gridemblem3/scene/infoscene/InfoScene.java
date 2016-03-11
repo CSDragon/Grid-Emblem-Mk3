@@ -21,7 +21,8 @@ public class InfoScene extends Scene
 {
     private int mapNum;
     private ArrayList<InfoEvent> events;
-
+    private InfoMenu infoMenu;
+    
     public InfoScene()
     {
         super();
@@ -41,6 +42,12 @@ public class InfoScene extends Scene
         {
             switch(controlState)
             {
+                /*
+                STATES
+                    1) Info Menu
+                */
+                case 1:
+                    infoMenu.respondControls(im);
             }
         }
     }
@@ -57,6 +64,12 @@ public class InfoScene extends Scene
         {
             switch(controlState)
             {
+                /*
+                STATES
+                    1) Info Menu
+                */
+                case 1:
+                    infoMenu.runFrame();
             }
         }
         
@@ -72,6 +85,7 @@ public class InfoScene extends Scene
         //always check this
         if(active)
         {
+            infoMenu.animate();
         }
     }
     
@@ -83,6 +97,7 @@ public class InfoScene extends Scene
     {
         if(visible)
         {
+            infoMenu.draw(g);
         }
     }
 
@@ -117,6 +132,7 @@ public class InfoScene extends Scene
             System.exit(-1);
         }
         
-        int i = 0;
+        infoMenu = new InfoMenu(events);
+        infoMenu.start();
     }
 }
