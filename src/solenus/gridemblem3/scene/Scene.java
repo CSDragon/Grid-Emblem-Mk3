@@ -85,7 +85,7 @@ public abstract class Scene
         {
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**

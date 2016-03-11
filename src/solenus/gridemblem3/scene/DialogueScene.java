@@ -123,7 +123,7 @@ public class DialogueScene extends Scene
                     break;
                 case 2:
                     if(curCommand == commands.size()-1)
-                        return 1;
+                        return BACK;
                     nextLine();
                     break;
                 case 3:
@@ -186,7 +186,7 @@ public class DialogueScene extends Scene
             
     //</editor-fold>
     
-    public void start(String dialog)
+    public void start(String dialogFile)
     {
         super.start();
         controlState = 2;
@@ -215,7 +215,7 @@ public class DialogueScene extends Scene
         
         try
         {
-            BufferedReader in = new BufferedReader(new FileReader("assets/dialog/"+dialog+"Script.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("assets/dialog/"+dialogFile+".txt"));
             String read;
             
             numSpeakers = Integer.decode(in.readLine().substring(15));

@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.scene.DialogueScene;
 import solenus.gridemblem3.scene.Scene;
 
 /**
@@ -22,10 +23,15 @@ public class InfoScene extends Scene
     private int mapNum;
     private ArrayList<InfoEvent> events;
     private InfoMenu infoMenu;
+    private DialogueScene dialogueScene;
+    
+    private int activeEvent;
     
     public InfoScene()
     {
         super();
+        
+        dialogueScene = new DialogueScene(this);
     }
     
     // <editor-fold desc="Scene control methods">
@@ -48,6 +54,11 @@ public class InfoScene extends Scene
                 */
                 case 1:
                     infoMenu.respondControls(im);
+                    break;
+                    
+                case 2:
+                    dialogueScene.respondControls(im);
+                    break;
             }
         }
     }
@@ -69,11 +80,31 @@ public class InfoScene extends Scene
                     1) Info Menu
                 */
                 case 1:
-                    infoMenu.runFrame();
+                    switch(infoMenu.runFrame())
+                    {
+                        case InfoMenu.BACK:
+                            return BACK;
+                        
+                        case InfoMenu.NOTHING:
+                            break;
+                        
+                        default:
+                            activeEvent = infoMenu.getCursorLoc();
+                            cst1to2();
+                            break;
+                    }
+                
+                case 2:
+                    switch(dialogueScene.runFrame())
+                    {
+                        case Scene.BACK:
+                            cst2to1();
+                            break;
+                    }
             }
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**
@@ -86,6 +117,7 @@ public class InfoScene extends Scene
         if(active)
         {
             infoMenu.animate();
+            dialogueScene.animate();
         }
     }
     
@@ -98,6 +130,7 @@ public class InfoScene extends Scene
         if(visible)
         {
             infoMenu.draw(g);
+            dialogueScene.draw(g);
         }
     }
 
@@ -134,5 +167,20 @@ public class InfoScene extends Scene
         
         infoMenu = new InfoMenu(events);
         infoMenu.start();
+    }
+    
+    public void cst1to2()
+    {
+        controlState = 2;
+        infoMenu.end();
+        dialogueScene.start(events.get((activeEvent)).getFileName());
+    }
+    
+    public void cst2to1()
+    {
+        controlState = 1;
+        
+        dialogueScene.end();
+        infoMenu.resume();
     }
 }
