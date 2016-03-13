@@ -287,7 +287,7 @@ public class HQScene extends Scene
     {
         controlState = 6;
         hqMenu.end();
-        infoScene.start(playerArmy.getMapNum());
+        infoScene.start(playerArmy);
     }
     
     public void cst1to0()

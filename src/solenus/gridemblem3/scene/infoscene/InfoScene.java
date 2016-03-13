@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.scene.DialogueScene;
 import solenus.gridemblem3.scene.Scene;
 
@@ -20,7 +21,7 @@ import solenus.gridemblem3.scene.Scene;
  */
 public class InfoScene extends Scene
 {
-    private int mapNum;
+    private PlayerData data;
     private ArrayList<InfoEvent> events;
     private InfoMenu infoMenu;
     private DialogueScene dialogueScene;
@@ -104,9 +105,19 @@ public class InfoScene extends Scene
                     switch(dialogueScene.runFrame())
                     {
                         case Scene.BACK:
-                            cst2to1();
+                            controlState = 3;
                             break;
                     }
+                    break;
+                case 3:
+                    data.getWeaponConvoy().addAll(events.get(activeEvent).getWeaponRewards());
+                    data.getItemConvoy().addAll(events.get(activeEvent).getItemRewards());
+                    cst3to4();
+                    break;
+                case 4:
+                    //TODO
+                    controlState = 1;
+                    break;
             }
         }
         
@@ -144,19 +155,19 @@ public class InfoScene extends Scene
     
     /**
      * Starts the scene up.
-     * @param mapNum the map we're loading the events for.
+     * @param pd the player's save file
      */
-    public void start(int mapNum)
+    public void start(PlayerData pd)
     {
         super.start();
         controlState = 1;
         
-        this.mapNum = mapNum;
+        data = pd;
         events = new ArrayList<>();
         
         try
         {
-            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+mapNum+"/events.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+data.getMapNum()+"/events.txt"));
             
             int numEvents = Integer.parseInt(in.readLine().substring(11));
             in.readLine();
@@ -167,7 +178,7 @@ public class InfoScene extends Scene
         catch(Exception e)
         {
             e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Loading Events for map "+ mapNum +"didn't work.");
+            JOptionPane.showMessageDialog(null, "Loading Events for map "+ data.getMapNum() +"didn't work.");
             System.exit(-1);
         }
         
@@ -179,14 +190,14 @@ public class InfoScene extends Scene
     {
         controlState = 2;
         infoMenu.end();
-        dialogueScene.start(events.get((activeEvent)).getFileName());
+        dialogueScene.start(events.get(activeEvent).getFileName());
     }
     
-    public void cst2to1()
+    public void cst3to4()
     {
-        controlState = 1;
-        
-        dialogueScene.end();
+        controlState = 4;
         infoMenu.resume();
+        dialogueScene.end();
     }
+    
 }

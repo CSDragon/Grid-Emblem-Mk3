@@ -45,8 +45,6 @@ TODOs
 	
 Current TODO Stack:
 	Prebattle/HQ functions
-		Info
-			Deliver Rewards
 	
 		
 
