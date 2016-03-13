@@ -9,9 +9,6 @@ TODOs
 	Terrain:
 		processSpecialEffects
 		
-	Map:
-		convert the terrain list in the file read to be more 2d, so when you look at it, it makes sense. if it's 13x10, there should be 10 lines with 13 elements, not 130 lines.
-		
 	UnitActionMenu:
 		checkCommands
 	
@@ -27,22 +24,12 @@ TODOs
 		Graphics logic is nonsense right now.
 	
 	HQScene:
-		Shop
-		Skills
 		Support
-		Events
 	
-	PreBattleMenu
-		Select Units
-		Skills
-		
 	SystemActionMenu
 		Units
 		Options
 		
-	UnitActionMenu
-		A bunch of stuff.
-	
 	ItemActionMenu:
 		Limit actions to available actions.
 		Better movement control.
@@ -59,6 +46,7 @@ TODOs
 Current TODO Stack:
 	Prebattle/HQ functions
 		Info
+			Deliver Rewards
 	
 		
 

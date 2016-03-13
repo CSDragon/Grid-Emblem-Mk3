@@ -51,6 +51,9 @@ public class InfoScene extends Scene
                 /*
                 STATES
                     1) Info Menu
+                    2) Dialogue Scene
+                    3) Give Rewards.
+                    4) Save that we've seen the event.
                 */
                 case 1:
                     infoMenu.respondControls(im);
@@ -78,6 +81,9 @@ public class InfoScene extends Scene
                 /*
                 STATES
                     1) Info Menu
+                    2) Dialogue Scene
+                    3) Give Rewards.
+                    4) Save that we've seen the event.
                 */
                 case 1:
                     switch(infoMenu.runFrame())
