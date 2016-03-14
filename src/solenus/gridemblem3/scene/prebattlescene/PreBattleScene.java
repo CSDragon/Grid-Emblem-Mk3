@@ -152,10 +152,18 @@ public class PreBattleScene extends Scene
                             return UPDATEUNITS;
                     }
                 case 4:
-                    switch(saveMenu.runFrame())
+                    int s = saveMenu.runFrame();
+                    switch(s)
                     {
                         case SaveMenu.BACK:
                             cst4to1();
+                            break;
+                            
+                        case SaveMenu.NOTHING:
+                            break;
+                            
+                        default:
+                            data.saveFile(s+1);
                             break;
                     }
                     break;

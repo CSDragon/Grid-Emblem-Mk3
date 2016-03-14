@@ -199,12 +199,12 @@ public class Unit extends Actor
         
         in.readLine();
 
+        curHP = (int)hp;
+
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
         skillsReserve = new ArrayList<>();
-
-        curHP = (int)hp;
         
         int numWeapons = Integer.parseInt(in.readLine().substring(13));
         in.readLine();
@@ -323,7 +323,7 @@ public class Unit extends Actor
         }
         bw.newLine();
         
-        bw.write("Num Skill Bank: "+skillsReserve.size()); bw.newLine();
+        bw.write("Num Skills Bank: "+skillsReserve.size()); bw.newLine();
         for(String s: skillsReserve)
         {
             bw.write(s); bw.newLine();

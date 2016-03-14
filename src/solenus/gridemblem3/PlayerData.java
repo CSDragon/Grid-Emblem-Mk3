@@ -32,6 +32,8 @@ public class PlayerData
     private ArrayList<Weapon> weaponConvoy;
     private ArrayList<Usable> itemConvoy;
     
+    private ArrayList<Boolean> eventsWatched;
+    
     /**
      * Constructs an empty player data.
      */
@@ -40,6 +42,7 @@ public class PlayerData
         unitList = new ArrayList<>();
         weaponConvoy = new ArrayList<>();
         itemConvoy = new ArrayList<>();
+        eventsWatched = new ArrayList<>();
         
         mapNum = 1;
         inBase = false;
@@ -87,6 +90,9 @@ public class PlayerData
             for(int i = 0; i<numItems; i++)
                 itemConvoy.add(new Usable(in));
                 
+            int numEvents = Integer.parseInt(in.readLine().substring(12));
+            for(int i = 0; i<numEvents; i++)
+                eventsWatched.add(Boolean.parseBoolean(in.readLine()));
             
             in.close();
         }
@@ -139,6 +145,12 @@ public class PlayerData
             bw.newLine();
             for(Usable u: itemConvoy)
                 u.save(bw);
+            
+            bw.write("Num Events: "+eventsWatched.size()); bw.newLine();
+            for(Boolean b: eventsWatched)
+            {
+                bw.write(b.toString()); bw.newLine();
+            }
             
             bw.close();
         }
@@ -212,6 +224,10 @@ public class PlayerData
         itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
         itemConvoy.add(Usable.loadFromPrefab("Vulnerary"));
 
+        eventsWatched = new ArrayList<>();
+        eventsWatched.add(Boolean.FALSE);
+        eventsWatched.add(Boolean.FALSE);
+        eventsWatched.add(Boolean.FALSE);
     }
     
     /**
@@ -253,6 +269,26 @@ public class PlayerData
         itemConvoy.add(u);
         u.setOwner(null);
         return true;
+    }
+    
+    /**
+     * When a new map is loaded, send the number of events to here.
+     * @param numEvents The number of events
+     */
+    public void setEvents(int numEvents)
+    {
+        eventsWatched = new ArrayList<>();
+        for(int i = 0; i<numEvents; i++)
+            eventsWatched.add(Boolean.FALSE);
+    }
+    
+    /**
+     * Tells your save file you watched an event.
+     * @param numEvent 
+     */
+    public void watchedEvent(int numEvent)
+    {
+        eventsWatched.set(numEvent, Boolean.TRUE);
     }
     
     /**
@@ -475,6 +511,11 @@ public class PlayerData
     public ArrayList<Usable> getItemConvoy() 
     {
         return itemConvoy;
+    }
+    
+    public ArrayList<Boolean> getEventsWatched()
+    {
+        return eventsWatched;
     }
     
     /**

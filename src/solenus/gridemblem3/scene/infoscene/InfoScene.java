@@ -97,7 +97,8 @@ public class InfoScene extends Scene
                         
                         default:
                             activeEvent = infoMenu.getCursorLoc();
-                            cst1to2();
+                            if(!data.getEventsWatched().get(activeEvent))
+                                cst1to2();
                             break;
                     }
                 
@@ -117,6 +118,7 @@ public class InfoScene extends Scene
                 case 4:
                     //TODO
                     controlState = 1;
+                    data.watchedEvent(activeEvent);
                     break;
             }
         }

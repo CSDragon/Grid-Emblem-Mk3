@@ -13,7 +13,7 @@ NumWeapons: 0
 NumItems: 1
 Vulnerary
 
-Event: The Greatest Fighter
+Event: The King of the Arena
 XinIntro
 NumWeapons: 0
 NumItems: 0
