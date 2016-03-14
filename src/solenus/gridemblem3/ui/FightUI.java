@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.actor.Unit;
-import solenus.gridemblem3.scene.gamemap.Map;
+import solenus.gridemblem3.scene.mapscene.Map;
 import solenus.gridemblem3.item.Weapon;
 
 /**

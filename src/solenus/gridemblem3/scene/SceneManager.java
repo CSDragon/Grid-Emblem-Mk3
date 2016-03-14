@@ -5,6 +5,7 @@
  */
 package solenus.gridemblem3.scene;
 
+import solenus.gridemblem3.scene.mapscene.MapScene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.InputManager;

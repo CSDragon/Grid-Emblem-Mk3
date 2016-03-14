@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.actor.Unit;
-import solenus.gridemblem3.scene.gamemap.Pathfinding;
+import solenus.gridemblem3.scene.mapscene.Pathfinding;
 
 /**
  *

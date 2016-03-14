@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.scene.gamemap;
+package solenus.gridemblem3.scene.mapscene;
 
 import java.util.ArrayList;
 import solenus.gridemblem3.actor.Unit;

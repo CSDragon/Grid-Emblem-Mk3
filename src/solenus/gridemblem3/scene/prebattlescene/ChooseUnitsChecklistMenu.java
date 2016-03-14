@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
-import solenus.gridemblem3.scene.gamemap.Map;
+import solenus.gridemblem3.scene.mapscene.Map;
 import solenus.gridemblem3.ui.menu.GenericChecklistMenu;
 
 /**

@@ -5,8 +5,8 @@
  */
 package solenus.gridemblem3.actor;
 import java.awt.Graphics2D;
-import solenus.gridemblem3.scene.gamemap.Camera;
-import solenus.gridemblem3.scene.gamemap.GridRenderable;
+import solenus.gridemblem3.scene.mapscene.Camera;
+import solenus.gridemblem3.scene.mapscene.GridRenderable;
 
 /**
  * An actor is any object that can be on the map.

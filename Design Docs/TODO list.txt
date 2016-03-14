@@ -1,7 +1,7 @@
 TODOs
 	
 	MapScene:
-		
+		Other turn events
 	
 	Unit:
 		isEqupable
@@ -29,6 +29,7 @@ TODOs
 	SystemActionMenu
 		Units
 		Options
+		Battle Save
 		
 	ItemActionMenu:
 		Limit actions to available actions.
@@ -41,6 +42,9 @@ TODOs
 		Visually design all menus
 		Staff logic
 		Usables
+		
+	Select Units:
+		There's no reason to have to press confirm.
 		
 	
 Current TODO Stack:

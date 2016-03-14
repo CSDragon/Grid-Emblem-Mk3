@@ -11,7 +11,7 @@ import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.scene.Scene;
-import solenus.gridemblem3.scene.gamemap.Map;
+import solenus.gridemblem3.scene.mapscene.Map;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.scene.skillsscene.SkillsScene;
 import solenus.gridemblem3.ui.menu.PreBattleMenu;
