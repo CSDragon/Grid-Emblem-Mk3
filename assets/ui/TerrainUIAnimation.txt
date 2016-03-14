@@ -1,0 +1,6 @@
+width: 250
+height: 100
+centerX: 125
+centerY: 50
+xLoc: 10
+yLoc: 10

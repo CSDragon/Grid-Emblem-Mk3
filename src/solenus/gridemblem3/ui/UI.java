@@ -7,6 +7,8 @@ package solenus.gridemblem3.ui;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -24,7 +26,12 @@ public abstract class UI
     protected int centerX;
     protected int centerY;
     
+    protected Set<Integer> controlStateVisibility;
     
+    public UI()
+    {
+        controlStateVisibility = new HashSet<>();
+    }
     
     /**
      * renders the scene.
@@ -95,6 +102,14 @@ public abstract class UI
     {
         xLoc = p.x;
         yLoc = p.y;
+    }
+
+    /**
+     * @return the controlStateVisibility
+     */
+    public Set<Integer> getControlStateVisibility() 
+    {
+        return controlStateVisibility;
     }
     
     

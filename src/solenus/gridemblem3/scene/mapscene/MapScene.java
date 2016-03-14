@@ -68,6 +68,7 @@ public class MapScene extends Scene
     private UnitCircles unitCircles;
     private XPBarUI xp;
     private PreBattleScene preBattleScene;
+    private TerrainUI terrainUI;
     
     //range UI
     private boolean drawAllyMoveRange;
@@ -94,6 +95,7 @@ public class MapScene extends Scene
         systemAction = new SystemActionMenu();
         xp = new XPBarUI();
         preBattleScene = new PreBattleScene(this);
+        terrainUI = new TerrainUI();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -257,6 +259,8 @@ public class MapScene extends Scene
                     }
                     break;
             }
+            
+            terrainUI.runFrame();
         }
     }
     
@@ -537,6 +541,7 @@ public class MapScene extends Scene
             //UI
             fightUI.animate();
             preBattleScene.animate();
+            terrainUI.animate(controlState);
         }
     }
 
@@ -586,6 +591,7 @@ public class MapScene extends Scene
             fightUI.draw(g2);
             xp.draw(g2);
             preBattleScene.draw(g2);
+            terrainUI.draw(g2);
         }
         
     }
@@ -644,9 +650,12 @@ public class MapScene extends Scene
             cursor.moveInstantly(unitList.get(0).getCoord());
             camera.moveInstantly(cursor.getXCur(), cursor.getYCur());
         }
-        
         getAllEnemyRanges();
         
+        //UI
+        terrainUI.start(cursor, map);
+        
+        //TEST
         numFactions = 2;
     }
     

@@ -5,10 +5,8 @@
  */
 package solenus.gridemblem3.scene.mapscene;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.actor.Unit;
 

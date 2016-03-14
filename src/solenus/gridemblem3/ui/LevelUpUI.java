@@ -25,13 +25,6 @@ import solenus.gridemblem3.render.Rendering;
 public class LevelUpUI extends UI
 {
     private BufferedImage ui;
-    int width;
-    int height;
-    int centerX;
-    int centerY;
-    
-    int xLoc = -200;
-    int yLoc = -100;
     
     public int controlState;
     public Unit levelingUpUnit;
@@ -43,6 +36,8 @@ public class LevelUpUI extends UI
     
     public LevelUpUI()
     {
+        xLoc = -200;
+        yLoc = -100;
         
         try
         {

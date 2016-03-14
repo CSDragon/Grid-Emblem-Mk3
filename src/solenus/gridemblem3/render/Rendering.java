@@ -71,15 +71,25 @@ public class Rendering
     public static void renderAbsolute(BufferedImage image, Graphics2D g, int x, int y, int xAdjust, int yAdjust, int xOrientation, int yOrientation)
     {
         //change the orientation
-        if(xOrientation == 1)
-            x = GridEmblemMk3.HALFWIDTH + x;
-        else if(xOrientation == 2)
-            x = GridEmblemMk3.WIDTH - x;
-
-        if(yOrientation == 1)
-            y = GridEmblemMk3.HALFHEIGHT + y;
-        else if (yOrientation == 2)
-            y = GridEmblemMk3.HEIGHT - y;
+        switch(xOrientation)
+        {
+            case 1:
+                x += GridEmblemMk3.HALFWIDTH;
+                break;
+            case 2:
+                x = GridEmblemMk3.WIDTH - x;
+                break;
+        }
+        
+        switch(yOrientation)
+        {
+            case 1:
+                y += GridEmblemMk3.HALFHEIGHT;
+                break;
+            case 2:
+                y = GridEmblemMk3.HEIGHT - y;
+                break;
+        }
 
         g.drawImage(image, x - xAdjust, y - yAdjust, null);
     }
@@ -106,21 +116,21 @@ public class Rendering
     {
         //change the orientation
         if(xOrientation == 1)
-            x = GridEmblemMk3.HALFWIDTH - xAdjust + x;
+            x = GridEmblemMk3.HALFWIDTH + x;
         else if(xOrientation == 2)
-            x = GridEmblemMk3.WIDTH - xAdjust - x;
+            x = GridEmblemMk3.WIDTH - x;
 
         if(yOrientation == 1)
-            y = GridEmblemMk3.HALFHEIGHT - yAdjust + y;
+            y = GridEmblemMk3.HALFHEIGHT + y;
         else if (yOrientation == 2)
-            y = GridEmblemMk3.HEIGHT - yAdjust - y;
+            y = GridEmblemMk3.HEIGHT - y;
         
         if(textOrientation == 1)
             x -= (g.getFontMetrics().stringWidth(s))/2;
         else if(textOrientation == 2)
             x -= (g.getFontMetrics().stringWidth(s));
         
-        g.drawString(s, x, y);
+        g.drawString(s, x - xAdjust, y - yAdjust);
     }
     
     /**
