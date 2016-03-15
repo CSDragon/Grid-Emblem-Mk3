@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import javax.swing.JOptionPane;
-import solenus.gridemblem3.ui.menu.KeybindsMenu;
+import solenus.gridemblem3.scene.topmenuscene.KeybindsMenu;
 
 /**
  *

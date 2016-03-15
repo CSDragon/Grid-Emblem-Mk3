@@ -13,7 +13,7 @@ import solenus.gridemblem3.scene.infoscene.InfoScene;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.scene.shopscene.ShopScene;
 import solenus.gridemblem3.scene.skillsscene.SkillsScene;
-import solenus.gridemblem3.ui.menu.HQMenu;
+import solenus.gridemblem3.scene.hqscene.HQMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
 
 

@@ -39,11 +39,6 @@ public class WeaponSelectionMenu extends Menu
     private BufferedImage cursor;
     private BufferedImage oneBox;
     
-    private int height;
-    private int width;
-    private int centerX;
-    private int centerY;
-    
     /**
      * Standard constructor
      */

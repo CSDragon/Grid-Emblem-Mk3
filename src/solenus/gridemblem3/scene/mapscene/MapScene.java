@@ -22,8 +22,6 @@ import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.ui.FightUI;
 import solenus.gridemblem3.ui.XPBarUI;
 import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
-import solenus.gridemblem3.ui.menu.SystemActionMenu;
-import solenus.gridemblem3.ui.menu.UnitActionMenu;
 
 
 /**
@@ -484,9 +482,10 @@ public class MapScene extends Scene
                 
                 /*  Pre-battle Menu
                     Active Object: preBattleScene
-                    Camera Follows: None
+                    Camera Follows: cursor
                 */
                 case 14:
+                    camera.moveToRenderable(cursor, map);
                     switch(preBattleScene.runFrame())
                     {
                         case PreBattleScene.VIEWMAP:

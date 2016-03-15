@@ -184,7 +184,7 @@ public class InfoScene extends Scene
             System.exit(-1);
         }
         
-        infoMenu = new InfoMenu(events);
+        infoMenu = new InfoMenu(events, data.getEventsWatched());
         infoMenu.start();
     }
     

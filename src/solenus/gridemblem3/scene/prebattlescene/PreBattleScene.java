@@ -14,7 +14,7 @@ import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.scene.mapscene.Map;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.scene.skillsscene.SkillsScene;
-import solenus.gridemblem3.ui.menu.PreBattleMenu;
+import solenus.gridemblem3.scene.mapscene.PreBattleMenu;
 import solenus.gridemblem3.ui.menu.SaveMenu;
 
 /**

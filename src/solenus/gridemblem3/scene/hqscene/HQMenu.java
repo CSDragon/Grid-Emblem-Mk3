@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.ui.menu;
+package solenus.gridemblem3.scene.hqscene;
+
+import solenus.gridemblem3.ui.menu.GenericMenu;
 
 /**
  *

@@ -16,7 +16,7 @@ public class InfoMenu extends GenericMenu
 {
     private ArrayList<InfoEvent> events;
     
-    public InfoMenu(ArrayList<InfoEvent> ie)
+    public InfoMenu(ArrayList<InfoEvent> ie, ArrayList<Boolean> seenEvent)
     {
         super(eventListNameArray(ie));
         ie = events;

@@ -30,7 +30,6 @@ public class GenericMenu extends Menu
     protected BufferedImage box;
     
     protected String[] actions;
-
     
     /**
      * The Generic Constructor. If it calls this one, it must manually update actions and numCommands.
