@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
-import solenus.gridemblem3.scene.DialogueScene;
+import solenus.gridemblem3.scene.dialoguescene.DialogueScene;
 import solenus.gridemblem3.scene.Scene;
 
 /**

@@ -19,9 +19,7 @@ import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
-import solenus.gridemblem3.ui.FightUI;
 import solenus.gridemblem3.ui.XPBarUI;
-import solenus.gridemblem3.ui.menu.WeaponSelectionMenu;
 
 
 /**

@@ -1,4 +1,6 @@
 TODOs
+	Menu:
+		Disabled menu options
 	
 	MapScene:
 		Other turn events
