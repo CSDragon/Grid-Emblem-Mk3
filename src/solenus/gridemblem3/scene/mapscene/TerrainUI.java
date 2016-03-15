@@ -28,7 +28,6 @@ import solenus.gridemblem3.ui.UI;
 public class TerrainUI extends UI
 {
     private BufferedImage ui;
-    
     private float opacity;
     
     private MapCursor cursor;
@@ -38,7 +37,7 @@ public class TerrainUI extends UI
     
     public TerrainUI()
     {
-        controlStateVisibility = new HashSet<>(Arrays.asList(1,2,5,15));
+        controlStateVisibility = new HashSet<>(Arrays.asList(1,2,15));
         
         try
         {

@@ -65,6 +65,7 @@ public class MapScene extends Scene
     private XPBarUI xp;
     private PreBattleScene preBattleScene;
     private TerrainUI terrainUI;
+    private UnitHoverUI unitHoverUI;
     
     //range UI
     private boolean drawAllyMoveRange;
@@ -92,6 +93,7 @@ public class MapScene extends Scene
         xp = new XPBarUI();
         preBattleScene = new PreBattleScene(this);
         terrainUI = new TerrainUI();
+        unitHoverUI = new UnitHoverUI();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -255,8 +257,6 @@ public class MapScene extends Scene
                     }
                     break;
             }
-            
-            terrainUI.runFrame();
         }
     }
     
@@ -270,7 +270,6 @@ public class MapScene extends Scene
         //always check this
         if(active)
         {
-                
             switch(getControlState())
             {
                 /*  
@@ -477,6 +476,7 @@ public class MapScene extends Scene
                             cst13to1();
                             break;
                     }
+                    break;
                 
                 /*  Pre-battle Menu
                     Active Object: preBattleScene
@@ -510,8 +510,10 @@ public class MapScene extends Scene
                     break;
                     
             }  
+            
+            terrainUI.runFrame();
+            unitHoverUI.runFrame();
         }
-        
         return NOTHING;
     }
     
@@ -539,6 +541,7 @@ public class MapScene extends Scene
             fightUI.animate();
             preBattleScene.animate();
             terrainUI.animate(controlState);
+            unitHoverUI.animate(controlState);
         }
     }
 
@@ -589,6 +592,7 @@ public class MapScene extends Scene
             xp.draw(g2);
             preBattleScene.draw(g2);
             terrainUI.draw(g2);
+            unitHoverUI.draw(g2);
         }
         
     }
@@ -651,6 +655,7 @@ public class MapScene extends Scene
         
         //UI
         terrainUI.start(cursor, map);
+        unitHoverUI.start(cursor, this);
         
         //TEST
         numFactions = 2;
