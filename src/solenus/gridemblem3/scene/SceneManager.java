@@ -23,7 +23,7 @@ public class SceneManager extends Scene
     
     public static final int TOPMENU = 0;
     
-    //Gameplay order
+    //Game flow
     public static final int NEWLEVEL = 1;
     public static final int PREHQSKIT = 2;
     public static final int HQSCENE = 3;
@@ -142,6 +142,7 @@ public class SceneManager extends Scene
                     break;
                 
                 case NEWLEVEL:
+                    playerArmy.nextLevel();
                     controlStateTransition(PREHQSKIT);
                     break;
                     
@@ -198,6 +199,13 @@ public class SceneManager extends Scene
                     {
                         case SaveMenu.BACK:
                             controlStateTransition(NEWLEVEL);
+                            break;
+                            
+                        case SaveMenu.NOTHING:
+                            break;
+                            
+                        default:
+                            playerArmy.saveFile(saveMenu.getCursorLoc()+1);
                             break;
                     }
                     break;
@@ -323,14 +331,21 @@ public class SceneManager extends Scene
      * Loads the player's data from a file 
      * @param fileNum The file number to load from.
      */
-    public void loadGame(int fileNum) //TODO: Make this load to postmap too.
+    public void loadGame(int fileNum)
     {
         playerArmy = new PlayerData(fileNum);
-        if(playerArmy.isInBase())
-            controlStateTransition(HQSCENE);
-        else
-            controlStateTransition(MAPSCENE);
-            
+        switch(playerArmy.getSaveLoc())
+        {
+            case PlayerData.BASESAVE:
+                controlStateTransition(HQSCENE);
+                break;
+            case PlayerData.PREBATTLESAVE:
+                controlStateTransition(MAPSCENE);
+                break;
+            case PlayerData.POSTBATTLESAVE:
+                controlStateTransition(NEWLEVEL);
+                break;
+        }   
     }
     
     /**

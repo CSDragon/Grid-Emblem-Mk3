@@ -13,6 +13,7 @@ TODOs
 	
 	Unit:
 		isEqupable
+		numAttacks
 		
 	Terrain:
 		processSpecialEffects

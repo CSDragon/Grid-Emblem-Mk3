@@ -24,8 +24,13 @@ import solenus.gridemblem3.item.Weapon;
  */
 public class PlayerData 
 {
+    public static final int BASESAVE = 0;
+    public static final int PREBATTLESAVE = 1;
+    public static final int POSTBATTLESAVE = 2;
+    public static final int SUSPEND = 3;
+    
     private int mapNum;
-    private boolean inBase;
+    private int saveLoc;
     private int gold;
     
     private ArrayList<Unit> unitList;
@@ -33,6 +38,8 @@ public class PlayerData
     private ArrayList<Usable> itemConvoy;
     
     private ArrayList<Boolean> eventsWatched;
+    
+    //<editor-fold desc="Constructors, Saveing, and Initialization">
     
     /**
      * Constructs an empty player data.
@@ -43,9 +50,6 @@ public class PlayerData
         weaponConvoy = new ArrayList<>();
         itemConvoy = new ArrayList<>();
         eventsWatched = new ArrayList<>();
-        
-        mapNum = 1;
-        inBase = false;
     }
     
     /**
@@ -62,7 +66,7 @@ public class PlayerData
             
             //Get the map data
             mapNum = Integer.parseInt(in.readLine().substring(12));
-            inBase = in.readLine().substring(10).equals("true");
+            saveLoc = Integer.parseInt(in.readLine().substring(9));
             in.readLine();
 
             //Get how much gold you have
@@ -121,7 +125,7 @@ public class PlayerData
             
             //Write the scenario information
             bw.write("Map Number: "+mapNum); bw.newLine();
-            bw.write("In Base?: "+inBase); bw.newLine();
+            bw.write("SaveLoc: " + saveLoc); bw.newLine();
             bw.newLine();
 
             //Write Gold
@@ -167,7 +171,7 @@ public class PlayerData
     public void newGame()
     {
         mapNum = 1;
-        inBase = false;
+        saveLoc = PREBATTLESAVE;
         gold = 30000;
         
         unitList.add(Unit.loadFromPrefab("Garen"));
@@ -230,6 +234,34 @@ public class PlayerData
         eventsWatched.add(Boolean.FALSE);
     }
     
+    public void nextLevel()
+    {
+        mapNum++;
+        for(Unit u: unitList)
+            u.newMap();
+        
+        //Set the new events.
+        try
+        {
+            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+ mapNum +"/events.txt"));
+            
+            int numEvents = Integer.parseInt(in.readLine().substring(11));
+            eventsWatched = new ArrayList<>();
+            for(int i = 0; i<numEvents; i++)
+                eventsWatched.add(Boolean.FALSE);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(null, "Loading Events for map "+ mapNum +" didn't work.");
+            System.exit(-1);
+        }
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="List Maintainance">
+    
     /**
      * Adds a unit to the army.
      * @param u The unit to be added
@@ -272,26 +304,6 @@ public class PlayerData
     }
     
     /**
-     * When a new map is loaded, send the number of events to here.
-     * @param numEvents The number of events
-     */
-    public void setEvents(int numEvents)
-    {
-        eventsWatched = new ArrayList<>();
-        for(int i = 0; i<numEvents; i++)
-            eventsWatched.add(Boolean.FALSE);
-    }
-    
-    /**
-     * Tells your save file you watched an event.
-     * @param numEvent 
-     */
-    public void watchedEvent(int numEvent)
-    {
-        eventsWatched.set(numEvent, Boolean.TRUE);
-    }
-    
-    /**
      * Removes a weapon from the convoy
      * @param w The weapon to be removed.
      * @return If the weapon was even in the convoy to begin with.
@@ -311,47 +323,91 @@ public class PlayerData
         return itemConvoy.remove(u);
     }
     
-    //TEST
-    public static void main(String[] args) 
+    /**
+     * Tells your save file you watched an event.
+     * @param numEvent 
+     */
+    public void watchedEvent(int numEvent)
     {
-       
-        Unit u = new Unit(0,6,1);
-        Unit.writeToPrefab(u);
-        
-        /*
-        PlayerData a = new PlayerData();
-        ArrayList<Unit> unitList = new ArrayList<>();
-        unitList.add(new Unit(0, 6, 1));
-        unitList.get(0).addWeapon(new Weapon("Tome", 100, 0, 0, Weapon.LIGHT, 19, 10, 2, 100, 0 ,0, 1, 2));
-        
-                
-        unitList.add(new Unit(0, 6, 1));
-        unitList.get(1).addWeapon(new Weapon("Tome"  , 100, 0, 0, Weapon.LIGHT, 19, 10, 20, 100, 0 ,0, 1, 2));
-        unitList.get(1).addWeapon(new Weapon("Bow"   , 100, 0, 0, Weapon.BOW  , 19, 10,  2, 100, 0 ,0, 2, 2));
-        unitList.get(1).addWeapon(new Weapon("Sword" , 100, 0, 0, Weapon.SWORD, 19, 10,  2, 100, 0 ,0, 1, 1));
-        
-        a.addUnit(unitList.get(0));
-        a.addUnit(unitList.get(1));
-        
-        a.saveFile(1);
-        
-        File f = new File("saves");
-        for(File fi: f.listFiles())
-            System.out.println(fi.getName());
-        
-        
-        PlayerData a = new PlayerData();
-        Unit u = new Unit();
-        u.addWeapon(new Weapon("Sheld",0,1,2,3,4,5,6,7,1,2));
-        a.addUnit(u);
-        a.addWeapon(new Weapon("Sord", 0, 1, 2, 3, 4, 5, 6, 7, 1, 2));
-        a.saveFile(9);
-        
-        PlayerData b = PlayerData.loadFile(9);
-        int i = 1;
-        */
-        
+        eventsWatched.set(numEvent, Boolean.TRUE);
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="Shopping">
+
+    /**
+     * Checks if you can buy an item
+     * @param i The item we're checking the price of
+     * @return Whether we can buy it or not.
+     */
+    public boolean canBuyItem(Item i)
+    {
+        return (gold >= i.getGoldValue());
+    }
+    
+    /**
+     * Buys an item. But does not add it to an invnetory. 
+     * @param i The item to be purchased. 
+     * @return Whether you can actually buy the item in the first place
+     */
+    public boolean buyItem(Item i)
+    {
+        if(canBuyItem(i))
+        {
+            gold -= i.getGoldValue();
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    /**
+     * Gets gold for selling an item. Does not remove it from the convoy.
+     * @param i The item to be sold.
+     */
+    public void sellItem(Item i)
+    {
+        gold+= i.getGoldValue();
+    }
+        
+    /**
+     * Gives a Weapon to a Unit. 
+     * @param u The unit getting the weapon. u can be null, in which case send it directly to the convoy.
+     * @param weapon The weapon the unit is getting
+     * @return Returns true is the weapon was accepted. False if it was sent to convoy because of inventory limits.
+     */
+    public boolean giveWeapon(Unit u, Weapon weapon)
+    {
+        if(u != null && u.addWeapon(weapon))
+            return true;
+        else
+        {
+            weaponConvoy.add(weapon);
+            return false;
+        }
+    }
+    
+    /**
+     * Gives a Usable to a Unit. 
+     * @param u The unit getting the item
+     * @param item The item the unit is getting
+     * @return Returns true is the item was accepted. False if it was sent to convoy because of inventory limits.
+     */
+    public boolean giveItem(Unit u, Usable item)
+    {
+        if(u != null && u.addItem(item))
+            return true;
+        else
+        {
+            itemConvoy.add(item);
+            return false;
+        }
+    }
+    
+    //</editor-fold>
+
+    //<editor-fold desc="getters and setters">
     
     /**
      * Gets the first unit in your army with this name. Because of this, no units can have duplicate names.
@@ -399,69 +455,6 @@ public class PlayerData
         
         return ret;
     }
-
-    /**
-     * Checks if you can buy an item
-     * @param i The item we're checking the price of
-     * @return Whether we can buy it or not.
-     */
-    public boolean canBuyItem(Item i)
-    {
-        return (gold >= i.getGoldValue());
-    }
-    
-    /**
-     * Buys an item. But does not add it to an invnetory. 
-     * @param i The item to be purchased. 
-     * @return Whether you can actually buy the item in the first place
-     */
-    public boolean buyItem(Item i)
-    {
-        if(canBuyItem(i))
-        {
-            gold -= i.getGoldValue();
-            return true;
-        }
-        else
-            return false;
-    }
-        
-    /**
-     * Gives a Weapon to a Unit. 
-     * @param u The unit getting the weapon. u can be null, in which case send it directly to the convoy.
-     * @param weapon The weapon the unit is getting
-     * @return Returns true is the weapon was accepted. False if it was sent to convoy because of inventory limits.
-     */
-    public boolean giveWeapon(Unit u, Weapon weapon)
-    {
-        if(u != null && u.addWeapon(weapon))
-            return true;
-        else
-        {
-            weaponConvoy.add(weapon);
-            return false;
-        }
-    }
-    
-    /**
-     * Gives a Usable to a Unit. 
-     * @param u The unit getting the item
-     * @param item The item the unit is getting
-     * @return Returns true is the item was accepted. False if it was sent to convoy because of inventory limits.
-     */
-    public boolean giveItem(Unit u, Usable item)
-    {
-        if(u != null && u.addItem(item))
-            return true;
-        else
-        {
-            itemConvoy.add(item);
-            return false;
-        }
-    }
-    
-
-    //<editor-fold desc="getters and setters">
     
     /**
      * @return the mapNum
@@ -476,17 +469,14 @@ public class PlayerData
         mapNum = mn;
     }
 
-    /**
-     * @return the inBase
-     */
-    public boolean isInBase() 
+    public int getSaveLoc()
     {
-        return inBase;
+        return saveLoc;
     }
     
-    public void setInBase(boolean ib)
+    public void setSaveLoc(int sl)
     {
-        inBase = ib;
+        saveLoc = sl;
     }
     
     /**

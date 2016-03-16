@@ -1,0 +1,19 @@
+NumEvents: 3
+
+Event: 2Old Friends
+QuinnJ4Intro
+NumWeapons: 1
+Steel Bow
+NumItems: 1
+Vulnerary
+
+Event: 2Siblings
+GarenLuxIntro
+NumWeapons: 0
+NumItems: 1
+Vulnerary
+
+Event: 2The King of the Arena
+XinIntro
+NumWeapons: 0
+NumItems: 0
