@@ -2,6 +2,9 @@ TODOs
 	Menu:
 		Disabled menu options
 	
+	SceneManager:
+		Incorporate DialogueScene.
+	
 	MapScene:
 		Other turn events
 		Win condition: Priority Target
@@ -80,26 +83,10 @@ Discarded Bugs:
 	(?) Reweight can crash if it goes out of bounds, but it never should. If this actually ever happens, create a reset button for mapscene.
 	Pathfinding really shouldn't need to see mapscene. Maybe move the unit list into map?
 	resizing has weird effects sometimes. This may not matter, as you should never be able to resize ingame anyway.
-	
 
-	
-Completed:
-	General
-		Add multi-size support
-	
-	gamemap
-		MovementArrow
-			Diagonals
-	scene
-		MapScene
-	
-	actor
-		Unit
-			movement animations
-			
-			
+
 Maybe Someday:
 	Unit speed on button press
 	Escape exits dialogue quickly.
 	Escape opens up a "Do you want to quit" menu on mapscene
-			
+	

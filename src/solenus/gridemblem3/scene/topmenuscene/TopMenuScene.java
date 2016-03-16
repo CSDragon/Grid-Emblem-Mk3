@@ -8,11 +8,6 @@ package solenus.gridemblem3.scene.topmenuscene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.scene.Scene;
-import solenus.gridemblem3.scene.topmenuscene.MainMenu;
-import solenus.gridemblem3.scene.topmenuscene.SettingsMenu;
-import solenus.gridemblem3.scene.topmenuscene.KeybindsMenu;
-import solenus.gridemblem3.scene.topmenuscene.GraphicsMenu;
-import solenus.gridemblem3.scene.topmenuscene.AudioMenu;
 import solenus.gridemblem3.ui.menu.LoadMenu;
 
 

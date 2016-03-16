@@ -105,7 +105,7 @@ public class InfoScene extends Scene
                 case 2:
                     switch(dialogueScene.runFrame())
                     {
-                        case Scene.BACK:
+                        case DialogueScene.FINISH:
                             controlState = 3;
                             break;
                     }
@@ -116,7 +116,6 @@ public class InfoScene extends Scene
                     cst3to4();
                     break;
                 case 4:
-                    //TODO
                     controlState = 1;
                     data.watchedEvent(activeEvent);
                     break;

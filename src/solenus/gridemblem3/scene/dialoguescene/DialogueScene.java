@@ -24,6 +24,8 @@ import solenus.gridemblem3.scene.Scene;
  */
 public class DialogueScene extends Scene
 {
+    public static final int FINISH = 1;
+    
     private BufferedImage blackout;
     private BufferedImage textbox;
     private BufferedImage background;
@@ -124,7 +126,7 @@ public class DialogueScene extends Scene
                     break;
                 case 2:
                     if(curCommand == commands.size()-1)
-                        return BACK;
+                        return FINISH;
                     nextLine();
                     break;
                 case 3:
@@ -141,7 +143,7 @@ public class DialogueScene extends Scene
             }
         }
         
-        return -1;
+        return NOTHING;
     }
     
     /**
