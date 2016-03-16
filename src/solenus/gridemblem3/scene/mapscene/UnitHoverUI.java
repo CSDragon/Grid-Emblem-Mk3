@@ -121,7 +121,7 @@ public class UnitHoverUI extends UI
             g.setColor(Color.BLACK);
             Rendering.renderTextAbsolute(activeUnit.getName(), g, xLoc+80, yLoc+30, 0, 0, 2, 0, 1);
 
-            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+            g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
             g.setColor(Color.BLACK);
             Rendering.renderTextAbsolute("Lv: " + activeUnit.getLevel(), g, xLoc+142, yLoc+58, 0, 0, 2, 0, 0);
             Rendering.renderTextAbsolute("HP: " + activeUnit.getCurHP() + " / " + (int)activeUnit.getHP(), g, xLoc+8, yLoc+58, 0, 0, 2, 0, 2);

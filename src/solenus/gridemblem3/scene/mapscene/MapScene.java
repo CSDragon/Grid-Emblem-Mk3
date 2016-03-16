@@ -29,6 +29,7 @@ import solenus.gridemblem3.ui.XPBarUI;
 public class MapScene extends Scene
 {
     public static final int RETURNTOBASE = 2;
+    public static final int VICTORY = 3;
     
     //the game map
     private Map map;
@@ -132,7 +133,7 @@ public class MapScene extends Scene
             //cursor mode
             switch(getControlState())
             {
-                case(1):
+                case 1:
                     //A: On a friendly unit, enter move mode, on anything else enter system action box.
                     if(im.getA() == 1)
                     {
@@ -299,6 +300,8 @@ public class MapScene extends Scene
                 case 1:
                     cursor.runFrame();
                     camera.moveToRenderable(cursor, map);
+                    if(checkWinCondition())
+                        return VICTORY;
                     break;
                 
                 /*  Unit Movement Mode
@@ -1008,6 +1011,28 @@ public class MapScene extends Scene
         
         unitList.addAll(sel);
         unitList.addAll(map.getStartingUnits());
+    }
+    
+    /**
+     * Checks if you've won.
+     * @return 
+     */
+    public boolean checkWinCondition()
+    {
+       switch(map.getWinCondition())
+       {
+           case Map.WINCON_ROUTE:
+               int enemiesLeft = 0;
+               for(Unit u: unitList)
+               {
+                   if(u.getTeam() == 1)
+                     enemiesLeft++;
+               }
+               if(enemiesLeft == 0)
+                   return true;
+               break;
+       }
+       return false;
     }
     
     //<editor-fold desc="controlState Methods">

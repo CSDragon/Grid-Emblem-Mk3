@@ -4,6 +4,9 @@ TODOs
 	
 	MapScene:
 		Other turn events
+		Win condition: Priority Target
+		Win condition: Capture
+		
 	
 	Unit:
 		isEqupable
@@ -50,7 +53,7 @@ TODOs
 		
 	
 Current TODO Stack:
-	Prebattle/HQ functions
+	Win condition: Route
 	
 		
 

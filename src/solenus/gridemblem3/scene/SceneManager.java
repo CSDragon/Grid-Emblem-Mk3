@@ -116,6 +116,8 @@ public class SceneManager extends Scene
                         case MapScene.RETURNTOBASE:
                             cst2to4();
                             break;
+                        case MapScene.VICTORY:
+                            break;
                     }
                     break;
                 

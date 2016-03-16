@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
-import solenus.gridemblem3.item.Weapon;
 
 /**
  *
@@ -29,11 +28,17 @@ import solenus.gridemblem3.item.Weapon;
  */
 public class Map 
 {
+    public static final int WINCON_ROUTE = 0;
+    public static final int WINCON_PRIORITYTARGETS = 1;
+    public static final int WINCON_CAPTURE = 2;
+    
     private int height;
     private int width;
     private boolean skipSetup;
     private String name;
     private int idNum;
+    
+    private int winCondition;
     
     private BufferedImage mapImage;
     
@@ -78,10 +83,12 @@ public class Map
             BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+id+"/mapdata.map"));
             
             
-            //get sprite dimensions
+            //get basic data
+            name = in.readLine().substring(6);
             width = Integer.decode(in.readLine().substring(7));
             height = Integer.decode(in.readLine().substring(8));
             skipSetup = in.readLine().substring(12).equals("true");
+            winCondition = Integer.decode(in.readLine().substring(15));
 
             
             //discard extra lines
@@ -506,6 +513,15 @@ public class Map
     {
         this.mandatoryPlayerUnitLocations = mandatoryPlayerUnitLocations;
     }
-    //</editor-fold>
+
+    /**
+     * @return the winCondition
+     */
+    public int getWinCondition() 
+    {
+        return winCondition;
+    }
+    
+//</editor-fold>
 
 }

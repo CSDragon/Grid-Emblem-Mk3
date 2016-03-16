@@ -1,6 +1,8 @@
+Name: Test Map
 Width: 24
 Height: 13
 Skip Setup: false
+Win Condition: 0
 
 Terrain:
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands
