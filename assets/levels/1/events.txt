@@ -1,3 +1,7 @@
+Has Pre-HQ Event: false
+Has Mid Event: false
+Has Post-Battle: true
+
 NumEvents: 3
 
 Event: Old Friends

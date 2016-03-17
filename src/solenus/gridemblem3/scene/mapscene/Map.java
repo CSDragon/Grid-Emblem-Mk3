@@ -72,15 +72,15 @@ public class Map
         mandatoryPlayerUnitLocations = new ArrayList<>();
     }
     
-    public Map(int id, PlayerData pd)
+    public Map(PlayerData pd)
     {
         this();
-        idNum = id;
+        idNum = pd.getMapNum();
     
         try
         {
-            mapImage = ImageIO.read(new File("assets/levels/"+id+"/map.png"));
-            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+id+"/mapdata.map"));
+            mapImage = ImageIO.read(new File("assets/levels/"+idNum+"/map.png"));
+            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+idNum+"/mapdata.map"));
             
             
             //get basic data
@@ -182,7 +182,7 @@ public class Map
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null, "Critical Error:\nMap no map found for Stage "+id+". I have no clue how, but ya bork'd ");
+            JOptionPane.showMessageDialog(null, "Critical Error:\nMap no map found for Stage "+idNum+". I have no clue how, but ya bork'd ");
         }
     }
 
@@ -192,9 +192,6 @@ public class Map
      */
     public void saveMap(int mapNum)
     {
-        File saves = new File("saves");
-        saves.mkdir();
-        
         File saveFile = new File("assets/levels/"+mapNum+"/mapData.map");
         try
         {

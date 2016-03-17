@@ -46,14 +46,19 @@ TODOs
 	
 	ShopScene
 		Selling
+		
+	Select Units:
+		There's no reason to have to press confirm.
 	
 	Other
 		Visually design all menus
 		Staff logic
 		Usables
-		
-	Select Units:
-		There's no reason to have to press confirm.
+		Skills
+		Terrain Special Effects
+		Gamve Over
+		Victory
+		Intro screen
 		
 	
 Current TODO Stack:

@@ -71,10 +71,8 @@ public class MapScene extends Scene
     //range UI
     private boolean drawAllyMoveRange;
     private ArrayList<Point> allyRangeMap;
-    
     private ArrayList<Unit> enemyRangeList;
     private ArrayList<Point> selectedEnemyRangeMap;
-    
     private boolean drawAllEnemyRanges;
     private ArrayList<Point> allEnemyRangeMap;
     
@@ -616,10 +614,14 @@ public class MapScene extends Scene
     {
         super.start();
         
+        //clear up all the previous map's data
+        turn = 0;
+        selectedUnit = null;
+        
         //Load up the main grid objects
         playerArmy = pd;
         fightGraphicsMode = false;
-        map = new Map(playerArmy.getMapNum(), pd);
+        map = new Map(playerArmy);
         Pathfinding.setMap(map, this);
         
         //Control State

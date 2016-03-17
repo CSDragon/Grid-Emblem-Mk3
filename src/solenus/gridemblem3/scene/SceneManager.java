@@ -12,6 +12,7 @@ import solenus.gridemblem3.scene.mapscene.MapScene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.InputManager;
+import solenus.gridemblem3.scene.dialoguescene.EventManager;
 import solenus.gridemblem3.ui.menu.SaveMenu;
 
 /**
@@ -27,7 +28,7 @@ public class SceneManager extends Scene
     public static final int NEWLEVEL = 1;
     public static final int PREHQSKIT = 2;
     public static final int HQSCENE = 3;
-    public static final int POSTHQSKIT = 4;
+    public static final int MIDDLESKIT = 4;
     public static final int MAPSCENE = 5;
     public static final int POSTMAPSKIT = 6;
     public static final int POSTMAPSAVE = 7;
@@ -42,6 +43,7 @@ public class SceneManager extends Scene
     private SaveMenu saveMenu; 
     
     private PlayerData playerArmy;
+    private EventManager eventManager;
     
     /**
      * Creates the scene manager and its children
@@ -93,7 +95,7 @@ public class SceneManager extends Scene
                     break;
                 
                 case PREHQSKIT:
-                case POSTHQSKIT:
+                case MIDDLESKIT:
                 case POSTMAPSKIT:
                     ds.respondControls(im);
                     break;
@@ -133,17 +135,35 @@ public class SceneManager extends Scene
                         case TopMenuScene.NEWGAME:
                             playerArmy = new PlayerData();
                             playerArmy.newGame();
+                            eventManager = new EventManager(playerArmy);
                             controlStateTransition(MAPSCENE);
                             break;
                         case TopMenuScene.CONTINUE:
-                            loadGame(tms.getFileNum());
+                            playerArmy = new PlayerData(tms.getFileNum());
+                            eventManager = new EventManager(playerArmy);
+                            switch(playerArmy.getSaveLoc())
+                            {
+                                case PlayerData.BASESAVE:
+                                    controlStateTransition(HQSCENE);
+                                    break;
+                                case PlayerData.PREBATTLESAVE:
+                                    controlStateTransition(MAPSCENE);
+                                    break;
+                                case PlayerData.POSTBATTLESAVE:
+                                    controlStateTransition(NEWLEVEL);
+                                    break;
+                            } 
                             break;
                     }
                     break;
                 
                 case NEWLEVEL:
                     playerArmy.nextLevel();
-                    controlStateTransition(PREHQSKIT);
+                    eventManager = new EventManager(playerArmy);
+                    if(eventManager.getPreHQEvent())
+                        controlStateTransition(PREHQSKIT);
+                    else
+                        controlStateTransition(HQSCENE);
                     break;
                     
                 case PREHQSKIT:
@@ -159,15 +179,19 @@ public class SceneManager extends Scene
                     switch(hs.runFrame())
                     {
                         case HQScene.GOTOMAP:
-                            controlStateTransition(MAPSCENE);
+                            if(!playerArmy.getWatchedMidScene() && eventManager.getMidEvent())
+                                controlStateTransition(MIDDLESKIT);
+                            else
+                                controlStateTransition(MAPSCENE);
                             break;
                     }
                     break;
                     
-                case POSTHQSKIT:
+                case MIDDLESKIT:
                     switch(ds.runFrame())
                     {
                         case DialogueScene.FINISH:
+                            playerArmy.setWatchedMidScene(true);
                             controlStateTransition(MAPSCENE);
                             break;
                     }
@@ -180,7 +204,10 @@ public class SceneManager extends Scene
                             controlStateTransition(HQSCENE);
                             break;
                         case MapScene.VICTORY:
-                            controlStateTransition(POSTMAPSKIT);
+                            if(eventManager.getPostBattleEvent())
+                                controlStateTransition(POSTMAPSKIT);
+                            else
+                                controlStateTransition(POSTMAPSAVE);
                             break;
                     }
                     break;
@@ -285,7 +312,7 @@ public class SceneManager extends Scene
                 break;
                 
             case PREHQSKIT:
-            case POSTHQSKIT:
+            case MIDDLESKIT:
             case POSTMAPSKIT:
                 ds.end();
                 break;
@@ -310,13 +337,13 @@ public class SceneManager extends Scene
                 break;
                 
             case HQSCENE:
-                hs.start(playerArmy);
+                hs.start(playerArmy, eventManager);
                 break;
                 
             case PREHQSKIT:
-            case POSTHQSKIT:
+            case MIDDLESKIT:
             case POSTMAPSKIT:
-                ds.start("test"); //TODO: Get this an activeDialogue.
+                ds.start(eventManager.getGameFlowEvent(controlState)); //TODO: Get this an activeDialogue.
                 break;
                 
             case POSTMAPSAVE: 
@@ -326,27 +353,6 @@ public class SceneManager extends Scene
     }
 
     //</editor-fold>
-
-    /**
-     * Loads the player's data from a file 
-     * @param fileNum The file number to load from.
-     */
-    public void loadGame(int fileNum)
-    {
-        playerArmy = new PlayerData(fileNum);
-        switch(playerArmy.getSaveLoc())
-        {
-            case PlayerData.BASESAVE:
-                controlStateTransition(HQSCENE);
-                break;
-            case PlayerData.PREBATTLESAVE:
-                controlStateTransition(MAPSCENE);
-                break;
-            case PlayerData.POSTBATTLESAVE:
-                controlStateTransition(NEWLEVEL);
-                break;
-        }   
-    }
     
     /**
      * resizes the scene.

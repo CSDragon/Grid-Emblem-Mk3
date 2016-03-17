@@ -1,3 +1,7 @@
+Has Pre-HQ Event: true
+Has Mid Event: true
+Has Post-Battle: true
+
 NumEvents: 3
 
 Event: 2Old Friends

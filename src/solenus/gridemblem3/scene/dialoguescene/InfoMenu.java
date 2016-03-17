@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.scene.infoscene;
+package solenus.gridemblem3.scene.dialoguescene;
 
+import solenus.gridemblem3.scene.dialoguescene.InfoEvent;
 import java.util.ArrayList;
 import solenus.gridemblem3.ui.menu.GenericMenu;
 

@@ -10,7 +10,8 @@ import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.scene.Scene;
-import solenus.gridemblem3.scene.infoscene.InfoScene;
+import solenus.gridemblem3.scene.dialoguescene.EventManager;
+import solenus.gridemblem3.scene.dialoguescene.InfoScene;
 import solenus.gridemblem3.scene.inventoryscene.InventoryScene;
 import solenus.gridemblem3.scene.shopscene.ShopScene;
 import solenus.gridemblem3.scene.skillsscene.SkillsScene;
@@ -35,6 +36,8 @@ public class HQScene extends Scene
     
     PlayerData playerArmy;
     private int saveFile;
+    
+    private EventManager eventManager;
     
     public HQScene(Scene parent)
     {
@@ -226,11 +229,13 @@ public class HQScene extends Scene
     /**
      * Starts the scene up.
      * @param pd The army data.
+     * @param em The events manager for the info scene.
      */    
-    public void start(PlayerData pd)
+    public void start(PlayerData pd, EventManager em)
     {
         super.start();
         playerArmy = pd;
+        eventManager = em;
         hqMenu.start();
     }
     
@@ -287,7 +292,7 @@ public class HQScene extends Scene
     {
         controlState = 6;
         hqMenu.end();
-        infoScene.start(playerArmy);
+        infoScene.start(playerArmy, eventManager);
     }
     
     public void cst1to0()

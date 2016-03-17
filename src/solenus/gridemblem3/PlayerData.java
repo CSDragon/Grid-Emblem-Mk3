@@ -32,6 +32,7 @@ public class PlayerData
     private int mapNum;
     private int saveLoc;
     private int gold;
+    private boolean watchedMidScene;
     
     private ArrayList<Unit> unitList;
     private ArrayList<Weapon> weaponConvoy;
@@ -240,22 +241,8 @@ public class PlayerData
         for(Unit u: unitList)
             u.newMap();
         
-        //Set the new events.
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+ mapNum +"/events.txt"));
-            
-            int numEvents = Integer.parseInt(in.readLine().substring(11));
-            eventsWatched = new ArrayList<>();
-            for(int i = 0; i<numEvents; i++)
-                eventsWatched.add(Boolean.FALSE);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Loading Events for map "+ mapNum +" didn't work.");
-            System.exit(-1);
-        }
+        eventsWatched = new ArrayList<>();
+        watchedMidScene = false;
     }
     
     //</editor-fold>
@@ -321,6 +308,13 @@ public class PlayerData
     public boolean removeItem(Usable u)
     {
         return itemConvoy.remove(u);
+    }
+    
+    public void setupEvents(int numEvents)
+    {
+        eventsWatched = new ArrayList<>();
+        for(int i = 0; i < numEvents; i++)
+            eventsWatched.add(Boolean.FALSE);
     }
     
     /**
@@ -510,12 +504,29 @@ public class PlayerData
     
     /**
      * Returns the amount of gold you have
+     * @return The ammount of gold you have
      */
     public int getGold()
     {
         return gold;
     }
     
-    //</editor-fold>
+    /**
+     * @return the watchedMidScene
+     */
+    public boolean getWatchedMidScene() 
+    {
+        return watchedMidScene;
+    }
 
+    /**
+     * @param watchedMidScene the watchedMidScene to set
+     */
+    public void setWatchedMidScene(boolean watchedMidScene) 
+    {
+        this.watchedMidScene = watchedMidScene;
+    }
+    
+    //</editor-fold>
+    
 }

@@ -3,16 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package solenus.gridemblem3.scene.infoscene;
+package solenus.gridemblem3.scene.dialoguescene;
 
 import java.awt.Graphics2D;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
-import solenus.gridemblem3.scene.dialoguescene.DialogueScene;
 import solenus.gridemblem3.scene.Scene;
 
 /**
@@ -22,11 +17,13 @@ import solenus.gridemblem3.scene.Scene;
 public class InfoScene extends Scene
 {
     private PlayerData data;
-    private ArrayList<InfoEvent> events;
     private InfoMenu infoMenu;
     private DialogueScene dialogueScene;
     
+    private EventManager eventManager;
+    
     private int activeEvent;
+    
     
     public InfoScene()
     {
@@ -111,8 +108,8 @@ public class InfoScene extends Scene
                     }
                     break;
                 case 3:
-                    data.getWeaponConvoy().addAll(events.get(activeEvent).getWeaponRewards());
-                    data.getItemConvoy().addAll(events.get(activeEvent).getItemRewards());
+                    data.getWeaponConvoy().addAll(eventManager.getInfoEvents().get(activeEvent).getWeaponRewards());
+                    data.getItemConvoy().addAll(eventManager.getInfoEvents().get(activeEvent).getItemRewards());
                     cst3to4();
                     break;
                 case 4:
@@ -158,32 +155,15 @@ public class InfoScene extends Scene
      * Starts the scene up.
      * @param pd the player's save file
      */
-    public void start(PlayerData pd)
+    public void start(PlayerData pd, EventManager em)
     {
         super.start();
         controlState = 1;
+        eventManager = em;
         
         data = pd;
-        events = new ArrayList<>();
         
-        try
-        {
-            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+data.getMapNum()+"/events.txt"));
-            
-            int numEvents = Integer.parseInt(in.readLine().substring(11));
-            in.readLine();
-            
-            for(int i = 0; i<numEvents; i++)
-                events.add(new InfoEvent(in));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(null, "Loading Events for map "+ data.getMapNum() +"didn't work.");
-            System.exit(-1);
-        }
-        
-        infoMenu = new InfoMenu(events, data.getEventsWatched());
+        infoMenu = new InfoMenu(eventManager.getInfoEvents(), data.getEventsWatched());
         infoMenu.start();
     }
     
@@ -191,7 +171,7 @@ public class InfoScene extends Scene
     {
         controlState = 2;
         infoMenu.end();
-        dialogueScene.start(events.get(activeEvent).getFileName());
+        dialogueScene.start(eventManager.getInfoEvents().get(activeEvent).getFileName());
     }
     
     public void cst3to4()
