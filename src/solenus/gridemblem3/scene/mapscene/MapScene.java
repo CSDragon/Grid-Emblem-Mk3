@@ -269,7 +269,7 @@ public class MapScene extends Scene
         //always check this
         if(active)
         {
-            switch(getControlState())
+            switch(controlState)
             {
                 /*  
                 STATES:

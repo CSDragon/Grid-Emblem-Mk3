@@ -68,9 +68,9 @@ public class UnitHoverUI extends UI
     public void animate(int cs)
     {   
         //always check this
-        if(active && activeUnit != null)
+        if(active)
         {
-            if(controlStateVisibility.contains(cs))
+            if(controlStateVisibility.contains(cs) && activeUnit != null)
             {
                 if(opacity != 1f)
                     opacity += 0.25f;
