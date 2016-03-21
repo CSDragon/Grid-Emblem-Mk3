@@ -113,7 +113,7 @@ public class TerrainUI extends UI
     public void draw(Graphics2D g)
     {
         //always check this
-        if(visible)
+        if(visible && activeTerrain != null)
         {
             Composite ac = g.getComposite();
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));

@@ -58,7 +58,6 @@ public abstract class Scene
     //</editor-fold>
     
     // <editor-fold desc="Scene control methods">
-    
         
     /**
      * Responds to controls.

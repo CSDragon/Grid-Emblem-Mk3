@@ -19,6 +19,7 @@ import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.*;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
+import solenus.gridemblem3.scene.mapscene.unitinspectscene.UnitInspectScene;
 import solenus.gridemblem3.ui.XPBarUI;
 
 
@@ -67,6 +68,7 @@ public class MapScene extends Scene
     private PreBattleScene preBattleScene;
     private TerrainUI terrainUI;
     private UnitHoverUI unitHoverUI;
+    private UnitInspectScene unitInspectScene;
     
     //range UI
     private boolean drawAllyMoveRange;
@@ -126,6 +128,7 @@ public class MapScene extends Scene
                 13) Exp
                 14) Prebattle Menu
                 15) View Map
+                16) Unit Inspect Scene
             */
 
             //cursor mode
@@ -255,7 +258,15 @@ public class MapScene extends Scene
                             selectedUnit = null;
                     }
                     break;
+                    
+                case 16:
+                    unitInspectScene.respondControls(im);
+                    break;
             }
+            
+            //TEST
+            if(im.getR() == 1)
+                cstXto16();
         }
     }
     
@@ -289,6 +300,7 @@ public class MapScene extends Scene
                     13) Exp
                     14) Prebattle Menu
                     15) View Map
+                    16) Unit Inspect Scene.
                 */
                 
                 /*  Cursor Mode
@@ -510,6 +522,19 @@ public class MapScene extends Scene
                     camera.moveToRenderable(cursor, map);
                     break;
                     
+                /*  Unit Inspect Scene
+                    Active Object: Unit Inspect Scene
+                    Camera Follows: cursor
+                */
+                case 16:
+                    switch(unitInspectScene.runFrame())
+                    {
+                        case Scene.BACK:
+                            cst16toX();
+                    }
+                    camera.moveToRenderable(cursor, map);
+                    break;
+                    
             }  
             
             terrainUI.runFrame();
@@ -543,6 +568,7 @@ public class MapScene extends Scene
             preBattleScene.animate();
             terrainUI.animate(controlState);
             unitHoverUI.animate(controlState);
+            unitInspectScene.animate();
         }
     }
 
@@ -594,6 +620,7 @@ public class MapScene extends Scene
             preBattleScene.draw(g2);
             terrainUI.draw(g2);
             unitHoverUI.draw(g2);
+            unitInspectScene.draw(g2);
         }
         
     }
@@ -661,6 +688,7 @@ public class MapScene extends Scene
         //UI
         terrainUI.start(cursor, map);
         unitHoverUI.start(cursor, this);
+        unitInspectScene = new UnitInspectScene(this);
         
         //TEST
         numFactions = 2;
@@ -1350,6 +1378,18 @@ public class MapScene extends Scene
         controlState = 14;
         cursor.setVisible(false);
         preBattleScene.resume();
+    }
+    
+    public void cstXto16()
+    {
+        unitInspectScene.start(controlState);
+        controlState = 16;
+    }
+    
+    public void cst16toX()
+    {
+        controlState = unitInspectScene.getParentControlState();
+        unitInspectScene.end();
     }
     
     
