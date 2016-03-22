@@ -5,6 +5,7 @@
  */
 package solenus.gridemblem3.actor;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import solenus.gridemblem3.item.*;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.PlayerData;
 
@@ -109,6 +111,7 @@ public class Unit extends Actor
     private ArrayList<String> skills;
     private ArrayList<String> skillsReserve;
     
+    private BufferedImage portrait;
     
     //<editor-fold desc="constructors">
 
@@ -123,31 +126,10 @@ public class Unit extends Actor
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
         skillsReserve = new ArrayList<>();
+        
+        loadPortrait();
     }
 
-    //Test constructor
-    public Unit(int t, int m, int mt)
-    {
-        super(null);
-        
-        hp = 10;
-        curHP = 10;
-        team = t;
-        move = m;
-        transportType = mt;
-        
-        weaponInventory = new ArrayList<>();
-        inventory = new ArrayList<>();
-        skills = new ArrayList<>();
-        skillsReserve = new ArrayList<>();
-        
-        
-        hasMoved = false;
-        passable = true;
-        
-        xp = 80;
-    }
-    
     /**
      * Creates a new unit from a text file
      * @param in The text we're reading from.
@@ -229,6 +211,9 @@ public class Unit extends Actor
         for(int i = 0; i<numSkillsReserve; i++)
             skillsReserve.add(in.readLine());
         in.readLine();
+        
+        loadPortrait();
+
     }
     
     /**
@@ -350,6 +335,44 @@ public class Unit extends Actor
         catch(Exception e)
         {
             System.out.println("Unit Prefab Generation failed");
+        }
+    }
+    
+    public final void loadPortrait()
+    {
+        if(name == null)
+        {
+            try
+            {
+                portrait = ImageIO.read(new File("assets/portraits/Generic.png"));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace(System.out);
+                JOptionPane.showMessageDialog(null, "Loading generic portrait failed, file doesn't seem to exist.");
+                System.exit(-1);
+            }
+        }
+        
+        else
+        {
+            try
+            {
+                portrait = ImageIO.read(new File("assets/portraits/"+ name +".png"));
+            }
+            catch(Exception e)
+            {
+                try
+                {
+                    portrait = ImageIO.read(new File("assets/portraits/Generic.png"));
+                }
+                catch(Exception e1)
+                {
+                    e1.printStackTrace(System.out);
+                    JOptionPane.showMessageDialog(null, "Loading generic portrait failed, file doesn't seem to exist.");
+                    System.exit(-1);
+                }
+            }
         }
     }
     
@@ -1265,8 +1288,14 @@ public class Unit extends Actor
         this.staffMastery = staffMastery;
     }
     
-    //</editor-fold>
+    /**
+     * @return the portrait
+     */
+    public BufferedImage getPortrait() {
+        return portrait;
+    }
 
+    //</editor-fold>
 
 
 }

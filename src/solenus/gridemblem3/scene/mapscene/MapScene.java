@@ -1382,7 +1382,7 @@ public class MapScene extends Scene
     
     public void cstXto16()
     {
-        unitInspectScene.start(controlState);
+        unitInspectScene.start(controlState, getUnitAtPoint(cursor.getCoord()));
         controlState = 16;
     }
     
