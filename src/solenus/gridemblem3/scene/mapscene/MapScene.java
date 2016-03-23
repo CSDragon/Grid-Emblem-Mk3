@@ -135,6 +135,12 @@ public class MapScene extends Scene
             switch(getControlState())
             {
                 case 1:
+                    //R: Open the unit inspection.
+                    if(im.getR() == 1)
+                    {
+                        cstXto16();
+                        break;
+                    }
                     //A: On a friendly unit, enter move mode, on anything else enter system action box.
                     if(im.getA() == 1)
                     {
@@ -162,14 +168,18 @@ public class MapScene extends Scene
                     //L: Move cursor instantly to next unmoved unit.
                     if(im.getL()%20 == 1)
                         moveToNextUnmovedUnit();
-                    //R: Open details screen TODO
-
                     //Check that nothing has changed. If the move mode was changed, we don't want to move anymore.
                     if (getControlState() == 1)
                         cursor.respondControls(im);
                     break;
 
                 case 2:
+                    //R: Open the unit inspection.
+                    if(im.getR() == 1)
+                    {
+                        cstXto16();
+                        break;
+                    }
                     //A: When over an available location, move the unit to that location and open the action box
                     if(im.getA() == 1)
                         if(allyRangeMap.contains(cursor.getCoord()))
@@ -201,14 +211,16 @@ public class MapScene extends Scene
                     break;
 
                 case 6:
+                    //R: Open the unit inspection.
+                    if(im.getR() == 1)
+                    {
+                        cstXto16();
+                        break;
+                    }
                     if(im.getUp() == 1 || im.getRight() == 1)
-                    {
                         attackableUnitsIndex--;
-                    }
                     if(im.getDown() == 1 || im.getLeft() == 1)
-                    {
                         attackableUnitsIndex++;
-                    }
 
                     if(attackableUnitsIndex < 0)
                         attackableUnitsIndex = attackableUnits.size()-1;
@@ -233,6 +245,13 @@ public class MapScene extends Scene
                     break;
                 case 15:
                     cursor.respondControls(im);
+                    
+                    //R: Open the unit inspection.
+                    if(im.getR() == 1)
+                    {
+                        cstXto16();
+                        break;
+                    }
                     if(im.getA() == 1)
                     {
                         if(playerStartingLocations.contains(cursor.getCoord()))
@@ -263,10 +282,6 @@ public class MapScene extends Scene
                     unitInspectScene.respondControls(im);
                     break;
             }
-            
-            //TEST
-            if(im.getR() == 1)
-                cstXto16();
         }
     }
     
