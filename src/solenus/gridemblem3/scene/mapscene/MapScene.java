@@ -252,6 +252,7 @@ public class MapScene extends Scene
                         cstXto16();
                         break;
                     }
+                    //A: If pressed on a starting location that contains a unit, you mave move the unit.
                     if(im.getA() == 1)
                     {
                         if(playerStartingLocations.contains(cursor.getCoord()))

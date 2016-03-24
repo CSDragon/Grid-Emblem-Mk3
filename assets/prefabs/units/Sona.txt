@@ -1,0 +1,61 @@
+Name: Sona
+Class: Cleric
+Team: 0
+Level: 1
+XP: 0
+HP: 16.5
+STR: 3.5
+MAG: 8.5
+Skill: 3.5
+SPD: 5.5
+Luck: 8.5
+DEF: 2.5
+RES: 10.5
+Move: 5
+HPUP: 0.45
+STRUP: 0.20
+MAGUP: 0.7
+SkillUP: 0.7
+SPDUP: 0.70
+LuckUP: 0.5
+DEFUP: 0.2
+RESUP: 0.35
+Move Type: 1
+Armor Type: 0
+Sword Mastery: -1
+Axe Mastery: -1
+Lance Mastery: -1
+Bow Mastery: -1
+Dagger Mastery: -1
+Fire Mastery: -1
+Wind Mastery: -1
+Lightning Mastery: -1
+Light Mastery: -1
+Dark Mastery: -1
+Staff Mastery: 40
+
+Num Weapons: 1
+
+Name: Heal
+Value: 1000
+Weapon Type: 10
+Strength or Magic: 0
+Mastery Requirement: E
+Damage: 1
+Max Uses: 40
+Cur Uses: 40
+Hit: 100	
+Weight: 2
+Crit: 0
+Min Range: 1
+Max Range: 1
+Num Effects: 1
+RodHeal
+
+Num Items: 0
+
+Skills
+Num Skills: 0
+
+Num Skills Bank: 0
+
