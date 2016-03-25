@@ -6,7 +6,7 @@ Mastery Requirement: D
 Damage: 10
 Max Uses: 25
 Cur Uses: 25
-Hit: 70	
+Hit: 70
 Weight: 8
 Crit: 5
 Min Range: 1

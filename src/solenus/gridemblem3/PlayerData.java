@@ -179,6 +179,7 @@ public class PlayerData
         unitList.add(Unit.loadFromPrefab("Lux"));
         unitList.add(Unit.loadFromPrefab("Quinn"));
         unitList.add(Unit.loadFromPrefab("Xin Zhao"));
+        unitList.add(Unit.loadFromPrefab("Sona"));
         
         //TEST
         weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));

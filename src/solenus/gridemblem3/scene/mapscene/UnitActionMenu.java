@@ -7,17 +7,11 @@ package solenus.gridemblem3.scene.mapscene;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.actor.Unit;
-import solenus.gridemblem3.scene.mapscene.Pathfinding;
+import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.ui.menu.GenericMenu;
 
 /**
@@ -27,7 +21,8 @@ import solenus.gridemblem3.ui.menu.GenericMenu;
 public class UnitActionMenu extends GenericMenu
 {
     public static final int ATTACK = 0;
-    public static final int ITEM = 1;
+    public static final int STAFF = 1;
+    public static final int ITEM = 2;
     //Put any new commands ABOVE WAIT, and update the value of WAIT acordingly. WAIT should always be the last number.
     public static final int WAIT = 2;
     
@@ -35,6 +30,7 @@ public class UnitActionMenu extends GenericMenu
     private ArrayList<Unit> attackableUnits;
     private ArrayList<Integer> availCommands;
     private boolean attackFlag;
+    private boolean staffFlag;
     private boolean itemFlag;
     
     
@@ -107,6 +103,12 @@ public class UnitActionMenu extends GenericMenu
                 textOffset += height;
             }
             
+            if(staffFlag)
+            {
+                Rendering.renderTextAbsolute("Staff", g, xLoc + 10, yLoc + textOffset, centerX, centerY, 1, 1, 0);
+                textOffset += height;
+            }
+            
             if(itemFlag)
             {
                 Rendering.renderTextAbsolute("Item", g, xLoc + 10, yLoc + textOffset, centerX, centerY, 1, 1, 0);
@@ -126,12 +128,20 @@ public class UnitActionMenu extends GenericMenu
     public void checkCommands()
     {
         availCommands = new ArrayList();
-        
+        attackFlag = false;
+        staffFlag = false;
+        itemFlag = false;
         
         attackableUnits = Pathfinding.getAttackableObjects(selectedUnit);
         attackFlag = (attackableUnits.size() > 0);
         if(attackFlag)
             availCommands.add(ATTACK);
+        
+        for(Weapon w:selectedUnit.getWeaponInventory())
+            if(w.getWeaponType() == Weapon.STAFF)
+                staffFlag = true;
+        if(staffFlag)
+            availCommands.add(STAFF);
         
         itemFlag = (selectedUnit.getInventory().size() > 0);
         if(itemFlag)
@@ -160,7 +170,6 @@ public class UnitActionMenu extends GenericMenu
         attackableUnits = null;
         availCommands = null;
         checkCommands();
-
     }
     
     
