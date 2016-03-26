@@ -24,7 +24,7 @@ public class UnitActionMenu extends GenericMenu
     public static final int STAFF = 1;
     public static final int ITEM = 2;
     //Put any new commands ABOVE WAIT, and update the value of WAIT acordingly. WAIT should always be the last number.
-    public static final int WAIT = 2;
+    public static final int WAIT = 3;
     
     private Unit selectedUnit;
     private ArrayList<Unit> attackableUnits;

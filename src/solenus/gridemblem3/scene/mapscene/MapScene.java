@@ -356,6 +356,12 @@ public class MapScene extends Scene
                         case UnitActionMenu.ATTACK:
                             cst3to6();
                             break;
+                            
+                        case UnitActionMenu.STAFF:
+                            break;
+                            
+                        case UnitActionMenu.ITEM:
+                            break;
                         
                         case UnitActionMenu.WAIT:
                             cst3to1();
