@@ -245,7 +245,6 @@ public class MapScene extends Scene
                     break;
                 case 15:
                     cursor.respondControls(im);
-                    
                     //R: Open the unit inspection.
                     if(im.getR() == 1)
                     {
