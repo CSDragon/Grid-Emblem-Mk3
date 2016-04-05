@@ -130,31 +130,38 @@ public class Pathfinding
      * Gets all the points a unit can attack
      * @param u the attacking unit
      * @param moveRange the range it can move (which determines how far it can move before attacking)
+     * @param staffFlag If we're checking a staff, this is true. Otherwise it's false.
      * @return the list of points the unit can attack
      */
-    public static ArrayList<Point> getAllAttackLocations(Unit u, ArrayList<Point> moveRange)
+    public static ArrayList<Point> getAllAttackLocations(Unit u, ArrayList<Point> moveRange, boolean staffFlag)
     {
         ArrayList<Point> p = new ArrayList<>();
         
-        Weapon w = u.getEquppedWeapon();
-        
-        //if we even have a weapon
-        if(w != null)
-        {
-            int min = w.getMinRange();
-            int max = w.getMaxRange();
-
-            //and get all the places you can hit from that range.
-            for (Point mr : moveRange) 
+        //Go down the list of weapons.
+        for(Weapon w : u.getWeaponInventory())
+        {      
+            //if we can even EQUIP the weapon
+            if(u.canEquipWeapon(w))
             {
-                for (int i = min; i<= max; i++) 
+                //If we're in staff mode, look for staves. If we're in attack mode look for anything but staves.
+                if((w.getWeaponType() == Weapon.STAFF) == staffFlag)
                 {
-                    for (int j = 0; j<i; j++) 
+                    int min = w.getMinRange();
+                    int max = w.getMaxRange();
+
+                    //and get all the places you can hit from that range.
+                    for (Point mr : moveRange) 
                     {
-                        p.add(new Point(mr.x-i+j, mr.y+j));
-                        p.add(new Point(mr.x+j,   mr.y+i-j));
-                        p.add(new Point(mr.x+i-j, mr.y-j));
-                        p.add(new Point(mr.x-j,   mr.y-i+j));
+                        for (int i = min; i<= max; i++) 
+                        {
+                            for (int j = 0; j<i; j++) 
+                            {
+                                p.add(new Point(mr.x-i+j, mr.y+j));
+                                p.add(new Point(mr.x+j,   mr.y+i-j));
+                                p.add(new Point(mr.x+i-j, mr.y-j));
+                                p.add(new Point(mr.x-j,   mr.y-i+j));
+                            }
+                        }
                     }
                 }
             }
@@ -172,29 +179,29 @@ public class Pathfinding
     /**
      * Performs getAllAttackLocations with the default movement range of the unit's whole range.
      * @param u the attacking unit
+     * @param staffMode If we're actually looking for allies to heal, not enemies to attack.
      * @return the list of points the unit can attack
      */
-    public static ArrayList<Point> getAllAttackLocations(Unit u)
+    public static ArrayList<Point> getAllAttackLocations(Unit u, boolean staffMode)
     {
         findAllMovableLocations(u);
-        return getAllAttackLocations(u, moveList);
+        return getAllAttackLocations(u, moveList, staffMode);
     }
     
     /**
      * Gets the list of points a unit can attack while standing still
      * @param u The attacking unit.
      * @param p The point at which it is standing
+     * @param staffMode If we're actually looking for allies to heal, not enemies to attack.
      * @return The list of points it can attack.
      */
-    public static ArrayList<Point> getAllAttackLocations(Unit u, Point p)
+    public static ArrayList<Point> getAllAttackLocations(Unit u, Point p, boolean staffMode)
     {
         ArrayList points = new ArrayList<>();
         points.add(p);
-        return getAllAttackLocations(u, points);
+        return getAllAttackLocations(u, points, staffMode);
     }
-    
 
-    
     /**
      * Finds the fastest possible path to get a unit to a point
      * @param dest the place we're going
@@ -275,17 +282,18 @@ public class Pathfinding
     }
     
     
-    //Because of this thread, any breakable rocks or stuff are gonna have to be Units.
+    //Because of this method, any breakable rocks or stuff are gonna have to be Units.
     /**
-     * Finds and returns all attackable enemies and objects in the 
+     * Finds and returns all attackable enemies and objects in the area
      * @param selectedUnit the unit being checked
+     * @param staffMode If we're actually looking for allies to heal, not enemies to attack.
      * @return The list of enemy units.
      */
-    public static ArrayList<Unit> getAttackableObjects(Unit selectedUnit)
+    public static ArrayList<Unit> getAttackableObjects(Unit selectedUnit, boolean staffMode)
     {
         ArrayList<Unit> ret = new ArrayList();
         
-        ArrayList<Point> p = Pathfinding.getAllAttackLocations(selectedUnit, selectedUnit.getCoord());
+        ArrayList<Point> p = Pathfinding.getAllAttackLocations(selectedUnit, selectedUnit.getCoord(), staffMode);
         
         Unit check;
         
@@ -293,13 +301,14 @@ public class Pathfinding
         {
             check = mapScene.getUnitAtPoint(checkpoint);
             //TODO this check may not be optimal for non-team objects like destructable rocks.
-            if(check != null && !selectedUnit.isAlly(check))
+            //Checks if it's an ally or an enemy. Add it if it's an enemy and we're attacking, or if it's an ally and we're healing.
+            if(check != null && (selectedUnit.isAlly(check) == staffMode))
             ret.add(check);
         }
         
         return ret;
     }
-    
+
     //<editor-fold desc="Getters and setters">
     
     /**

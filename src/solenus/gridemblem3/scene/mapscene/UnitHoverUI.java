@@ -125,7 +125,8 @@ public class UnitHoverUI extends UI
             g.setColor(Color.BLACK);
             Rendering.renderTextAbsolute("Lv: " + activeUnit.getLevel(), g, xLoc+142, yLoc+58, 0, 0, 2, 0, 0);
             Rendering.renderTextAbsolute("HP: " + activeUnit.getCurHP() + " / " + (int)activeUnit.getHP(), g, xLoc+8, yLoc+58, 0, 0, 2, 0, 2);
-            Rendering.renderTextAbsolute(activeUnit.getEquppedWeapon().getName(), g, xLoc+122, yLoc+86, 0, 0, 2, 0, 0);
+            if(activeUnit.getEquppedWeapon() != null)
+                Rendering.renderTextAbsolute(activeUnit.getEquppedWeapon().getName(), g, xLoc+122, yLoc+86, 0, 0, 2, 0, 0);
             
             g.setComposite(ac);
         }

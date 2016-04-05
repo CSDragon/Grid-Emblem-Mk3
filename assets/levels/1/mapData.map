@@ -64,6 +64,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -71,7 +72,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -124,6 +125,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -131,7 +133,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -184,6 +186,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -191,7 +194,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -244,6 +247,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -251,7 +255,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -304,6 +308,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -311,7 +316,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -364,6 +369,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -371,7 +377,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -424,6 +430,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -431,7 +438,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10
@@ -484,6 +491,7 @@ Lightning Mastery: 20
 Light Mastery: 20
 Dark Mastery: 20
 Staff Mastery: 20
+Natural Mastery: 20
 
 Num Weapons: 1
 
@@ -491,7 +499,7 @@ Name: Light
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
-Mastery Requirement: B
+Mastery Requirement: E
 Damage: 5
 Max Uses: 10
 Cur Uses: 10

@@ -743,7 +743,7 @@ public class MapScene extends Scene
     {
         allyRangeMap.clear();
         if(u != null)
-            allyRangeMap.addAll(Pathfinding.getAllAttackLocations(u));
+            allyRangeMap.addAll(Pathfinding.getAllAttackLocations(u, false));
     }
     
     /**
@@ -761,7 +761,7 @@ public class MapScene extends Scene
             enemyRangeList.add(u);
 
             //add threat points to threat map
-            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u));
+            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u, false));
 
             //Remove duplicates
             HashSet h = new HashSet(selectedEnemyRangeMap);
@@ -782,7 +782,7 @@ public class MapScene extends Scene
         //recreate the threat map.
         selectedEnemyRangeMap.clear();
         for (Unit enemy : enemyRangeList) 
-            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(enemy));
+            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(enemy, false));
 
     }
     
@@ -794,7 +794,7 @@ public class MapScene extends Scene
         for (Unit u : unitList)
         {
             if(u.getTeam() == 1)
-                allEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u));
+                allEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u, false));
         }
         
         //Remove duplicates

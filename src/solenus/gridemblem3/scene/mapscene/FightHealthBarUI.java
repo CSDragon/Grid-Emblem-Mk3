@@ -102,7 +102,8 @@ public class FightHealthBarUI extends UI
             /*
             STATES:
                 1) Idle
-                2) Animating
+                2) Animating Damage
+                3) Animating Healing
             */
             switch(controlState)
             {

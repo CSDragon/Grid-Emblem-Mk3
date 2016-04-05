@@ -34,6 +34,7 @@ public class Weapon extends Item
     public static final int LIGHT = 8;
     public static final int DARK = 9;
     public static final int STAFF = 10;
+    public static final int NATURAL = 11;
     
     public static final int E = 0;
     public static final int D = 10;
@@ -189,6 +190,31 @@ public class Weapon extends Item
         if(curUses > 0)
             curUses -= 1;
     }
+    
+    /**
+     * @return The mastery requirement in the usable integer form.
+     */
+    public int getMasteryRequirementAsInt()
+    {
+        switch(masteryRequirement)
+        {
+            case 'S':
+                return S;
+            case 'A':
+                return A;
+            case 'B':
+                return B;
+            case 'C':
+                return C;
+            case 'D':
+                return D;
+            case 'E':
+                return E;
+                
+        }
+        return -1;
+    }
+    
     
     //<editor-fold desc="Getters and Setters">
     

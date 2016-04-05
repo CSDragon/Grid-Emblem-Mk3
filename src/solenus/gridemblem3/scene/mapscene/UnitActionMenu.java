@@ -28,6 +28,7 @@ public class UnitActionMenu extends GenericMenu
     
     private Unit selectedUnit;
     private ArrayList<Unit> attackableUnits;
+    private ArrayList<Unit> staffableUnits;
     private ArrayList<Integer> availCommands;
     private boolean attackFlag;
     private boolean staffFlag;
@@ -132,14 +133,15 @@ public class UnitActionMenu extends GenericMenu
         staffFlag = false;
         itemFlag = false;
         
-        attackableUnits = Pathfinding.getAttackableObjects(selectedUnit);
+        attackableUnits = Pathfinding.getAttackableObjects(selectedUnit, false);
         attackFlag = (attackableUnits.size() > 0);
+        
         if(attackFlag)
             availCommands.add(ATTACK);
-        
-        for(Weapon w:selectedUnit.getWeaponInventory())
-            if(w.getWeaponType() == Weapon.STAFF)
-                staffFlag = true;
+
+        staffableUnits = Pathfinding.getAttackableObjects(selectedUnit, true);
+            staffFlag = (staffableUnits.size() > 0);
+
         if(staffFlag)
             availCommands.add(STAFF);
         

@@ -33,6 +33,7 @@ Lightning Mastery: -1
 Light Mastery: 40
 Dark Mastery: -1
 Staff Mastery: -1
+Natural Mastery: -1
 
 Num Weapons: 1
 

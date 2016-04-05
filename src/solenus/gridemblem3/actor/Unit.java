@@ -105,6 +105,7 @@ public class Unit extends Actor
     private int lightMastery;
     private int darkMastery;
     private int staffMastery;
+    private int naturalWeaponMastery;
 
     private ArrayList<Weapon> weaponInventory;
     private ArrayList<Usable> inventory;
@@ -176,6 +177,7 @@ public class Unit extends Actor
         lightMastery = Integer.parseInt(in.readLine().substring(15));
         darkMastery = Integer.parseInt(in.readLine().substring(14));
         staffMastery = Integer.parseInt(in.readLine().substring(15));
+        naturalWeaponMastery = Integer.parseInt(in.readLine().substring(17));
 
 
         
@@ -288,6 +290,7 @@ public class Unit extends Actor
         bw.write("Light Mastery: "+lightMastery); bw.newLine();
         bw.write("Dark Mastery: "+darkMastery); bw.newLine();
         bw.write("Staff Mastery: "+staffMastery); bw.newLine();
+        bw.write("Natural Mastery: "+naturalWeaponMastery); bw.newLine();
         
         bw.newLine();
         bw.write("Num Weapons: "+weaponInventory.size()); bw.newLine();
@@ -479,10 +482,39 @@ public class Unit extends Actor
     }
     
        
-    public boolean isEquipable(Weapon w)
+    public boolean canEquipWeapon(Weapon w)
     {
-        //TODO
-        return true;
+        int mr = w.getMasteryRequirementAsInt();
+
+        switch(w.getWeaponType())
+        {
+            case Weapon.SWORD:
+                return mr < swordMastery;
+            case Weapon.AXE:
+                return mr < axeMastery;
+            case Weapon.LANCE:
+                return mr < lanceMastery;
+            case Weapon.BOW:
+                return mr < bowMastery;
+            case Weapon.DAGGER:
+                return mr < daggerMastery;
+            case Weapon.FIRE:
+                return mr < fireMastery;
+            case Weapon.WIND:
+                return mr < windMastery;
+            case Weapon.LIGHTNING:
+                return mr < lightningMastery;
+            case Weapon.LIGHT:
+                return mr < lightMastery;
+            case Weapon.DARK:
+                return mr < darkMastery;
+            case Weapon.STAFF:
+                return mr < staffMastery;
+            case Weapon.NATURAL:
+                return mr < naturalWeaponMastery;
+        }
+        
+        return false;
     }
     
     /**
@@ -497,7 +529,7 @@ public class Unit extends Actor
         
         for(Weapon w : weaponInventory)
         {
-            if(isEquipable(w) && w.getMinRange() <= dist && w.getMaxRange() >= dist)
+            if(canEquipWeapon(w) && w.getMinRange() <= dist && w.getMaxRange() >= dist)
                 ret.add(w);
         }
         
@@ -1080,7 +1112,7 @@ public class Unit extends Actor
      */
     public Weapon getEquppedWeapon()
     {
-        if(weaponInventory.isEmpty() || !isEquipable(weaponInventory.get(0)))
+        if(weaponInventory.isEmpty() || !canEquipWeapon(weaponInventory.get(0)))
             return null;
         else
             return weaponInventory.get(0);
@@ -1279,6 +1311,15 @@ public class Unit extends Actor
     {
         return staffMastery;
     }
+    
+    /**
+     * @return the naturalWeaponmastery
+     */
+    public int getNaturalWeaponMastery()
+    {
+        return naturalWeaponMastery;
+    }
+
 
     /**
      * @param staffMastery the staffMastery to set
@@ -1286,6 +1327,14 @@ public class Unit extends Actor
     public void setStaffMastery(int staffMastery)
     {
         this.staffMastery = staffMastery;
+    }
+    
+    /**
+     * @param naturalWeaponMastery the Natural Weapon Mastery to set
+     */
+    public void setNaturalWeaponMastery(int naturalWeaponMastery)
+    {
+        this.naturalWeaponMastery = naturalWeaponMastery;
     }
     
     /**

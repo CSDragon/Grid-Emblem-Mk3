@@ -33,6 +33,7 @@ Lightning Mastery: 0
 Light Mastery: 0
 Dark Mastery: 0
 Staff Mastery: 0
+Natural Mastery: 0
 
 Num Weapons: 0
 
