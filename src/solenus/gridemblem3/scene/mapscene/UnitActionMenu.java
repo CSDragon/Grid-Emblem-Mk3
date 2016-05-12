@@ -183,5 +183,10 @@ public class UnitActionMenu extends GenericMenu
         return attackableUnits;
     }
     
+    public ArrayList<Unit> getStaffableUnits()
+    {
+        return staffableUnits;
+    }
+    
     //</editor-fold>
 }

@@ -129,6 +129,8 @@ public class MapScene extends Scene
                 14) Prebattle Menu
                 15) View Map
                 16) Unit Inspect Scene
+                17) Select an ally to heal
+                18) Select a staff to use
             */
 
             //cursor mode
@@ -281,6 +283,35 @@ public class MapScene extends Scene
                 case 16:
                     unitInspectScene.respondControls(im);
                     break;
+                    
+                case 17:
+                    //R: Open the unit inspection.
+                    if(im.getR() == 1)
+                    {
+                        cstXto16();
+                        break;
+                    }
+                    if(im.getUp() == 1 || im.getRight() == 1)
+                        attackableUnitsIndex--;
+                    if(im.getDown() == 1 || im.getLeft() == 1)
+                        attackableUnitsIndex++;
+
+                    if(attackableUnitsIndex < 0)
+                        attackableUnitsIndex = attackableUnits.size()-1;
+                    if(attackableUnitsIndex >= attackableUnits.size())
+                        attackableUnitsIndex = 0;
+
+                    if(im.getA() == 1)
+                        cst6to7();
+                    if(im.getB() == 1)
+                        cst6to3();
+
+                    break;
+                    
+                case 18:
+                    weaponSelect.respondControls(im);
+                    break;
+                    
             }
         }
     }
@@ -316,6 +347,9 @@ public class MapScene extends Scene
                     14) Prebattle Menu
                     15) View Map
                     16) Unit Inspect Scene.
+                    17) Select an ally to heal
+                    18) Select a staff to use
+
                 */
                 
                 /*  Cursor Mode
@@ -357,6 +391,7 @@ public class MapScene extends Scene
                             break;
                             
                         case UnitActionMenu.STAFF:
+                            cst3to17();
                             break;
                             
                         case UnitActionMenu.ITEM:
@@ -554,6 +589,33 @@ public class MapScene extends Scene
                             cst16toX();
                     }
                     camera.moveToRenderable(cursor, map);
+                    break;
+                    
+                /*  Ally to heal Selection
+                    Active Objects: Cursor
+                    Camera Follows: Cursor
+                */
+                case 17:
+                    cursor.moveInstantly(attackableUnits.get(attackableUnitsIndex).getCoord());
+                    camera.moveToRenderable(cursor, map);
+                    break;
+                    
+                /*  Staff Selection
+                    Active Objects: WeaponSelctUI
+                    Camera Follows: SelectedUnit
+                */
+                case 18:
+                    camera.moveToRenderable(selectedUnit, map);
+                    switch(weaponSelect.runFrame())
+                    {
+                        //If B pressed, return to enemy select
+                        case WeaponSelectionMenu.BACK:
+                            cst18to17();
+                            break;
+                        case 1:
+                            cst7to8();
+                            break;
+                    }
                     break;
                     
             }  
@@ -1192,6 +1254,14 @@ public class MapScene extends Scene
         unitActionMenu.setVisible(false);
     }
     
+    public void cst3to17()
+    {
+        controlState = 17;
+        attackableUnits = unitActionMenu.getStaffableUnits();
+        attackableUnitsIndex = attackableUnits.size()-1;
+        unitActionMenu.setVisible(false);
+    }
+    
     /**
      * Leaves the system action box and returns to the cursor
      */
@@ -1414,6 +1484,30 @@ public class MapScene extends Scene
     {
         controlState = unitInspectScene.getParentControlState();
         unitInspectScene.end();
+    }
+    
+    /**
+     * Going from staff select back to target select
+     */
+    public void cst18to17()
+    {
+        controlState = 17;
+        weaponSelect.end();
+    }
+    
+
+    /**
+     * Going from staff select to healing.
+     */
+    public void cst18to8()
+    {
+        controlState = 8;
+        cursor.setVisible(false);
+        selectedUnit.equipWeapon(weaponSelect.getWeapon());
+        weaponSelect.end();
+        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightGraphicsMode, map);
+        fightUI.staffMode();
+        mvArrow.end();
     }
     
     
