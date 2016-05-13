@@ -61,6 +61,7 @@ public class MapScene extends Scene
     private UnitActionMenu unitActionMenu;
     private WeaponSelectionMenu weaponSelect;
     private FightUI fightUI;
+    private StaffActionUI staffUI;
     private SystemActionMenu systemAction;
     private Grid grid;
     private UnitCircles unitCircles;
@@ -90,6 +91,7 @@ public class MapScene extends Scene
         unitActionMenu = new UnitActionMenu();
         weaponSelect = new WeaponSelectionMenu();
         fightUI = new FightUI();
+        staffUI = new StaffActionUI();
         systemAction = new SystemActionMenu();
         xp = new XPBarUI();
         preBattleScene = new PreBattleScene(this);
@@ -302,7 +304,7 @@ public class MapScene extends Scene
                         attackableUnitsIndex = 0;
 
                     if(im.getA() == 1)
-                        cst6to7();
+                        cst17to18();
                     if(im.getB() == 1)
                         cst6to3();
 
@@ -613,10 +615,24 @@ public class MapScene extends Scene
                             cst18to17();
                             break;
                         case 1:
-                            cst7to8();
+                            cst18to19();
                             break;
                     }
                     break;
+                    
+                /*  Healing
+                    Active Objects: staffUI
+                    Camera Follows: selectedUnit
+                */
+                case 19:
+                    switch(staffUI.runFrame())
+                    {
+                        case 1:
+                            cst8toX();
+                            break;
+                    }
+                    break;
+                    
                     
             }  
             
@@ -1298,7 +1314,7 @@ public class MapScene extends Scene
     }
     
     /**
-     * Goes to item select.
+     * Goes to weapon select.
      */
     public void cst6to7()
     {
@@ -1487,6 +1503,16 @@ public class MapScene extends Scene
     }
     
     /**
+     * Goes to staff select.
+     */
+    public void cst17to18()
+    {
+        controlState = 18;
+        weaponSelect.start(selectedUnit, attackableUnits.get(attackableUnitsIndex));
+    }
+
+    
+    /**
      * Going from staff select back to target select
      */
     public void cst18to17()
@@ -1497,17 +1523,26 @@ public class MapScene extends Scene
     
 
     /**
-     * Going from staff select to healing.
+     * Going from staff select to doing the healing.
      */
-    public void cst18to8()
+    public void cst18to19()
     {
-        controlState = 8;
+        controlState = 19;
         cursor.setVisible(false);
         selectedUnit.equipWeapon(weaponSelect.getWeapon());
         weaponSelect.end();
-        fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightGraphicsMode, map);
-        fightUI.staffMode();
+        staffUI.start(selectedUnit, attackableUnits.get(attackableUnitsIndex));
+        //fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightGraphicsMode, map);
         mvArrow.end();
+    }
+    
+    /**
+     * The unit has finished healing. award XP
+     */
+    public void cst19to13()
+    {
+        controlState = 13;
+        xp.start(staffUI.getHealer(), staffUI.getHealerXP());
     }
     
     

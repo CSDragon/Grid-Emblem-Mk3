@@ -26,7 +26,6 @@ public class FightUI extends UI
     
     private boolean fastForwardFlag;
     private boolean graphics;
-    private boolean staff;
     
     private Unit attacker;
     private Unit defender;
@@ -319,16 +318,16 @@ public class FightUI extends UI
     {
         float ret = xp;
         
-        //If A is overleveled (more than 2 higher), reduce by 10% for each level too hight.
-        if(a.getLevel() > b.getLevel()+2)
+        //If A is overleveled (more than 3 higher), reduce by 10% for each level too hight.
+        if(a.getLevel() > b.getLevel()+3)
         {
-            ret = ret - (a.getLevel() - b.getLevel() - 2)*xp*0.1f;
+            ret = ret - (a.getLevel() - b.getLevel() - 3)*xp*0.1f;
             if(ret < 1)
                 ret = 1;
         }
         //if A is underleveled give it 20% more xp per level it was weaker than b.
         else if(a.getLevel() < b.getLevel())
-            ret = ret + (b.getLevel() - a.getLevel())*xp*.2f;
+            ret = ret + (a.getLevel() - b.getLevel())*xp*.2f;
         return (int)ret;
     }
     
@@ -357,55 +356,58 @@ public class FightUI extends UI
      */
     public void startAttack()
     {
-        switch (attackPhase) 
+        //Nobody has attacked yet. The attacker goes first
+        if(attackPhase == 0)
         {
-            //Nobody has attacked yet. The attacker goes first
-            case 0:
-                attackPhase = 1;
+            attackPhase = 1;
+            attackerTurn = true;
+            numAttacks = attacker.numAttacks();
+            controlState = 3;
+        }
+        
+        //Now it's the defender's turn
+        else if(attackPhase == 1)
+        {
+            attackPhase = 2;
+            attackerTurn = false;
+            defenderTurn = true;
+            numAttacks = defender.numAttacks();
+            controlState = 3;
+        }
+        
+        //Now the speed round
+        else if(attackPhase == 2)
+        {
+            attackPhase = 3;
+            attackerTurn = false;
+            defenderTurn = false;
+            
+            int speedDef = attacker.getTotalSpd() - defender.getTotalSpd();
+            
+            //the attacker is fast enough. FIGHT
+            if (speedDef >= 4)
+            {
                 attackerTurn = true;
                 numAttacks = attacker.numAttacks();
                 controlState = 3;
-                break;
-            //Now it's the defender's turn
-            case 1:
-                attackPhase = 2;
-                attackerTurn = false;
+            }
+            
+            //the defender is fast enough. FIGHT
+            else if(speedDef <= -4)
+            {
                 defenderTurn = true;
                 numAttacks = defender.numAttacks();
                 controlState = 3;
-                break;
-            //Now the speed round
-            case 2:
-                attackPhase = 3;
-                attackerTurn = false;
-                defenderTurn = false;
-                int speedDef = attacker.getTotalSpd() - defender.getTotalSpd();
-                //the attacker is fast enough. FIGHT
-                if (speedDef >= 4)
-                {
-                    attackerTurn = true;
-                    numAttacks = attacker.numAttacks();
-                    controlState = 3;
-                }
-                
-                //the defender is fast enough. FIGHT
-                else if(speedDef <= -4)
-                {
-                    defenderTurn = true;
-                    numAttacks = defender.numAttacks();
-                    controlState = 3;
-                }
-                
-                //they were the same-ish speed. No more fighting.
-                else
-                    controlState = 1;
-                break;
-
-            //We can't get to attack phase 4
-            default:
+            }
+            
+            //they were the same-ish speed. No more fighting.
+            else
                 controlState = 1;
-                break;
         }
+        
+        //We can't get to attack phase 4
+        else
+            controlState = 1;
     }
     
     /**
@@ -681,11 +683,6 @@ public class FightUI extends UI
     public static int weaponAdvantageDamage(Weapon a, Weapon b)
     {
         return 0;
-    }
-    
-    public void staffMode()
-    {
-        staff = true;
     }
     
     //</editor-fold>
