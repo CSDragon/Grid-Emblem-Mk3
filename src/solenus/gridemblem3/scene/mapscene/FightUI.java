@@ -318,10 +318,10 @@ public class FightUI extends UI
     {
         float ret = xp;
         
-        //If A is overleveled (more than 3 higher), reduce by 10% for each level too hight.
-        if(a.getLevel() > b.getLevel()+3)
+        //If A is overleveled (more than 2 higher), reduce by 10% for each level too hight.
+        if(a.getLevel() > b.getLevel()+2)
         {
-            ret = ret - (a.getLevel() - b.getLevel() - 3)*xp*0.1f;
+            ret = ret - (a.getLevel() - b.getLevel() - 2)*xp*0.1f;
             if(ret < 1)
                 ret = 1;
         }
