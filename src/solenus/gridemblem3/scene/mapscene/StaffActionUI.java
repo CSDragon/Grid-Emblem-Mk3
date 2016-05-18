@@ -133,12 +133,7 @@ public class StaffActionUI extends UI
         healed = d;
         
         //Clean the flags.
-        int x = healer.getX() - healed.getX();
-        if(x > 0)
-            x = 1;
-        else
-            x = -1;
-        healedHealthBar = new FightHealthBarUI(healed.getTotalHP(), healed.getCurHP(), -x);
+        healedHealthBar = new FightHealthBarUI(healed.getTotalHP(), healed.getCurHP(), 0);
     }
     
     public void loadRecorces()
@@ -162,7 +157,7 @@ public class StaffActionUI extends UI
      */
     public void cleanup()
     {
-        //Just in case they're not back where they belong.
+        //Just in case they're visually out of place.
         healed.moveInstantly(healed.getCoord());
         
         //Award XP

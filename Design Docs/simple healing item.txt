@@ -1,0 +1,15 @@
+Using an item:
+
+Start: 	Press A on the item
+cstTo20:Initialize the health bar, heal, decrement the uses.
+20: 	Wait for the animation to finish
+cstTo1: Health bar is null return to map neutral state.
+
+
+        //Decrement the number of remaining frames. And when we're out of remaining frames move on.
+        if(frameCount > damagePoint)
+        {
+            attackerBarDone = attackerHealthBar.runFrame();
+            defenderBarDone = defenderHealthBar.runFrame();
+        }
+        

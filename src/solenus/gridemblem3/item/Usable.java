@@ -137,7 +137,7 @@ public class Usable extends Item
      */
     public ArrayList<String> use()
     {
-        curUses --;
+        curUses--;
         return effects;
     }
 

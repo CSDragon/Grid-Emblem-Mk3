@@ -17,6 +17,7 @@ import solenus.gridemblem3.GridEmblemMk3;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.*;
+import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.scene.mapscene.unitinspectscene.UnitInspectScene;
@@ -60,8 +61,10 @@ public class MapScene extends Scene
     private ArrayList<Point> movingLine;
     private UnitActionMenu unitActionMenu;
     private WeaponSelectionMenu weaponSelect;
+    private ItemSelectionMenu itemSelect;
     private FightUI fightUI;
     private StaffActionUI staffUI;
+    private FightHealthBarUI singleHealthBar;
     private SystemActionMenu systemAction;
     private Grid grid;
     private UnitCircles unitCircles;
@@ -90,6 +93,7 @@ public class MapScene extends Scene
         mvArrow = new MovementArrow();
         unitActionMenu = new UnitActionMenu();
         weaponSelect = new WeaponSelectionMenu();
+        itemSelect = new ItemSelectionMenu();
         fightUI = new FightUI();
         staffUI = new StaffActionUI();
         systemAction = new SystemActionMenu();
@@ -132,7 +136,9 @@ public class MapScene extends Scene
                 15) View Map
                 16) Unit Inspect Scene
                 17) Select an ally to heal
-                18) Select a staff to use
+                18) Select a staff to use 
+                19) Heal "combat"
+                20) Healing item usage
             */
 
             //cursor mode
@@ -309,9 +315,15 @@ public class MapScene extends Scene
                         cst6to3();
 
                     break;
-                    
+                  
+                //Select Staff
                 case 18:
                     weaponSelect.respondControls(im);
+                    break;
+                
+                //Select Item
+                case 21:
+                    itemSelect.respondControls(im);
                     break;
                     
             }
@@ -351,6 +363,8 @@ public class MapScene extends Scene
                     16) Unit Inspect Scene.
                     17) Select an ally to heal
                     18) Select a staff to use
+                    19) Heal "combat"
+                    20) Healing item usage
 
                 */
                 
@@ -397,6 +411,7 @@ public class MapScene extends Scene
                             break;
                             
                         case UnitActionMenu.ITEM:
+                            cst3to21();
                             break;
                         
                         case UnitActionMenu.WAIT:
@@ -625,10 +640,40 @@ public class MapScene extends Scene
                     Camera Follows: selectedUnit
                 */
                 case 19:
+                    camera.moveToRenderable(selectedUnit, map);
                     switch(staffUI.runFrame())
                     {
                         case 1:
                             cst19to13();
+                            break;
+                    }
+                    break;
+                    
+                /* Using a healing item
+                    Active Objects: singleHealthBar
+                    Camera Follows: selectedUnit
+                */
+                case 20:
+                {
+                    camera.moveToRenderable(selectedUnit, map);
+                    if(singleHealthBar.runFrame())
+                        cst20to1();
+                }
+                
+                /*  item Selection
+                    Active Objects: WeaponSelctUI
+                    Camera Follows: SelectedUnit
+                */
+                case 21:
+                    camera.moveToRenderable(selectedUnit, map);
+                    switch(itemSelect.runFrame())
+                    {
+                        //If B pressed, return to unit action menu
+                        case ItemSelectionMenu.BACK:
+                            cst21to3();
+                            break;
+                        case 1:
+                            cst21to20();
                             break;
                     }
                     break;
@@ -665,6 +710,8 @@ public class MapScene extends Scene
             //UI
             fightUI.animate();
             staffUI.animate();
+            if(singleHealthBar != null)
+                singleHealthBar.animate();
             preBattleScene.animate();
             terrainUI.animate(controlState);
             unitHoverUI.animate(controlState);
@@ -714,9 +761,12 @@ public class MapScene extends Scene
             //draw UI
             unitActionMenu.draw(g2);
             weaponSelect.draw(g2);
+            itemSelect.draw(g2);
             systemAction.draw(g2);
             fightUI.draw(g2);
             staffUI.draw(g2);
+            if(singleHealthBar != null)
+                singleHealthBar.draw(g2);
             xp.draw(g2);
             preBattleScene.draw(g2);
             terrainUI.draw(g2);
@@ -1280,6 +1330,13 @@ public class MapScene extends Scene
         unitActionMenu.setVisible(false);
     }
     
+    public void cst3to21()
+    {
+        controlState = 21;
+        itemSelect.start(selectedUnit);
+        unitActionMenu.setVisible(false);
+    }
+    
     /**
      * Leaves the system action box and returns to the cursor
      */
@@ -1545,6 +1602,50 @@ public class MapScene extends Scene
     {
         controlState = 13;
         xp.start(staffUI.getHealer(), staffUI.getHealerXP());
+    }
+    
+    
+    
+    public void cst20to1()
+    {
+        controlState = 1;
+        itemSelect.end();
+        selectedUnit.setHasMoved(true);
+        singleHealthBar = null;
+        mvArrow.end();
+
+    }
+    
+    public void cst21to20()
+    {
+        controlState = 20;
+        singleHealthBar = new FightHealthBarUI(selectedUnit.getTotalHP(), selectedUnit.getCurHP(), 0);
+        
+        Usable u = selectedUnit.getInventory().get(itemSelect.getCursorLoc());
+        
+        String itemType = u.use().get(0);
+
+        if (u.getCurUses() <= 0)
+            selectedUnit.getInventory().remove(u);
+        
+        int healingDone = 0;
+
+
+        if(itemType.substring(0,4).equals("Heal"))
+        {
+            healingDone = Integer.parseInt(itemType.substring(4));
+        }
+
+        //Take Damage
+        selectedUnit.heal(healingDone);
+
+        singleHealthBar.heal(healingDone);
+    }
+    
+    public void cst21to3()
+    {
+        controlState = 3;
+        itemSelect.end();
     }
     
     

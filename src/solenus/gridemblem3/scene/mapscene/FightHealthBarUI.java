@@ -89,6 +89,9 @@ public class FightHealthBarUI extends UI
         location = loc*50;
         if(loc < 0)
             location -= uiWidth;
+        
+        if(loc == 0)
+            location -= uiWidth/2;
     }
     
     /**
