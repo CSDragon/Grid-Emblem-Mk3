@@ -22,7 +22,6 @@ public class StaffActionUI extends UI
     private Unit healed;
     private int xDir;
     private int yDir;
-    private int healedXP;
     private FightHealthBarUI healedHealthBar;
     private int healerXP;
     private int frameCount;
@@ -75,10 +74,6 @@ public class StaffActionUI extends UI
                 case 1:
                     cleanup();
                     return 1;
-                    
-                case 2:
-                    startAttack();
-                    break;
                 case 3:
                     combat();
                     break;
@@ -138,10 +133,6 @@ public class StaffActionUI extends UI
         healed = d;
         
         //Clean the flags.
-        
-        healedXP = 0;
-        
-        
         int x = healer.getX() - healed.getX();
         if(x > 0)
             x = 1;
@@ -152,8 +143,7 @@ public class StaffActionUI extends UI
     
     public void loadRecorces()
     {
-        controlState = 2;
-        //If fight with graphics
+        controlState = 3;
         xDir = healer.getX() - healed.getX();
         yDir = healer.getY() - healed.getY();
         if(xDir > 1)
@@ -196,7 +186,7 @@ public class StaffActionUI extends UI
         
         //if A is underleveled give it 20% more xp per level it was weaker than b.
         if(a.getLevel() < b.getLevel())
-            ret = ret + (a.getLevel() - b.getLevel())*xp*.2f;
+            ret = ret + (b.getLevel() - a.getLevel())*xp*.2f;
         return (int)ret;
     }
     
@@ -204,27 +194,12 @@ public class StaffActionUI extends UI
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
     
-        /**
-     * Starts up the attack.
-     */
-    public void startAttack()
-    {
-        //Nobody has attacked yet. The healer goes first
-        if(false) //TODO
-        {
-        
-        }
-        //We can't get to attack phase 4
-        else
-            controlState = 1;
-    }
-    
     /**
      * Performs the combat and preps the animation
      */
     public void combat()
     {
-        //attack(healer,healed);
+        attack(healer,healed);
         
         
         
@@ -248,102 +223,109 @@ public class StaffActionUI extends UI
         if(frameCount < animationLength)
             frameCount++;
         if(frameCount >= animationLength && healedBarDone)
-            controlState = 5;
+            controlState = 1;
     }
     
     //</editor-fold>
     
     
-    //<editor-fold desc="getters and setters">
-
     /**
-     * @return the controlState
+     * Simulates 1 attack, from a to b
+     * @param a The unit attacking. Not necessarily attacker
+     * @param b The unit defending. Not necessarily defender
      */
-    public int getControlState() {
-        return controlState;
+    public void attack(Unit a, Unit b)
+    {
+        String staffType = healer.getEquppedWeapon().getSpecialEffects().get(0);
+
+        int healingDone = 0;
+
+
+        if(staffType.substring(0,7).equals("RodHeal"))
+        {
+            healingDone = Integer.parseInt(staffType.substring(7));
+            healingDone += a.getMag()*0.5;
+        }
+
+        //Take Damage
+        b.heal(healingDone);
+
+        healedHealthBar.heal(healingDone);
+
+        a.getEquppedWeapon().dull();
     }
+    
+    //<editor-fold desc="getters and setters">
 
     /**
      * @return the healer
      */
-    public Unit getHealer() {
+    public Unit getHealer() 
+    {
         return healer;
     }
 
     /**
      * @return the healed
      */
-    public Unit getHealed() {
+    public Unit getHealed() 
+    {
         return healed;
-    }
-
-    /**
-     * @return the xDir
-     */
-    public int getxDir() {
-        return xDir;
-    }
-
-    /**
-     * @return the yDir
-     */
-    public int getyDir() {
-        return yDir;
-    }
-
-    /**
-     * @return the healedXP
-     */
-    public int getHealedXP() {
-        return healedXP;
     }
 
     /**
      * @return the healedHealthBar
      */
-    public FightHealthBarUI getHealedHealthBar() {
+    public FightHealthBarUI getHealedHealthBar() 
+    {
         return healedHealthBar;
     }
 
     /**
      * @return the healerXP
      */
-    public int getHealerXP() {
+    public int getHealerXP() 
+    {
         return healerXP;
     }
 
     /**
      * @return the frameCount
      */
-    public int getFrameCount() {
+    public int getFrameCount() 
+    {
         return frameCount;
     }
 
     /**
      * @return the healedBarDone
      */
-    public boolean isHealedBarDone() {
+    public boolean isHealedBarDone() 
+    {
         return healedBarDone;
     }
 
     /**
      * @return the animationLength
      */
-    public int getAnimationLength() {
+    public int getAnimationLength() 
+    {
         return animationLength;
     }
 
     /**
      * @return the noGraphicDamagePoint
      */
-    public int getNoGraphicDamagePoint() {
+    public int getNoGraphicDamagePoint() 
+    {
         return noGraphicDamagePoint;
     }
 
     /**
      * @return the damagePoint
      */
-    public int getDamagePoint() {
+    public int getDamagePoint() 
+    {
         return damagePoint;
     }
     

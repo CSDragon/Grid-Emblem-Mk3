@@ -628,7 +628,7 @@ public class MapScene extends Scene
                     switch(staffUI.runFrame())
                     {
                         case 1:
-                            cst8toX();
+                            cst19to13();
                             break;
                     }
                     break;
@@ -664,6 +664,7 @@ public class MapScene extends Scene
             
             //UI
             fightUI.animate();
+            staffUI.animate();
             preBattleScene.animate();
             terrainUI.animate(controlState);
             unitHoverUI.animate(controlState);
@@ -715,6 +716,7 @@ public class MapScene extends Scene
             weaponSelect.draw(g2);
             systemAction.draw(g2);
             fightUI.draw(g2);
+            staffUI.draw(g2);
             xp.draw(g2);
             preBattleScene.draw(g2);
             terrainUI.draw(g2);
@@ -1453,6 +1455,7 @@ public class MapScene extends Scene
         cursor.getSprite().sendTrigger("deactivate");
         selectedUnit.setHasMoved(true);
         fightUI.end();
+        staffUI.end();
         xp.end();
     }
     
@@ -1532,7 +1535,6 @@ public class MapScene extends Scene
         selectedUnit.equipWeapon(weaponSelect.getWeapon());
         weaponSelect.end();
         staffUI.start(selectedUnit, attackableUnits.get(attackableUnitsIndex));
-        //fightUI.start(selectedUnit,  attackableUnits.get(attackableUnitsIndex), fightGraphicsMode, map);
         mvArrow.end();
     }
     

@@ -327,7 +327,7 @@ public class FightUI extends UI
         }
         //if A is underleveled give it 20% more xp per level it was weaker than b.
         else if(a.getLevel() < b.getLevel())
-            ret = ret + (a.getLevel() - b.getLevel())*xp*.2f;
+            ret = ret + (b.getLevel() - a.getLevel())*xp*.2f;
         return (int)ret;
     }
     

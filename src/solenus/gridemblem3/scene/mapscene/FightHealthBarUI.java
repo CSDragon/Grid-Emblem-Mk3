@@ -108,20 +108,22 @@ public class FightHealthBarUI extends UI
             switch(controlState)
             {
                 case 2:
-                    if(framesLeft % FRAMESPERTIC == 0)
+                    if(framesLeft <= 0)
+                        controlState = 1;
+                    else if(framesLeft % FRAMESPERTIC == 0)
                         tempHP--;
                     framesLeft--;
-                    if(framesLeft == 0)
-                        controlState = 1;
-
+                    
                     return false;
                 
                 case 3:
-                    if(framesLeft % FRAMESPERTIC == 0)
+                    if (framesLeft == 0)
+                        controlState = 1;
+                    else if(framesLeft % FRAMESPERTIC == 0)
                         tempHP++;
                     framesLeft--;
-                    if(framesLeft == 0)
-                        controlState = 1;
+                    
+                    return false;
             }
         }
         

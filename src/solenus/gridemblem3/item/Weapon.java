@@ -294,5 +294,10 @@ public class Weapon extends Item
         return maxRange;
     }
     
+    public ArrayList<String> getSpecialEffects()
+    {
+        return specialEffects;
+    }
+    
     //</editor-fold>
 }

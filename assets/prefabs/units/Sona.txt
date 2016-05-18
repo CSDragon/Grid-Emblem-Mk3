@@ -51,7 +51,7 @@ Crit: 0
 Min Range: 1
 Max Range: 1
 Num Effects: 1
-RodHeal
+RodHeal10
 
 Num Items: 0
 
