@@ -112,6 +112,8 @@ public class Unit extends Actor
     private ArrayList<String> skills;
     private ArrayList<String> skillsReserve;
     
+    private boolean aiActive;
+    
     private BufferedImage portrait;
     
     //<editor-fold desc="constructors">
@@ -1340,8 +1342,19 @@ public class Unit extends Actor
     /**
      * @return the portrait
      */
-    public BufferedImage getPortrait() {
+    public BufferedImage getPortrait() 
+    {
         return portrait;
+    }
+    
+    public boolean getAIActive()
+    {
+        return aiActive;
+    }
+    
+    public void setAIActive(boolean b)
+    {
+        aiActive = b;
     }
 
     //</editor-fold>

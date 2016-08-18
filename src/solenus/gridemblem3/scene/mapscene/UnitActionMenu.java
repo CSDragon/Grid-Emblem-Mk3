@@ -133,13 +133,13 @@ public class UnitActionMenu extends GenericMenu
         staffFlag = false;
         itemFlag = false;
         
-        attackableUnits = Pathfinding.getAttackableObjects(selectedUnit, false);
+        attackableUnits = Pathfinding.getImmediateAttackableObjects(selectedUnit, false);
         attackFlag = (attackableUnits.size() > 0);
         
         if(attackFlag)
             availCommands.add(ATTACK);
 
-        staffableUnits = Pathfinding.getAttackableObjects(selectedUnit, true);
+        staffableUnits = Pathfinding.getImmediateAttackableObjects(selectedUnit, true);
             staffFlag = (staffableUnits.size() > 0);
 
         if(staffFlag)

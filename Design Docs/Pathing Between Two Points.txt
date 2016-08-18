@@ -1,0 +1,11 @@
+We need a map, and a queue.
+
+Starts at start. Adds points to the queue in NESW order, also adding them to the map with their calculated weight for that movement. If something already exists at that point on the map, check if it's smaller
+Once a sollution has been found, only continue to add points to the queue if they are less than the weight of the current shortest route.
+
+If a point is impassible, it's stored as INTMAX, and never added to the queue. Spaces containing enemies and objects are considered impassable.
+
+If the queue runs out and a sollution hasn't been found, return null
+
+
+An alternate version of this just fills out the map as best it can.

@@ -518,18 +518,14 @@ public class MapScene extends Scene
                     cst9toX();
                     break;
                     
-                /*  Someone Else's Turn
+                /*  Staring the AI turn by checking if any units need to become active
                     Active Object: AI
                     Camera Follows: Cursor
                 */    
                 case 10:
                     camera.moveToRenderable(cursor, map);
-                    switch(ai.runFrame())
-                    {
-                        case 0:
-                            cst10to9();
-                            break;
-                    }
+                    ai.activateUnits();
+                    cst10to22();
                     break;
                     
                 /*  Player Turn Start
@@ -678,7 +674,31 @@ public class MapScene extends Scene
                     }
                     break;
                     
+                /*  AI Unit selection
+                    Active Objects: AI, selectedUnit
+                    Camera Follows: selectedUnit
+                */
+                case 22:
+                    switch(ai.nextUnit())
+                    {
+                        case AI.UNITFOUND:
+                            selectedUnit = ai.getActiveUnit();
+                            controlState = 23;
+                            break;
+                        case AI.DONE:
+                            cst10to9();
+                            break;
+                    }
+                    break;
                     
+                /* AI Unit Movement
+                    Active Objects: AI, selectedUnit
+                    Camera Follows: selectedUnit
+                */
+                case 23:
+                    ai.act();
+                    controlState = 22;
+                    break;    
             }  
             
             terrainUI.runFrame();
@@ -816,7 +836,7 @@ public class MapScene extends Scene
         
         unitCircles = new UnitCircles(unitList);
         
-        ai = new AI(unitList);
+        ai = new AI(unitList, this);
         
         //range objects
         enemyRangeList = new ArrayList<>();
@@ -1459,14 +1479,15 @@ public class MapScene extends Scene
     
     /**
      * Moves from the end of turn phase to someone else's turn
+     * TODO: This doesn't work with other AI turns, as AI works right now.
      */
     public void cst9toX()
     {
-        //if it's the player's turn
+        //if it's now the player's turn
         if(turn == 0)
             controlState = 11;
         
-        //if it's someone else's turn;
+        //if it's now someone else's turn;
         else
         {
             controlState = 10;
@@ -1484,6 +1505,11 @@ public class MapScene extends Scene
     {
         controlState = 9;
         endTurn();
+    }
+    
+    public void cst10to22()
+    {
+        controlState= 22;
     }
     
     /**
@@ -1648,6 +1674,10 @@ public class MapScene extends Scene
         itemSelect.end();
     }
     
+    public int getTurn()
+    {
+        return turn;
+    }
     
     //</editor-fold>
 }

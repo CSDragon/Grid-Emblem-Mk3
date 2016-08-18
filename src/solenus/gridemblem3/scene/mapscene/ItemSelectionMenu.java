@@ -6,7 +6,6 @@
 package solenus.gridemblem3.scene.mapscene;
 
 import java.util.ArrayList;
-import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.ui.menu.GenericMenu;
@@ -64,13 +63,13 @@ public class ItemSelectionMenu extends GenericMenu
     {
         super.start();
         selectedUnit = u;
-        checkWeapons();
+        checkItems();
     }
     
     /**
      * Finds what weapons the unit can use to fight.
      */
-    public void checkWeapons()
+    public void checkItems()
     {
         itemList = selectedUnit.getInventory();
         numCommands = itemList.size();

@@ -1,0 +1,30 @@
+How should AI work?
+
+Simple AI: 
+	Enemies are off by default.
+	Turned on when something enters their attack radius. Or on a turn trigger.
+	Once on they move towards they find all enemies in their move+attack range
+		If none, they move to the nearest enemy
+		If some, they attack the target they have highest EDPS on. (might - [def or res] * 2 if speed). Maybe might work out their EDPS vs their target's EDPS.
+	Enemies move in order of "Don't have to move to hit something", "Can move and hit" and "Can't target an enemy" to reduce the ammount of accidental crowding out.
+	If a destination is occupied, it moves as far along its movement path as it can.
+
+	How it decides where to move:
+		Unit checks its min and max range. Makes a list of all points around enemies within that range. Removes duplicates, occupied and immpassable loctations.
+		Generates a pathfinding map, and looks at each of these locations, it chooses the closest one. Or the first on the list, in case of tie.
+________________________________
+	
+22) Select next unit
+	Unit selected -> 23
+	No units left -> end turn
+	
+23) Determine where to move the unit.
+	Available targets?
+		Yes: Target one, move to it -> 24
+		No: Find distance to all enemy units
+			Move towards closest one -> 22
+			
+24) Attack
+		Select the appropriate weapon -> 8
+		
+8)	Realize it's an oponents turn and -> 22 when it's over.

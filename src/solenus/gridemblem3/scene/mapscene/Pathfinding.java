@@ -7,7 +7,10 @@ package solenus.gridemblem3.scene.mapscene;
 import java.util.ArrayList;
 import java.awt.Point;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Weapon;
 
@@ -127,7 +130,7 @@ public class Pathfinding
     }
     
     /**
-     * Gets all the points a unit can attack
+     * Gets all the points a unit can attack 
      * @param u the attacking unit
      * @param moveRange the range it can move (which determines how far it can move before attacking)
      * @param staffFlag If we're checking a staff, this is true. Otherwise it's false.
@@ -195,7 +198,7 @@ public class Pathfinding
      * @param staffMode If we're actually looking for allies to heal, not enemies to attack.
      * @return The list of points it can attack.
      */
-    public static ArrayList<Point> getAllAttackLocations(Unit u, Point p, boolean staffMode)
+    public static ArrayList<Point> getImmediateAttackLocations(Unit u, Point p, boolean staffMode)
     {
         ArrayList points = new ArrayList<>();
         points.add(p);
@@ -286,15 +289,13 @@ public class Pathfinding
     /**
      * Finds and returns all attackable enemies and objects in the area
      * @param selectedUnit the unit being checked
-     * @param staffMode If we're actually looking for allies to heal, not enemies to attack.
+     * @param staffMode True if we're actually looking for allies to heal, not enemies to attack.
      * @return The list of enemy units.
      */
-    public static ArrayList<Unit> getAttackableObjects(Unit selectedUnit, boolean staffMode)
+    public static ArrayList<Unit> getImmediateAttackableObjects(Unit selectedUnit, boolean staffMode)
     {
         ArrayList<Unit> ret = new ArrayList();
-        
-        ArrayList<Point> p = Pathfinding.getAllAttackLocations(selectedUnit, selectedUnit.getCoord(), staffMode);
-        
+        ArrayList<Point> p = Pathfinding.getImmediateAttackLocations(selectedUnit, selectedUnit.getCoord(), staffMode);
         Unit check;
         
         for(Point checkpoint : p)
@@ -305,6 +306,80 @@ public class Pathfinding
             if(check != null && (selectedUnit.isAlly(check) == staffMode))
             ret.add(check);
         }
+        
+        return ret;
+    }
+    
+    /**
+     * Finds and returns all attackable enemies and objects this unit can possibly attack.
+     * @param selectedUnit the unit being checked
+     * @param staffMode True if we're actually looking for allies to heal, not enemies to attack.
+     * @return The list of enemy units.
+     */
+    public static ArrayList<Unit> getAllAttackableObjects(Unit selectedUnit, boolean staffMode)
+    {
+        ArrayList<Unit> ret = new ArrayList();
+        ArrayList<Point> p = Pathfinding.getAllAttackLocations(selectedUnit, staffMode);
+        Unit check;
+        
+        for(Point checkpoint : p)
+        {
+            check = mapScene.getUnitAtPoint(checkpoint);
+            //TODO this check may not be optimal for non-team objects like destructable rocks.
+            //Checks if it's an ally or an enemy. Add it if it's an enemy and we're attacking, or if it's an ally and we're healing.
+            if(check != null && (selectedUnit.isAlly(check) == staffMode))
+            ret.add(check);
+        }
+        
+        return ret;
+    }
+    
+    /**
+     * Finds the shortest route a Unit can move to any point on the map.
+     * @param u The moving Unit
+     * @return A hashmap of distances
+     */
+    public static HashMap<Point, Integer> mapShortestDistanceFromPoint(Unit u)
+    {
+        HashMap<Point, Integer> ret = new HashMap<>();
+        Queue<Point> queue = new LinkedList<>();
+        
+        queue.add(u.getCoord());
+        ret.put(u.getCoord(), 0);
+        
+        while(queue.peek() != null)
+        {
+            Point cur = queue.poll();
+
+            //test each adjacent tile
+            Point[] cardinal = new Point[4];
+            cardinal[0] = new Point(cur.x  , cur.y+1);
+            cardinal[1] = new Point(cur.x+1, cur.y  );
+            cardinal[2] = new Point(cur.x  , cur.y-1);
+            cardinal[3] = new Point(cur.x-1, cur.y  );
+            
+            for(Point p : cardinal)
+            {
+                if(p.x >= 0 && p.x < map.getWidth() && p.y >= 0 && p.y < map.getHeight())
+                {
+                    int weight = map.getTerrainAtPoint(p).getMoveCost(u.getTransportType());
+                    //If it's not impassable, if it's not occupied, or if it is occupied, if it's an ally, we can move to this space
+                    if(weight != -1 && (mapScene.getUnitAtPoint(p) == null || u.isAlly(mapScene.getUnitAtPoint(p))))
+                    {
+                        weight = ret.get(cur) + weight;
+                        //If the map is empty or if this is a shorter path, update the hashmap
+                        if(ret.get(p) == null || ret.get(p) > weight)
+                        {
+                            ret.put(p, weight);
+                            queue.add(p);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        
         
         return ret;
     }

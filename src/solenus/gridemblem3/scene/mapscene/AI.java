@@ -8,7 +8,6 @@ package solenus.gridemblem3.scene.mapscene;
 import java.util.ArrayList;
 import solenus.gridemblem3.actor.Unit;
 
-
 /**
  *
  * @author Chris
@@ -16,24 +15,30 @@ import solenus.gridemblem3.actor.Unit;
 public class AI 
 {
     private ArrayList<Unit> allUnits;
+    private MapScene ms;
     private int allUnitsIndex;
     private int turn;
+    private Unit activeUnit;
+    
+    public static final int DONE = 0;
+    public static final int UNITFOUND = 1;
     
     /**
      * Default constructor
      * @param units The list of units in the game.
+     * @param _ms the mapscene, so we can check activity.
      */
-    public AI(ArrayList<Unit> units)
+    public AI(ArrayList<Unit> units, MapScene _ms)
     {
         allUnits = units;
+        ms = _ms;
     }
-    
     
     /**
      * Finds the next available unit to have act, and tells it to act, or tells MapScene we're done if we're done
      * @return If we're done or not. -1 is not done, 0 is done.
      */
-    public int runFrame()
+    public int nextUnit()
     {
         //While we haven't gone out of bounds, and if we've yet to find a unit that is both on the right team and hasn't moved.
         while(allUnitsIndex < allUnits.size() && !(allUnits.get(allUnitsIndex).getTeam() == turn && !allUnits.get(allUnitsIndex).getHasMoved()))
@@ -41,20 +46,38 @@ public class AI
             
         
         if(allUnitsIndex >= allUnits.size())
-            return 0;
+            return DONE;
         
-        act(allUnits.get(allUnitsIndex));
+        activeUnit = allUnits.get(allUnitsIndex);
         
-        return -1;
+        return UNITFOUND;
     }
     
     /**
-     * Tells the unit how to act. TODO
-     * @param u The unit to act
+     * Finds which units to activate.
      */
-    public void act(Unit u)
+    public void activateUnits()
     {
-        u.setHasMoved(true);
+        Unit u;
+        for(int i = 0; i< allUnits.size(); i++)
+        {
+            u = allUnits.get(i);
+            //if it's the right turn, and inactive, check if we need to activate it.
+            if(u.getTeam() == ms.getTurn() && !u.getAIActive())
+                //if there's any units it could possibly attack this turn, time to activate it.
+                if(Pathfinding.getAllAttackableObjects(u, false).size() > 0)
+                    u.setAIActive(true);
+        }
+    }
+    
+    /**
+     * Tells the selected unit how to act.
+     * If it can attack something, it will
+     * If it can't, it moves to the closest unit.
+     */
+    public void act()
+    {
+        activeUnit.setHasMoved(true);
     }
     
     /**
@@ -65,5 +88,10 @@ public class AI
     {
         turn = t;
         allUnitsIndex = 0;
+    }
+    
+    public Unit getActiveUnit()
+    {
+        return activeUnit;
     }
 }
