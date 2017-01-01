@@ -128,7 +128,7 @@ public class Pathfinding
                     {
                         //"All movable locations" includes spaces occupied by allies and other objects you can pass through but not stop on.
                         //...Except that the point you're standing is also technically occupied, but we don't want to count that.
-                        if(mapScene.getActorAtPoint(mr) == null || mapScene.getUnitAtPoint(mr) == u)
+                        if(Pathfinding.isStoppingAllowed(u, mr))
                         {
                             for (int i = min; i<= max; i++) 
                             {

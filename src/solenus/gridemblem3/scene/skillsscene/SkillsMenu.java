@@ -7,6 +7,7 @@ package solenus.gridemblem3.scene.skillsscene;
 
 import java.util.ArrayList;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.ui.menu.GenericMenu;
 
 /**
@@ -24,7 +25,7 @@ class SkillsMenu extends GenericMenu
         selectedUnit = u;
         
         //Make sure it's exactly 5
-        numCommands = Unit.SKILL_LIMIT;
+        numCommands = PartyUnit.SKILL_LIMIT;
     }
     
     /**

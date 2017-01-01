@@ -17,6 +17,7 @@ import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
+import solenus.gridemblem3.party.PartyUnit;
 
 /**
  * The data collection of your army. This should only be used for the HQ and for starting a mission. MapScene should NOT use Armies.
@@ -79,7 +80,10 @@ public class PlayerData
             in.readLine();
             
             for(int i = 0; i<numUnits; i++)
-                unitList.add(new Unit(in));
+            {
+                PartyUnit pu = new PartyUnit(in);
+                unitList.add(new Unit(pu));
+            }
             
             //Get the weapon convoy data
             int numWeapons = Integer.parseInt(in.readLine().substring(13));

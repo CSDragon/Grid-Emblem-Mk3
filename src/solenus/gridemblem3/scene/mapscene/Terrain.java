@@ -8,7 +8,7 @@ package solenus.gridemblem3.scene.mapscene;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import javax.swing.JOptionPane;
-import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 
 /**
  *
@@ -102,11 +102,11 @@ public class Terrain
         if(impassable)
             return -1;
         
-        if(moveType == Unit.ON_FOOT && landPassable)
+        if(moveType == PartyUnit.ON_FOOT && landPassable)
             return landCost;
-        else if(moveType == Unit.MOUNTED && mountPassable)
+        else if(moveType == PartyUnit.MOUNTED && mountPassable)
             return mountCost;
-        else if(moveType == Unit.FLYING || moveType == Unit.FLYING_MOUNT)
+        else if(moveType == PartyUnit.FLYING || moveType == PartyUnit.FLYING_MOUNT)
             return airCost;
         
         else 

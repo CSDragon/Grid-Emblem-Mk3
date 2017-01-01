@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.PlayerData;
+import solenus.gridemblem3.party.PartyUnit;
 
 /**
  * Any living creature, human or otherwise, playable or otherwise, that's on the grid.
@@ -26,53 +27,12 @@ import solenus.gridemblem3.PlayerData;
  */
 public class Unit extends Actor
 {
-    //inventory limits
-    public static final int WEAPON_LIMIT = 5;
-    public static final int INVENTORY_LIMIT = 5;
-    public static final int SKILL_LIMIT = 5;
+    PartyUnit pu;
     
-    //transport values
-    public static final int ON_FOOT = 1;
-    public static final int MOUNTED = 2;
-    public static final int FLYING = 3;
-    public static final int FLYING_MOUNT = 4;
-    
-    //Armor type values
-    public static final int ROBES = 0;
-    public static final int LIGHT = 1;
-    public static final int MEDIUM = 2;
-    public static final int HEAVY = 3;
-    
-    //Team values
-    public static final int PLAYER = 0;
-    public static final int ENEMY = 1;
-    public static final int ALLY = 2;
-    public static final int OTHER = 3;
-    
-    
-    private String unitClass;
-    private int team;
     private boolean hasMoved;
-    
-    //Combat Stats
-    int level;
-    int xp;
-    
-    private double hp;
-    private double str;
-    private double mag;
-    private double skill;
-    private double spd;
-    private double luck;
-    private double def;
-    private double res;
-    private int move;
     
     private int curHP;
     private int curMove;
-    
-    private int transportType;
-    private int armorType;
     
     private int bonusHP;
     private int bonusStr;
@@ -84,37 +44,7 @@ public class Unit extends Actor
     private int bonusRes;
     private int bonusMove;
     
-    //Level up stat boosts.
-    private double hpup;
-    private double strup;
-    private double magup;
-    private double skillup;
-    private double spdup;
-    private double luckup;
-    private double defup;
-    private double resup;
-    
-    private int swordMastery;
-    private int axeMastery;
-    private int lanceMastery;
-    private int bowMastery;
-    private int daggerMastery;
-    private int fireMastery;
-    private int windMastery;
-    private int lightningMastery;
-    private int lightMastery;
-    private int darkMastery;
-    private int staffMastery;
-    private int naturalWeaponMastery;
-
-    private ArrayList<Weapon> weaponInventory;
-    private ArrayList<Usable> inventory;
-    private ArrayList<String> skills;
-    private ArrayList<String> skillsReserve;
-    
     private boolean aiActive;
-    
-    private BufferedImage portrait;
     
     //<editor-fold desc="constructors">
 
@@ -128,103 +58,22 @@ public class Unit extends Actor
         //units can be passed through, as long as their allied.
         passable = true;
         
-        weaponInventory = new ArrayList<>();
-        inventory = new ArrayList<>();
-        skills = new ArrayList<>();
-        skillsReserve = new ArrayList<>();
-        
-        loadPortrait();
+        pu = new PartyUnit();
     }
 
     /**
      * Creates a new unit from a text file
-     * @param in The text we're reading from.
-     * @throws IOException 
+     * @param _pu The Party Unit which acts as the stats for this unit
      */
-    public Unit(BufferedReader in) throws IOException
+    public Unit(PartyUnit _pu) 
     {
-        super(in.readLine().substring(6));
+        super(_pu.getName());
+        pu = _pu;
         
         //units can be passed through, as long as their allied.
         passable = true;
         
-        unitClass = in.readLine().substring(7);
-        team = Integer.parseInt(in.readLine().substring(6));
-        level = Integer.parseInt(in.readLine().substring(7));
-        xp = Integer.parseInt(in.readLine().substring(4));
-        hp  = Double.parseDouble(in.readLine().substring(4));
-        str = Double.parseDouble(in.readLine().substring(5));
-        mag = Double.parseDouble(in.readLine().substring(5));
-        skill = Double.parseDouble(in.readLine().substring(7));
-        spd = Double.parseDouble(in.readLine().substring(5));
-        luck = Double.parseDouble(in.readLine().substring(6));
-        def = Double.parseDouble(in.readLine().substring(5));
-        res = Double.parseDouble(in.readLine().substring(5));
-        
-        move = Integer.parseInt(in.readLine().substring(6));
-        
-        hpup  = Double.parseDouble(in.readLine().substring(6));
-        strup = Double.parseDouble(in.readLine().substring(7));
-        magup = Double.parseDouble(in.readLine().substring(7));
-        skillup = Double.parseDouble(in.readLine().substring(9));
-        spdup = Double.parseDouble(in.readLine().substring(7));
-        luckup = Double.parseDouble(in.readLine().substring(8));
-        defup = Double.parseDouble(in.readLine().substring(7));
-        resup = Double.parseDouble(in.readLine().substring(7));
-        
-        transportType = Integer.parseInt(in.readLine().substring(11));
-        armorType = Integer.parseInt(in.readLine().substring(12));
-        
-        swordMastery = Integer.parseInt(in.readLine().substring(15));
-        axeMastery = Integer.parseInt(in.readLine().substring(13));
-        lanceMastery = Integer.parseInt(in.readLine().substring(15));
-        bowMastery = Integer.parseInt(in.readLine().substring(13));
-        daggerMastery = Integer.parseInt(in.readLine().substring(16));
-        fireMastery = Integer.parseInt(in.readLine().substring(14));
-        windMastery = Integer.parseInt(in.readLine().substring(14));
-        lightningMastery = Integer.parseInt(in.readLine().substring(19));
-        lightMastery = Integer.parseInt(in.readLine().substring(15));
-        darkMastery = Integer.parseInt(in.readLine().substring(14));
-        staffMastery = Integer.parseInt(in.readLine().substring(15));
-        naturalWeaponMastery = Integer.parseInt(in.readLine().substring(17));
-
-
-        
-        in.readLine();
-
-        curHP = (int)hp;
-
-        weaponInventory = new ArrayList<>();
-        inventory = new ArrayList<>();
-        skills = new ArrayList<>();
-        skillsReserve = new ArrayList<>();
-        
-        int numWeapons = Integer.parseInt(in.readLine().substring(13));
-        in.readLine();
-        
-        for(int i = 0; i<numWeapons; i++)
-            addWeapon(new Weapon(in));
-        
-        int numItems = Integer.parseInt(in.readLine().substring(11));
-        in.readLine();
-        
-        for(int i = 0; i<numItems; i++)
-            addItem(new Usable(in));
-        
-        //Read in skills.
-        in.readLine();
-        int numSkills = Integer.parseInt(in.readLine().substring(12));
-        for(int i = 0; i<numSkills; i++)
-            skills.add(in.readLine());
-        in.readLine();
-        
-        int numSkillsReserve = Integer.parseInt(in.readLine().substring(17));
-        for(int i = 0; i<numSkillsReserve; i++)
-            skillsReserve.add(in.readLine());
-        in.readLine();
-        
-        loadPortrait();
-
+        curHP = (int)pu.getHP();
     }
     
     /**
@@ -238,7 +87,8 @@ public class Unit extends Actor
         try
         {
             BufferedReader in = new BufferedReader(new FileReader("assets/prefabs/units/"+name+".txt"));
-            ret = new Unit(in);
+            PartyUnit pu = new PartyUnit(in);
+            ret = new Unit(pu);
         }
         catch(Exception e)
         {
@@ -258,136 +108,13 @@ public class Unit extends Actor
      */
     public void save(BufferedWriter bw) throws IOException
     {
-        bw.write("Name: "+name); bw.newLine();
-        bw.write("Class: "+unitClass); bw.newLine();
-        bw.write("Team: "+team); bw.newLine();
-        
-        bw.write("Level: "+level); bw.newLine();
-        bw.write("XP: "+xp); bw.newLine();
-        
-        bw.write("HP: "+hp); bw.newLine();
-        bw.write("STR: "+str); bw.newLine();
-        bw.write("MAG: "+mag); bw.newLine();
-        bw.write("Skill: "+skill); bw.newLine();
-        bw.write("SPD: "+spd); bw.newLine();
-        bw.write("Luck: "+luck); bw.newLine();
-        bw.write("DEF: "+def); bw.newLine();
-        bw.write("RES: "+res); bw.newLine();
-        
-        bw.write("Move: "+move); bw.newLine();
-   
-        bw.write("HPUP: "+hpup); bw.newLine();
-        bw.write("STRUP: "+strup); bw.newLine();
-        bw.write("MAGUP: "+magup); bw.newLine();
-        bw.write("SkillUP: "+skillup); bw.newLine();
-        bw.write("SPDUP: "+spdup); bw.newLine();
-        bw.write("LuckUP: "+luckup);  bw.newLine();
-        bw.write("DEFUP: "+defup); bw.newLine();
-        bw.write("RESUP: "+resup); bw.newLine();
-        
-        bw.write("Move Type: "+transportType); bw.newLine();
-        bw.write("Armor Type: "+armorType); bw.newLine();
-        
-        bw.write("Sword Mastery: "+swordMastery); bw.newLine();
-        bw.write("Axe Mastery: "+axeMastery); bw.newLine();
-        bw.write("Lance Mastery: "+lanceMastery); bw.newLine();
-        bw.write("Bow Mastery: "+bowMastery); bw.newLine();
-        bw.write("Dagger Mastery: "+daggerMastery); bw.newLine();
-        bw.write("Fire Mastery: "+fireMastery); bw.newLine();
-        bw.write("Wind Mastery: "+windMastery); bw.newLine();
-        bw.write("Lightning Mastery: "+lightningMastery); bw.newLine();
-        bw.write("Light Mastery: "+lightMastery); bw.newLine();
-        bw.write("Dark Mastery: "+darkMastery); bw.newLine();
-        bw.write("Staff Mastery: "+staffMastery); bw.newLine();
-        bw.write("Natural Mastery: "+naturalWeaponMastery); bw.newLine();
-        
-        bw.newLine();
-        bw.write("Num Weapons: "+weaponInventory.size()); bw.newLine();
-        bw.newLine();
-        for(Weapon w: weaponInventory)
-            w.save(bw);
-        
-        bw.write("Num Items: "+inventory.size()); bw.newLine();
-        bw.newLine();
-        for(Usable u: inventory)
-            u.save(bw);
-        
-        bw.write("Skills"); bw.newLine();
-        bw.write("Num Skills: "+skills.size()); bw.newLine();
-        for(String s: skills)
-        {
-            bw.write(s); bw.newLine();
-        }
-        bw.newLine();
-        
-        bw.write("Num Skills Bank: "+skillsReserve.size()); bw.newLine();
-        for(String s: skillsReserve)
-        {
-            bw.write(s); bw.newLine();
-        }
-        bw.newLine();
-    }
-    
-    /**
-     * Writes a Unit to a file
-     * @param u The Unit to write to.
-     */
-    public static void writeToPrefab(Unit u)
-    {
-        File saveFile = new File("assets/prefabs/units/"+u.getName()+".txt");
-        try
-        {
-            FileOutputStream fos = new FileOutputStream(saveFile);
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-            
-            u.save(bw);
-            
-            bw.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Unit Prefab Generation failed");
-        }
+        pu.save(bw);
     }
     
     public final void loadPortrait()
     {
-        if(name == null)
-        {
-            try
-            {
-                portrait = ImageIO.read(new File("assets/portraits/Generic.png"));
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace(System.out);
-                JOptionPane.showMessageDialog(null, "Loading generic portrait failed, file doesn't seem to exist.");
-                System.exit(-1);
-            }
-        }
-        
-        else
-        {
-            try
-            {
-                portrait = ImageIO.read(new File("assets/portraits/"+ name +".png"));
-            }
-            catch(Exception e)
-            {
-                try
-                {
-                    portrait = ImageIO.read(new File("assets/portraits/Generic.png"));
-                }
-                catch(Exception e1)
-                {
-                    e1.printStackTrace(System.out);
-                    JOptionPane.showMessageDialog(null, "Loading generic portrait failed, file doesn't seem to exist.");
-                    System.exit(-1);
-                }
-            }
-        }
+        pu.loadPortrait();
     }
-    
     
     //</editor-fold>
     
@@ -399,9 +126,7 @@ public class Unit extends Actor
      */
     public void equipWeapon(int weapon)
     {
-        Weapon temp = weaponInventory.get(weapon);
-        weaponInventory.remove(weapon);
-        weaponInventory.add(0, temp);
+        pu.equipWeapon(weapon);
     }
     
     /**
@@ -410,14 +135,7 @@ public class Unit extends Actor
      */
     public void equipWeapon(Weapon w)
     {
-        //if it already exists in your inventory, remove it for a sec so we can add it to the front.
-        if(weaponInventory.contains(w))
-        {
-            weaponInventory.remove(w);
-        }
-        
-        w.setOwner(this);
-        weaponInventory.add(0, w);
+        pu.equipWeapon(w);
     }
     
     /**
@@ -428,16 +146,7 @@ public class Unit extends Actor
      */
     public final boolean addWeapon(Weapon w)
     {
-        if(weaponInventory.size() < WEAPON_LIMIT)
-        {
-            if(w.getOwner() != null)
-                w.getOwner().removeWeapon(w);
-            weaponInventory.add(w);
-            w.setOwner(this);
-            return true;
-        }
-        
-        return false;
+        return pu.addWeapon(w);
     }
     
     /**
@@ -447,16 +156,7 @@ public class Unit extends Actor
      */
     public final boolean addItem(Usable u)
     {
-        if(inventory.size() < INVENTORY_LIMIT)
-        {
-            if(u.getOwner() != null)
-                u.getOwner().removeItem(u);
-            u.setOwner(this);
-            inventory.add(u);
-            return true;
-        }
-        
-        return false;
+        return pu.addItem(u);
     }
     
     
@@ -467,12 +167,7 @@ public class Unit extends Actor
      */
     public boolean removeWeapon(Weapon w)
     {
-        if(weaponInventory.remove(w))
-        {
-            w.setOwner(null);
-            return true;
-        }
-        return false;
+        return pu.removeWeapon(w);
     }
 
     /**
@@ -482,48 +177,13 @@ public class Unit extends Actor
      */
     public boolean removeItem(Usable u)
     {
-        if(inventory.remove(u))
-        {
-            u.setOwner(null);
-            return true;
-        }
-        return false;
+        return pu.removeItem(u);
     }
     
        
     public boolean canEquipWeapon(Weapon w)
     {
-        int mr = w.getMasteryRequirementAsInt();
-
-        switch(w.getWeaponType())
-        {
-            case Weapon.SWORD:
-                return mr < swordMastery;
-            case Weapon.AXE:
-                return mr < axeMastery;
-            case Weapon.LANCE:
-                return mr < lanceMastery;
-            case Weapon.BOW:
-                return mr < bowMastery;
-            case Weapon.DAGGER:
-                return mr < daggerMastery;
-            case Weapon.FIRE:
-                return mr < fireMastery;
-            case Weapon.WIND:
-                return mr < windMastery;
-            case Weapon.LIGHTNING:
-                return mr < lightningMastery;
-            case Weapon.LIGHT:
-                return mr < lightMastery;
-            case Weapon.DARK:
-                return mr < darkMastery;
-            case Weapon.STAFF:
-                return mr < staffMastery;
-            case Weapon.NATURAL:
-                return mr < naturalWeaponMastery;
-        }
-        
-        return false;
+        return(pu.canEquipWeapon(w));
     }
     
     /**
@@ -536,7 +196,7 @@ public class Unit extends Actor
         ArrayList<Weapon> ret = new ArrayList();
         int dist = distanceTo(enemy);
         
-        for(Weapon w : weaponInventory)
+        for(Weapon w : pu.getWeaponInventory())
         {
             if(canEquipWeapon(w) && w.getMinRange() <= dist && w.getMaxRange() >= dist)
                 ret.add(w);
@@ -595,10 +255,7 @@ public class Unit extends Actor
      */
     public boolean addSkill(String s)
     {
-        if(skills.size() < SKILL_LIMIT)
-            return(skills.add(s));
-        
-        return false;
+        return pu.addSkill(s);
     }
     
     /**
@@ -608,7 +265,7 @@ public class Unit extends Actor
      */
     public boolean removeSkill(String s)
     {
-        return skills.remove(s);
+        return pu.removeSkill(s);
     }
     
     /**
@@ -618,7 +275,7 @@ public class Unit extends Actor
      */
     public boolean addSkillToReserve(String s)
     {
-        return skillsReserve.add(s);
+        return pu.addSkillToReserve(s);
     }
     
     /**
@@ -628,7 +285,7 @@ public class Unit extends Actor
      */
     public boolean removeSkillFromReserve(String s)
     {
-        return skillsReserve.remove(s);
+        return pu.removeSkillFromReserve(s);
     }
     
     /**
@@ -638,9 +295,7 @@ public class Unit extends Actor
      */
     public boolean moveSkillToReserve(String s)
     {
-        if(removeSkill(s))
-            return addSkillToReserve(s);
-        return false;
+        return pu.moveSkillToReserve(s);
     }
     
     /**
@@ -650,14 +305,8 @@ public class Unit extends Actor
      */
     public boolean moveSkillFromReserve(String s)
     {
-        if(skillsReserve.contains(s))
-        {
-            if(addSkill(s))
-                return removeSkillFromReserve(s);
-        }
-        return false;
+        return pu.moveSkillFromReserve(s);
     }
-    
     
     //</editor-fold>
     
@@ -668,17 +317,7 @@ public class Unit extends Actor
      */
     public void levelUp()
     {
-        hp += hpup;
-        str += strup;
-        mag += magup;
-        spd += spdup;
-        skill += skillup;
-        def += defup;
-        res += resup;
-        luck += luckup;
-        
-        level++;
-        xp -= 100;
+        pu.levelUp();
     }
     
     /**
@@ -688,8 +327,7 @@ public class Unit extends Actor
      */
     public boolean receiveXP(int xpReceived)
     {
-        xp += xpReceived;
-        return (xp >= 100);
+        return(pu.receiveXP(xpReceived));
     }
     
     /**
@@ -718,7 +356,7 @@ public class Unit extends Actor
     
     public void newMap()
     {
-        curHP = (int)hp;
+        curHP = (int)pu.getHP();
         hasMoved = false;
     }
     
@@ -757,10 +395,7 @@ public class Unit extends Actor
      */
     public boolean isAlly(Unit other)
     {
-        if(team == ENEMY)
-            return other.team == ENEMY;
-        else
-            return (other.getTeam() != ENEMY);
+        return(pu.isAlly(other.getPartyUnit()));
     }
     
     public boolean isDead()
@@ -779,14 +414,9 @@ public class Unit extends Actor
     
     //<editor-fold desc="getters and setters">
     
-    public int getLevel()
+    public PartyUnit getPartyUnit()
     {
-        return level;
-    }
-    
-    public int getXP()
-    {
-        return xp;
+        return pu;
     }
     
     /**
@@ -794,12 +424,12 @@ public class Unit extends Actor
      */
     public String getName()
     {
-        return name;
+        return pu.getName();
     }
     
     public String getUnitClass()
     {
-        return unitClass;
+        return pu.getUnitClass();
     }
     
     /**
@@ -807,7 +437,17 @@ public class Unit extends Actor
      */
     public int getTeam()
     {
-        return team;
+        return pu.getTeam();
+    }
+    
+    public int getLevel()
+    {
+        return pu.getLevel();
+    }
+    
+    public int getXP()
+    {
+        return pu.getXP();
     }
     
     /**
@@ -815,7 +455,7 @@ public class Unit extends Actor
      */
     public double getHP() 
     {
-        return hp;
+        return pu.getHP();
     }
     
     public int getCurHP()
@@ -828,7 +468,7 @@ public class Unit extends Actor
      */
     public double getStr() 
     {
-        return str;
+        return pu.getStr();
     }
 
     /**
@@ -836,7 +476,7 @@ public class Unit extends Actor
      */
     public double getMag() 
     {
-        return mag;
+        return pu.getMag();
     }
 
     /**
@@ -844,7 +484,7 @@ public class Unit extends Actor
      */
     public double getSpd() 
     {
-        return spd;
+        return pu.getSpd();
     }
 
     /**
@@ -852,7 +492,7 @@ public class Unit extends Actor
      */
     public double getSkill() 
     {
-        return skill;
+        return pu.getSpd();
     }
 
 
@@ -861,7 +501,7 @@ public class Unit extends Actor
      */
     public double getDef() 
     {
-        return def;
+        return pu.getDef();
     }
 
     /**
@@ -869,7 +509,7 @@ public class Unit extends Actor
      */
     public double getRes()
     {
-        return res;
+        return pu.getRes();
     }
 
     /**
@@ -877,7 +517,7 @@ public class Unit extends Actor
      */
     public double getLuck() 
     {
-        return luck;
+        return pu.getLuck();
     }
 
     /**
@@ -885,7 +525,7 @@ public class Unit extends Actor
      */
     public int getMove()
     {
-        return move;
+        return pu.getMove();
     }
 
     /**
@@ -893,7 +533,7 @@ public class Unit extends Actor
      */
     public double getHPup()
     {
-        return hpup;
+        return pu.getHPup();
     }
 
     /**
@@ -901,7 +541,7 @@ public class Unit extends Actor
      */
     public double getStrup() 
     {
-        return strup;
+        return pu.getStrup();
     }
     
     /**
@@ -909,7 +549,7 @@ public class Unit extends Actor
      */
     public double getMagup()
     {
-        return magup;
+        return pu.getMagup();
     }
 
     /**
@@ -917,7 +557,7 @@ public class Unit extends Actor
      */
     public double getSpdup() 
     {
-        return spdup;
+        return pu.getSpdup();
     }
     
     /**
@@ -925,7 +565,7 @@ public class Unit extends Actor
      */
     public double getSkillup()
     {
-        return skillup;
+        return pu.getSkillup();
     }
 
     /**
@@ -933,7 +573,7 @@ public class Unit extends Actor
      */
     public double getDefup() 
     {
-        return defup;
+        return pu.getDefup();
     }
 
     /**
@@ -941,7 +581,7 @@ public class Unit extends Actor
      */
     public double getResup()
     {
-        return resup;
+        return pu.getResup();
     }
 
     /**
@@ -949,7 +589,7 @@ public class Unit extends Actor
      */
     public double getLuckup() 
     {
-        return luckup;
+        return pu.getLuckup();
     }
 
     /**
@@ -1030,7 +670,7 @@ public class Unit extends Actor
      */
     public int getTotalHP() 
     {
-        return (int)(hp+bonusHP);
+        return (int)(pu.getHP()+bonusHP);
     }
 
     /**
@@ -1038,7 +678,7 @@ public class Unit extends Actor
      */
     public int getTotalStr() 
     {
-        return (int)(str+bonusStr);
+        return (int)(pu.getStr()+bonusStr);
     }
 
     /**
@@ -1046,7 +686,7 @@ public class Unit extends Actor
      */
     public int getTotalMag() 
     {
-        return (int)(mag+bonusMag);
+        return (int)(pu.getMag()+bonusMag);
     }
 
     /**
@@ -1054,7 +694,7 @@ public class Unit extends Actor
      */
     public int getTotalSpd() 
     {
-        return (int)(spd+bonusSpd);
+        return (int)(pu.getSpd()+bonusSpd);
     }
 
     /**
@@ -1062,7 +702,7 @@ public class Unit extends Actor
      */
     public int getTotalSkill() 
     {
-        return (int)skill+bonusSkill;
+        return (int)pu.getSkill()+bonusSkill;
     }
 
     /**
@@ -1070,7 +710,7 @@ public class Unit extends Actor
      */
     public int getTotalDef() 
     {
-        return (int)def+bonusDef;
+        return (int)pu.getDef()+bonusDef;
     }
 
     /**
@@ -1078,7 +718,7 @@ public class Unit extends Actor
      */
     public int getTotalRes() 
     {
-        return (int)res+bonusRes;
+        return (int)pu.getRes()+bonusRes;
     }
 
     /**
@@ -1086,7 +726,7 @@ public class Unit extends Actor
      */
     public int getTotalLuck() 
     {
-        return (int)luck+bonusLuck;
+        return (int)pu.getLuck()+bonusLuck;
     }
 
     /**
@@ -1094,7 +734,7 @@ public class Unit extends Actor
      */
     public int getTotalMove() 
     {
-        return (int)move+bonusMove;
+        return (int)pu.getMove()+bonusMove;
     }
     
     /**
@@ -1114,244 +754,61 @@ public class Unit extends Actor
         hasMoved = b;
     }
     
+    public int getTransportType()
+    {
+        return pu.getTransportType();
+    }
     
+    public int getArmorType()
+    {
+        return pu.getArmorType();
+    }
+    
+    public ArrayList<Weapon> getWeaponInventory()
+    {
+        return pu.getWeaponInventory();
+    }
+        
     /**
      * Gets the equipped weapon. Returns null if no weapon is equipped 
      * @return The first item in weaponInventory. if it's an equpiable weapon.
      */
     public Weapon getEquppedWeapon()
     {
-        if(weaponInventory.isEmpty() || !canEquipWeapon(weaponInventory.get(0)))
-            return null;
-        else
-            return weaponInventory.get(0);
+        return pu.getEquppedWeapon();
     }
-    
-    public int getTransportType()
-    {
-        return transportType;
-    }
-    
-    public ArrayList<Weapon> getWeaponInventory()
-    {
-        return weaponInventory;
-    }
-    
     
     public ArrayList<Usable> getInventory()
     {
-        return inventory;
+        return pu.getInventory();
     }
     
     public ArrayList<String> getSkills()
     {
-        return skills;
+        return pu.getSkills();
     }
     
     public ArrayList<String> getSkillsReserve()
     {
-        return skillsReserve;
+        return pu.getSkillsReserve();
     }
     
     /**
-     * @return the swordMastery
+     * Returns the mastery level of a chosen weapon.
+     * @param weaponType The type of weapon as defined by the Weapon class
+     * @return The mastery in that weapon type
      */
-    public int getSwordMastery()
+    public int getWeaponMastery(int weaponType)
     {
-        return swordMastery;
+        return pu.getWeaponMastery(weaponType);
     }
-
-    /**
-     * @param swordMastery the swordMastery to set
-     */
-    public void setSwordMastery(int swordMastery) 
-    {
-        this.swordMastery = swordMastery;
-    }
-
-    /**
-     * @return the axeMastery
-     */
-    public int getAxeMastery()
-    {
-        return axeMastery;
-    }
-
-    /**
-     * @param axeMastery the axeMastery to set
-     */
-    public void setAxeMastery(int axeMastery) 
-    {
-        this.axeMastery = axeMastery;
-    }
-
-    /**
-     * @return the lanceMastery
-     */
-    public int getLanceMastery()
-    {
-        return lanceMastery;
-    }
-
-    /**
-     * @param lanceMastery the lanceMastery to set
-     */
-    public void setLanceMastery(int lanceMastery)
-    {
-        this.lanceMastery = lanceMastery;
-    }
-
-    /**
-     * @return the bowMastery
-     */
-    public int getBowMastery()
-    {
-        return bowMastery;
-    }
-
-    /**
-     * @param bowMastery the bowMastery to set
-     */
-    public void setBowMastery(int bowMastery)
-    {
-        this.bowMastery = bowMastery;
-    }
-
-    /**
-     * @return the daggerMastery
-     */
-    public int getDaggerMastery()
-    {
-        return daggerMastery;
-    }
-
-    /**
-     * @param daggerMastery the daggerMastery to set
-     */
-    public void setDaggerMastery(int daggerMastery) 
-    {
-        this.daggerMastery = daggerMastery;
-    }
-
-    /**
-     * @return the fireMastery
-     */
-    public int getFireMastery()
-    {
-        return fireMastery;
-    }
-
-    /**
-     * @param fireMastery the fireMastery to set
-     */
-    public void setFireMastery(int fireMastery)
-    {
-        this.fireMastery = fireMastery;
-    }
-
-    /**
-     * @return the windMastery
-     */
-    public int getWindMastery()
-    {
-        return windMastery;
-    }
-
-    /**
-     * @param windMastery the windMastery to set
-     */
-    public void setWindMastery(int windMastery)
-    {
-        this.windMastery = windMastery;
-    }
-
-    /**
-     * @return the lightningMastery
-     */
-    public int getLightningMastery()
-    {
-        return lightningMastery;
-    }
-
-    /**
-     * @param lightningMastery the lightningMastery to set
-     */
-    public void setLightningMastery(int lightningMastery)
-    {
-        this.lightningMastery = lightningMastery;
-    }
-
-    /**
-     * @return the lightMastery
-     */
-    public int getLightMastery()
-    {
-        return lightMastery;
-    }
-
-    /**
-     * @param lightMastery the lightMastery to set
-     */
-    public void setLightMastery(int lightMastery)
-    {
-        this.lightMastery = lightMastery;
-    }
-
-    /**
-     * @return the darkMastery
-     */
-    public int getDarkMastery()
-    {
-        return darkMastery;
-    }
-
-    /**
-     * @param darkMastery the darkMastery to set
-     */
-    public void setDarkMastery(int darkMastery)
-    {
-        this.darkMastery = darkMastery;
-    }
-
-    /**
-     * @return the staffMastery
-     */
-    public int getStaffMastery()
-    {
-        return staffMastery;
-    }
-    
-    /**
-     * @return the naturalWeaponmastery
-     */
-    public int getNaturalWeaponMastery()
-    {
-        return naturalWeaponMastery;
-    }
-
-
-    /**
-     * @param staffMastery the staffMastery to set
-     */
-    public void setStaffMastery(int staffMastery)
-    {
-        this.staffMastery = staffMastery;
-    }
-    
-    /**
-     * @param naturalWeaponMastery the Natural Weapon Mastery to set
-     */
-    public void setNaturalWeaponMastery(int naturalWeaponMastery)
-    {
-        this.naturalWeaponMastery = naturalWeaponMastery;
-    }
-    
+   
     /**
      * @return the portrait
      */
     public BufferedImage getPortrait() 
     {
-        return portrait;
+        return pu.getPortrait();
     }
     
     public boolean getAIActive()

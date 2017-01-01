@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 
 /**
  *
@@ -117,7 +118,10 @@ public class Map
             int numUnits = Integer.parseInt(in.readLine().substring(26));
             in.readLine();
             for(int i = 0; i<numUnits; i++)
-                startingUnits.add(new Unit(in));
+            {
+                PartyUnit pu = new PartyUnit(in);
+                startingUnits.add(new Unit(pu));
+            }
             
             //Read in the staring unit locations.
             in.readLine();
@@ -131,7 +135,10 @@ public class Map
             in.readLine();
             
             for(int i = 0; i< numReinforcements; i++)
-                reinforcements.add(new Unit(in));
+            {
+                PartyUnit pu = new PartyUnit(in);
+                reinforcements.add(new Unit(pu));
+            }
             
             //Reinforcement Locations
             in.readLine();

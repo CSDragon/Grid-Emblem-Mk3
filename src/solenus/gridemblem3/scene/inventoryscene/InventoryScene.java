@@ -9,7 +9,6 @@ import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
@@ -18,6 +17,7 @@ import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
 
@@ -91,7 +91,7 @@ public class InventoryScene extends Scene
                     csm.respondControls(im);
                     break;
                 case 2:
-                    if(uim.getCursorLoc() < Unit.WEAPON_LIMIT)
+                    if(uim.getCursorLoc() < PartyUnit.WEAPON_LIMIT)
                     {
                         
                         if(im.getLeft() == 1)
@@ -123,7 +123,7 @@ public class InventoryScene extends Scene
                     uim.respondControls(im);
                     break;
                 case 3:
-                    if(uim.getCursorLoc() < Unit.WEAPON_LIMIT)
+                    if(uim.getCursorLoc() < PartyUnit.WEAPON_LIMIT)
                     {
                         if((im.getLeft() == 1 && tis.getControlState() == 0) || (im.getRight() == 1 && tis.getControlState() == TabbedInventoryScene.MAXTAB-1))
                         {
@@ -508,7 +508,7 @@ public class InventoryScene extends Scene
         if(isWeapon)
             uim.setCursorLoc(activeUnit.getWeaponInventory().size()-1);
         else
-            uim.setCursorLoc(Unit.WEAPON_LIMIT + activeUnit.getInventory().size()-1);
+            uim.setCursorLoc(PartyUnit.WEAPON_LIMIT + activeUnit.getInventory().size()-1);
         
         uim.refresh();
         iam.end();

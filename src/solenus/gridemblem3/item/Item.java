@@ -5,7 +5,7 @@
  */
 package solenus.gridemblem3.item;
 
-import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 
 /**
  * Abstract class for Items
@@ -19,7 +19,7 @@ public abstract class Item
     protected int numUses;
     protected int curUses;
     
-    private Unit owner; 
+    private PartyUnit owner; 
     
     
     public String getName()
@@ -55,7 +55,7 @@ public abstract class Item
     /**
      * @return the owner. RETURNS NULL IF THERE"S NO OWNER. BE PREPARED FOR THIS.
      */
-    public Unit getOwner() 
+    public PartyUnit getOwner() 
     {
         return owner;
     }
@@ -63,7 +63,7 @@ public abstract class Item
     /**
      * @param owner the owner to set
      */
-    public void setOwner(Unit owner) 
+    public void setOwner(PartyUnit owner) 
     {
         this.owner = owner;
     }

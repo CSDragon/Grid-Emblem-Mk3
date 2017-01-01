@@ -10,6 +10,7 @@ import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.ui.menu.GenericMenu;
 
 /**
@@ -60,15 +61,15 @@ public class UnitInventoryMenu extends GenericMenu
                     break;
                 case WEAPONMODE:
                     if(cursorLoc < 0)
-                        cursorLoc = Unit.WEAPON_LIMIT-1;
-                    if(cursorLoc >= Unit.WEAPON_LIMIT)
+                        cursorLoc = PartyUnit.WEAPON_LIMIT-1;
+                    if(cursorLoc >= PartyUnit.WEAPON_LIMIT)
                         cursorLoc = 0;
                     break;
                 case USABLEMODE:
-                    if(cursorLoc < Unit.WEAPON_LIMIT)
+                    if(cursorLoc < PartyUnit.WEAPON_LIMIT)
                         cursorLoc = numCommands-1;
                     if(cursorLoc >= numCommands)
-                        cursorLoc = Unit.WEAPON_LIMIT;
+                        cursorLoc = PartyUnit.WEAPON_LIMIT;
                     break;
             }
             //If B, exit the unit action box
@@ -93,7 +94,7 @@ public class UnitInventoryMenu extends GenericMenu
     {
         String[] ret;
         
-        ret = new String[Unit.WEAPON_LIMIT + Unit.INVENTORY_LIMIT];
+        ret = new String[PartyUnit.WEAPON_LIMIT + PartyUnit.INVENTORY_LIMIT];
         for(int i = 0; i< ret.length; i++)
             ret[i] = new String();
         
@@ -101,7 +102,7 @@ public class UnitInventoryMenu extends GenericMenu
             ret[i] = u.getWeaponInventory().get(i).getName();
         
         for(int i = 0; i< u.getInventory().size(); i++)
-            ret[i+Unit.WEAPON_LIMIT] = u.getInventory().get(i).getName();
+            ret[i + PartyUnit.WEAPON_LIMIT] = u.getInventory().get(i).getName();
         
         return ret;
     }
@@ -110,12 +111,12 @@ public class UnitInventoryMenu extends GenericMenu
     {
         try
         {
-            if(loc < Unit.WEAPON_LIMIT)
+            if(loc < PartyUnit.WEAPON_LIMIT)
             {
                 return inventoryUnit.getWeaponInventory().get(loc);
             }
             else
-                return inventoryUnit.getInventory().get(loc-Unit.WEAPON_LIMIT);
+                return inventoryUnit.getInventory().get(loc - PartyUnit.WEAPON_LIMIT);
         }
         catch(Exception e)
         {
@@ -134,12 +135,12 @@ public class UnitInventoryMenu extends GenericMenu
         switch(mode)
         {
             case 1:
-                if(cursorLoc >= Unit.WEAPON_LIMIT)
+                if(cursorLoc >= PartyUnit.WEAPON_LIMIT)
                     cursorLoc = 0;
                 break;
             case 2:
-                if(cursorLoc < Unit.WEAPON_LIMIT)
-                    cursorLoc = Unit.WEAPON_LIMIT;
+                if(cursorLoc < PartyUnit.WEAPON_LIMIT)
+                    cursorLoc = PartyUnit.WEAPON_LIMIT;
         }
     }
 }

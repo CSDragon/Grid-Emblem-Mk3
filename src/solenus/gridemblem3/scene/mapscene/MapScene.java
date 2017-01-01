@@ -192,7 +192,7 @@ public class MapScene extends Scene
                     }
                     //A: When over an available location, move the unit to that location and open the action box
                     if(im.getA() == 1)
-                        if(allyRangeMap.contains(cursor.getCoord()) && this.getActorAtPoint(cursor.getCoord()) == null)
+                        if(allyRangeMap.contains(cursor.getCoord()) && Pathfinding.isStoppingAllowed(selectedUnit, cursor.getCoord()))
                             cst2to5();
 
                     //B: Return to state 1.
