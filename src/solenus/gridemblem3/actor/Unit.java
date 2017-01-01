@@ -125,6 +125,9 @@ public class Unit extends Actor
     {
         super();
         
+        //units can be passed through, as long as their allied.
+        passable = true;
+        
         weaponInventory = new ArrayList<>();
         inventory = new ArrayList<>();
         skills = new ArrayList<>();
@@ -141,6 +144,10 @@ public class Unit extends Actor
     public Unit(BufferedReader in) throws IOException
     {
         super(in.readLine().substring(6));
+        
+        //units can be passed through, as long as their allied.
+        passable = true;
+        
         unitClass = in.readLine().substring(7);
         team = Integer.parseInt(in.readLine().substring(6));
         level = Integer.parseInt(in.readLine().substring(7));

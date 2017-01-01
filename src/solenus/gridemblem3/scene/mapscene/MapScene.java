@@ -192,7 +192,7 @@ public class MapScene extends Scene
                     }
                     //A: When over an available location, move the unit to that location and open the action box
                     if(im.getA() == 1)
-                        if(allyRangeMap.contains(cursor.getCoord()))
+                        if(allyRangeMap.contains(cursor.getCoord()) && this.getActorAtPoint(cursor.getCoord()) == null)
                             cst2to5();
 
                     //B: Return to state 1.
@@ -492,7 +492,7 @@ public class MapScene extends Scene
                     
                 /*  Battle
                     Active Objects: fightUI
-                    Camera Follows: selectedUnit
+                    Camera Follows: none
                 */
                 case 8:
                     int result = fightUI.runFrame(); //gotta store result so resolveBattle can be passed it regardless of which case it came from.
@@ -696,7 +696,7 @@ public class MapScene extends Scene
                     Camera Follows: selectedUnit
                 */
                 case 23:
-                    ai.act();
+                    ai.decideAction();
                     controlState = 22;
                     break;    
             }  
@@ -880,8 +880,7 @@ public class MapScene extends Scene
         allyRangeMap.clear();
         if(u != null)
         {
-            Pathfinding.findAllMovableLocations(u);
-            allyRangeMap.addAll(Pathfinding.getMoveList());
+            allyRangeMap.addAll(Pathfinding.listAllMovableLocations(u));
         }
     }
     
@@ -893,7 +892,7 @@ public class MapScene extends Scene
     {
         allyRangeMap.clear();
         if(u != null)
-            allyRangeMap.addAll(Pathfinding.getAllAttackLocations(u, false));
+            allyRangeMap.addAll(Pathfinding.listThreatRange(u, false));
     }
     
     /**
@@ -911,7 +910,7 @@ public class MapScene extends Scene
             enemyRangeList.add(u);
 
             //add threat points to threat map
-            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u, false));
+            selectedEnemyRangeMap.addAll(Pathfinding.listThreatRange(u, false));
 
             //Remove duplicates
             HashSet h = new HashSet(selectedEnemyRangeMap);
@@ -932,7 +931,7 @@ public class MapScene extends Scene
         //recreate the threat map.
         selectedEnemyRangeMap.clear();
         for (Unit enemy : enemyRangeList) 
-            selectedEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(enemy, false));
+            selectedEnemyRangeMap.addAll(Pathfinding.listThreatRange(enemy, false));
 
     }
     
@@ -944,7 +943,7 @@ public class MapScene extends Scene
         for (Unit u : unitList)
         {
             if(u.getTeam() == 1)
-                allEnemyRangeMap.addAll(Pathfinding.getAllAttackLocations(u, false));
+                allEnemyRangeMap.addAll(Pathfinding.listThreatRange(u, false));
         }
         
         //Remove duplicates
@@ -1259,7 +1258,8 @@ public class MapScene extends Scene
         drawAllyMoveRange = true;
         controlState = 2;
         selectedUnit = u;
-        mvArrow.start(u, allyRangeMap, cursor, map);
+        PathfindingReport pr = new PathfindingReport(u);
+        mvArrow.start(u, pr, cursor, map);
         cursor.getSprite().sendTrigger("activate");
     }
         

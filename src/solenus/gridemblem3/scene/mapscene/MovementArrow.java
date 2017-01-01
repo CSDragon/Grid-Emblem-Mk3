@@ -28,10 +28,10 @@ public class MovementArrow
     private boolean active;
     private MapCursor c;
     private Unit movingUnit;
-    private ArrayList<Point> movableArea;
     private boolean repathFlag;
     private int weight;
     private Map map;
+    private PathfindingReport pr;
     
     private int width;
     private int height;
@@ -149,18 +149,18 @@ public class MovementArrow
     /**
      * start arrowing
      * @param u the unit moving
-     * @param ma the list of points that the arrow and unit can move on
+     * @param pathRep the pathfinding report for the current unit
      * @param cu the mapCursor we need to watch
      * @param m the map it's happening on.
      */
-    public void start(Unit u, ArrayList<Point> ma, MapCursor cu, Map m)
+    public void start(Unit u, PathfindingReport pathRep, MapCursor cu, Map m)
     {
         c = cu;
-        map = m;
         active = true;
         areaTraveled.add(c.getCoord());
         movingUnit = u;
-        movableArea = ma;
+        pr = pathRep;
+        map = m;
     }
     
     /**
@@ -179,29 +179,31 @@ public class MovementArrow
      */
     public void addPoint(Point p)
     {
+        //First off, the behaviour is very different if p is a location we already traveled to. So let's find out where on the path it is. (-1 for new points)
         int locPath = areaTraveled.indexOf(p);
-        int locArea = movableArea.indexOf(p);
 
-        //if this location doesn't exist in the movable area
-        if(locArea == -1)
+        //If p's not in a location we can even move to, do nothing and flag a repath for when we get back into move range.
+        if(pr.getMovableLocations().indexOf(p) == -1)
             repathFlag = true;
 
-
-        //if we're on the same spot, do nothing
+        //If we're on the same spot, do nothing
         else if(locPath == areaTraveled.size()-1)
         {/*do nothing*/}
 
         //if we're on a new spot, add it
         else if(locPath == -1)
         {
-            //if Diagonal
-            if(Math.abs(p.x-areaTraveled.get(areaTraveled.size()-1).x + p.y-areaTraveled.get(areaTraveled.size()-1).y) != 1)
-                addPoint(new Point(p.x, areaTraveled.get(areaTraveled.size()-1).y));
-        
-            areaTraveled.add(p);
-            weight+= getWeightOfPoint(p);
             if(repathFlag)
-                repath();
+                repath(p);
+            else
+            {
+                //if Diagonal
+                if(Math.abs(p.x-areaTraveled.get(areaTraveled.size()-1).x + p.y-areaTraveled.get(areaTraveled.size()-1).y) != 1)
+                    addPoint(new Point(p.x, areaTraveled.get(areaTraveled.size()-1).y));
+
+                areaTraveled.add(p);
+                weight+= getWeightOfPoint(p);
+            }
 
 
         }
@@ -220,7 +222,7 @@ public class MovementArrow
     }
     
     /**
-     * Finds the movement requirement of moving onto point p
+     * Finds the movement requirement of moving onto point p.
      * @param p the point we're finding
      * @return the movement requirement
      */
@@ -237,7 +239,7 @@ public class MovementArrow
         if(active)
         {
             Point dest = areaTraveled.get(areaTraveled.size()-1);
-            areaTraveled = Pathfinding.repath(dest, movingUnit);
+            areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap());
         }
         reweight();
         
@@ -252,9 +254,10 @@ public class MovementArrow
     {
         if(active)
         {
-            areaTraveled = Pathfinding.repath(dest, movingUnit);
+            areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap());
         }
-        reweight();
+        //This is the one time we can set weight to the weightmap value, because it will be an optimized route.
+        weight = pr.getDistanceAt(areaTraveled.get(areaTraveled.size()-1));
         
         repathFlag = false;
     }
@@ -265,7 +268,7 @@ public class MovementArrow
      */
     public void reweight()
     {
-        
+        //this isn't as simple as looking it up on the weightmap from the pathfinding report, because the path might not be shortest distance (trap dodging)
         weight = 0;
         for(int i = 1; i<areaTraveled.size(); i++)
             weight+= getWeightOfPoint(areaTraveled.get(i));
