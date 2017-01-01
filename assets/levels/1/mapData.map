@@ -34,7 +34,7 @@ Class: null
 Team: 1
 Level: 10
 XP: 80
-HP: 20.0
+HP: 00.0
 STR: 0.0
 MAG: 7.0
 Skill: 10.0
@@ -68,7 +68,7 @@ Natural Mastery: 20
 
 Num Weapons: 1
 
-Name: Light
+Name: Bow
 Value: 0
 Weapon Type: 8
 Strength or Magic: 0
@@ -79,7 +79,7 @@ Cur Uses: 10
 Hit: 200
 Weight: 0
 Crit: 0
-Min Range: 1
+Min Range: 2
 Max Range: 2
 Num Effects: 0
 
@@ -579,7 +579,7 @@ Num Skills: 0
 Num Skills Bank: 0
 
 Unit Starting Locations
-6, 7
+8, 5
 7, 8
 7, 7
 7, 6

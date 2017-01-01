@@ -28,19 +28,29 @@ import solenus.gridemblem3.actor.Unit;
 public class PathfindingReport 
 {
     private Unit unitMapped;
+    private boolean unlimited;
     private HashMap<Point, Integer> distanceMap;
     private ArrayList<Point> movableLocations;
+    private ArrayList<Point> threatRange;
+    private ArrayList<Point> staffRange;
     private ArrayList<Unit> attackableUnits;
     private ArrayList<Unit> staffableUnits;
-    
      
-    public PathfindingReport(Unit u)
+    /**
+     * 
+     * @param u
+     * @param unconstrained If you are allowing this to check the entire map, or just the movement range.
+     */
+    public PathfindingReport(Unit u, boolean unconstrained)
     {
         unitMapped = u;
-        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped);
-        movableLocations = Pathfinding.listAllMovableLocations(unitMapped);
-        attackableUnits = Pathfinding.listAllAttackableObjects(unitMapped, true);
-        staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, false);
+        unlimited = unconstrained;
+        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited);
+        movableLocations = Pathfinding.listAllMovableLocations(unitMapped, distanceMap);
+        threatRange = Pathfinding.listThreatRange(unitMapped, movableLocations, false);
+        staffRange = Pathfinding.listThreatRange(unitMapped, movableLocations, true);
+        attackableUnits = Pathfinding.listAllAttackableObjects(unitMapped, threatRange, false);
+        staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, staffRange, true);
     }
 
     /**
@@ -48,15 +58,22 @@ public class PathfindingReport
      */
     public void update()
     {
-        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped);
-        movableLocations = Pathfinding.listAllMovableLocations(unitMapped);
-        attackableUnits = Pathfinding.listAllAttackableObjects(unitMapped, true);
-        staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, false);
+        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited);
+        movableLocations = Pathfinding.listAllMovableLocations(unitMapped, distanceMap);
+        threatRange = Pathfinding.listThreatRange(unitMapped, movableLocations, false);
+        staffRange = Pathfinding.listThreatRange(unitMapped, movableLocations, false);
+        attackableUnits = Pathfinding.listAllAttackableObjects(unitMapped, threatRange, false);
+        staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, staffRange, true);
     }
     
     //<editor-fold desc="getters and setters">
     
-    public int getDistanceAt(Point p)
+    /**
+     * Finds the distance unit has to travel to reach point p, by looking it up on the weight table.
+     * @param p The location this unit would have to travel to
+     * @return the distance
+     */
+    public int getDistanceTo(Point p)
     {
         return distanceMap.get(p);
     }
@@ -68,7 +85,14 @@ public class PathfindingReport
     {
         return unitMapped;
     }
-
+    
+    /**
+     * @return unlimited
+     */
+    public boolean isUnlimited()
+    {
+        return unlimited;
+    }
     /**
      * @return the distanceMap
      */
@@ -76,13 +100,29 @@ public class PathfindingReport
     {
         return distanceMap;
     }
-
+    
     /**
      * @return the movableLocations
      */
     public ArrayList<Point> getMovableLocations() 
     {
         return movableLocations;
+    }
+
+    /**
+     * @return the locations this unit can attack
+     */
+    public ArrayList<Point> getThreatRange() 
+    {
+        return threatRange;
+    }
+    
+    /**
+     * @return the locations this unit can use a staff on
+     */
+    public ArrayList<Point> getStaffRange() 
+    {
+        return staffRange;
     }
 
     /**

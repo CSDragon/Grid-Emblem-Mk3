@@ -71,7 +71,8 @@ public class AI
             {
                 //AI ACTIVATION LOGIC:
                 // * If there's any units it could possibly attack this turn, time to activate it.
-                if(Pathfinding.listAllAttackableObjects(u, false).size() > 0)
+                PathfindingReport pr = new PathfindingReport(u, true);
+                if(pr.getAttackableUnits().size() > 0)
                     u.setAIActive(true);
             }
         }
@@ -84,19 +85,18 @@ public class AI
      */
     public void decideAction()
     {
-        //First, get the distance map to all possible locations
-        HashMap<Point, Integer> hm = Pathfinding.mapShortestDistanceFromUnit(activeUnit);
+        //First, get a pathfinding report.
+        PathfindingReport pr = new PathfindingReport(activeUnit, true);
         
         //Then, get the list of all locations you can attack people from
-        ArrayList<Point> attackLoc = Pathfinding.listThreatRange(activeUnit, false);
         
         
-        ArrayList<Point> ordered = Pathfinding.sortLocationsByDistance(attackLoc, hm);
+        ArrayList<Point> ordered = Pathfinding.sortLocationsByDistance(pr.getThreatRange(), pr.getDistanceMap());
         
         System.out.println("I am at "+activeUnit.getCoord());
         for(int i = 0; i<ordered.size();i++)
         {
-            System.out.println("<"+ordered.get(i).x+", "+ordered.get(i).y+">: "+hm.get(ordered.get(i))+" units away.");
+            System.out.println("<"+ordered.get(i).x+", "+ordered.get(i).y+">: "+pr.getDistanceMap().get(ordered.get(i))+" units away.");
         }
         System.out.println("\n");
         

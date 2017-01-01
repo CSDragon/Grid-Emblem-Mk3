@@ -257,7 +257,7 @@ public class MovementArrow
             areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap());
         }
         //This is the one time we can set weight to the weightmap value, because it will be an optimized route.
-        weight = pr.getDistanceAt(areaTraveled.get(areaTraveled.size()-1));
+        weight = pr.getDistanceTo(areaTraveled.get(areaTraveled.size()-1));
         
         repathFlag = false;
     }

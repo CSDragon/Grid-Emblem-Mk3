@@ -880,7 +880,8 @@ public class MapScene extends Scene
         allyRangeMap.clear();
         if(u != null)
         {
-            allyRangeMap.addAll(Pathfinding.listAllMovableLocations(u));
+            PathfindingReport pr = new PathfindingReport(u, false);
+            allyRangeMap.addAll(pr.getMovableLocations());
         }
     }
     
@@ -892,7 +893,10 @@ public class MapScene extends Scene
     {
         allyRangeMap.clear();
         if(u != null)
-            allyRangeMap.addAll(Pathfinding.listThreatRange(u, false));
+        {
+            PathfindingReport pr = new PathfindingReport(u, false);
+            allyRangeMap.addAll(pr.getThreatRange());
+        }
     }
     
     /**
@@ -910,7 +914,8 @@ public class MapScene extends Scene
             enemyRangeList.add(u);
 
             //add threat points to threat map
-            selectedEnemyRangeMap.addAll(Pathfinding.listThreatRange(u, false));
+            PathfindingReport pr = new PathfindingReport(u, false);
+            selectedEnemyRangeMap.addAll(pr.getThreatRange());
 
             //Remove duplicates
             HashSet h = new HashSet(selectedEnemyRangeMap);
@@ -930,8 +935,11 @@ public class MapScene extends Scene
         
         //recreate the threat map.
         selectedEnemyRangeMap.clear();
-        for (Unit enemy : enemyRangeList) 
-            selectedEnemyRangeMap.addAll(Pathfinding.listThreatRange(enemy, false));
+        for (Unit enemy : enemyRangeList)
+        {
+            PathfindingReport pr = new PathfindingReport(u, false);
+            selectedEnemyRangeMap.addAll(pr.getThreatRange());
+        }
 
     }
     
@@ -943,7 +951,10 @@ public class MapScene extends Scene
         for (Unit u : unitList)
         {
             if(u.getTeam() == 1)
-                allEnemyRangeMap.addAll(Pathfinding.listThreatRange(u, false));
+            {
+                PathfindingReport pr = new PathfindingReport(u, false);
+                allEnemyRangeMap.addAll(pr.getThreatRange());
+            }
         }
         
         //Remove duplicates
@@ -1258,7 +1269,7 @@ public class MapScene extends Scene
         drawAllyMoveRange = true;
         controlState = 2;
         selectedUnit = u;
-        PathfindingReport pr = new PathfindingReport(u);
+        PathfindingReport pr = new PathfindingReport(u, false);
         mvArrow.start(u, pr, cursor, map);
         cursor.getSprite().sendTrigger("activate");
     }
