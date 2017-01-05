@@ -137,6 +137,7 @@ public class ChooseUnitsChecklistMenu extends GenericChecklistMenu
     /**
      * Resumes the checklist from where it left off
      */
+    @Override
     public void resume()
     {
         super.resume();

@@ -156,10 +156,9 @@ public class Map
             in.readLine();
             int numManUnits = Integer.parseInt(in.readLine().substring(34));
             
-            ArrayList<String> manNames = new ArrayList<>();
             
             for(int i = 0; i<numManUnits; i++)
-                manNames.add(in.readLine());
+                mandatoryPlayerUnits.add(in.readLine());
             in.readLine();
             
             in.readLine();
