@@ -5,7 +5,7 @@
  */
 package solenus.gridemblem3.scene.skillsscene;
 
-import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
 
 /**
@@ -14,9 +14,9 @@ import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
  */
 public class SkillsReserveScrollingMenu extends GenericScrollingMenu
 {
-    private Unit selectedUnit;
+    private PartyUnit selectedUnit;
 
-    public SkillsReserveScrollingMenu(Unit u, int ncv) 
+    public SkillsReserveScrollingMenu(PartyUnit u, int ncv) 
     {
         super(arrayListToString(u.getSkillsReserve()), ncv);
         selectedUnit = u;

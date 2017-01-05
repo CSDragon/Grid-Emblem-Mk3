@@ -6,7 +6,6 @@
 package solenus.gridemblem3.scene.skillsscene;
 
 import java.util.ArrayList;
-import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.ui.menu.GenericMenu;
 
@@ -16,9 +15,9 @@ import solenus.gridemblem3.ui.menu.GenericMenu;
  */
 class SkillsMenu extends GenericMenu
 {
-    private Unit selectedUnit;
+    private PartyUnit selectedUnit;
     
-    public SkillsMenu(Unit u)
+    public SkillsMenu(PartyUnit u)
     {
         //create the menu
         super(arrayListToString(u.getSkills()));

@@ -6,7 +6,6 @@
 package solenus.gridemblem3.scene.inventoryscene;
 
 import java.util.ArrayList;
-import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
@@ -24,14 +23,14 @@ public class UnitInventoryMenu extends GenericMenu
     public static final int USABLEMODE = 2;
     
     private int mode;
-    private Unit inventoryUnit;
+    private PartyUnit inventoryUnit;
     
     public UnitInventoryMenu()
     {
         super(new String[]{});
     }
     
-    public UnitInventoryMenu(Unit u, int x, int y)
+    public UnitInventoryMenu(PartyUnit u, int x, int y)
     {
         super(getInventories(u), x, y);
         
@@ -90,7 +89,7 @@ public class UnitInventoryMenu extends GenericMenu
         return NOTHING;
     }
     
-    public static String[] getInventories(Unit u)
+    public static String[] getInventories(PartyUnit u)
     {
         String[] ret;
         

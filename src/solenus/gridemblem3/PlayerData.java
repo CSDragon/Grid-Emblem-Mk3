@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
@@ -35,7 +34,7 @@ public class PlayerData
     private int gold;
     private boolean watchedMidScene;
     
-    private ArrayList<Unit> unitList;
+    private ArrayList<PartyUnit> unitList;
     private ArrayList<Weapon> weaponConvoy;
     private ArrayList<Usable> itemConvoy;
     
@@ -80,10 +79,7 @@ public class PlayerData
             in.readLine();
             
             for(int i = 0; i<numUnits; i++)
-            {
-                PartyUnit pu = new PartyUnit(in);
-                unitList.add(new Unit(pu));
-            }
+                unitList.add(new PartyUnit(in));
             
             //Get the weapon convoy data
             int numWeapons = Integer.parseInt(in.readLine().substring(13));
@@ -140,7 +136,7 @@ public class PlayerData
             //Write the army
             bw.write("Army Size: "+unitList.size()); bw.newLine();
             bw.newLine();
-            for(Unit u: unitList)
+            for(PartyUnit u: unitList)
                 u.save(bw);
             
             //Write the weapon convoy.
@@ -179,11 +175,11 @@ public class PlayerData
         saveLoc = PREBATTLESAVE;
         gold = 30000;
         
-        unitList.add(Unit.loadFromPrefab("Garen"));
-        unitList.add(Unit.loadFromPrefab("Lux"));
-        unitList.add(Unit.loadFromPrefab("Quinn"));
-        unitList.add(Unit.loadFromPrefab("Xin Zhao"));
-        unitList.add(Unit.loadFromPrefab("Sona"));
+        unitList.add(PartyUnit.loadFromPrefab("Garen"));
+        unitList.add(PartyUnit.loadFromPrefab("Lux"));
+        unitList.add(PartyUnit.loadFromPrefab("Quinn"));
+        unitList.add(PartyUnit.loadFromPrefab("Xin Zhao"));
+        unitList.add(PartyUnit.loadFromPrefab("Sona"));
         
         //TEST
         weaponConvoy.add(Weapon.loadFromPrefab("Iron Sword"));
@@ -243,8 +239,6 @@ public class PlayerData
     public void nextLevel()
     {
         mapNum++;
-        for(Unit u: unitList)
-            u.newMap();
         
         eventsWatched = new ArrayList<>();
         watchedMidScene = false;
@@ -259,7 +253,7 @@ public class PlayerData
      * @param u The unit to be added
      * @return Duplication check. Returns false if the unit already existed.
      */
-    public boolean addUnit(Unit u)
+    public boolean addUnit(PartyUnit u)
     {
         if(unitList.contains(u))
             return false;
@@ -376,7 +370,7 @@ public class PlayerData
      * @param weapon The weapon the unit is getting
      * @return Returns true is the weapon was accepted. False if it was sent to convoy because of inventory limits.
      */
-    public boolean giveWeapon(Unit u, Weapon weapon)
+    public boolean giveWeapon(PartyUnit u, Weapon weapon)
     {
         if(u != null && u.addWeapon(weapon))
             return true;
@@ -393,7 +387,7 @@ public class PlayerData
      * @param item The item the unit is getting
      * @return Returns true is the item was accepted. False if it was sent to convoy because of inventory limits.
      */
-    public boolean giveItem(Unit u, Usable item)
+    public boolean giveItem(PartyUnit u, Usable item)
     {
         if(u != null && u.addItem(item))
             return true;
@@ -413,9 +407,9 @@ public class PlayerData
      * @param name The name of the unit we're searching for.
      * @return The unit with that name.
      */
-    public Unit getUnit(String name)
+    public PartyUnit getUnit(String name)
     {
-        for(Unit u: unitList)
+        for(PartyUnit u: unitList)
         {
             if(u.getName().equals(name))
                 return u;
@@ -433,7 +427,7 @@ public class PlayerData
         
         ret.addAll(weaponConvoy);
         
-        for(Unit u: unitList)
+        for(PartyUnit u: unitList)
             ret.addAll(u.getWeaponInventory());
         
         return ret;
@@ -449,7 +443,7 @@ public class PlayerData
         
         ret.addAll(itemConvoy);
         
-        for(Unit u: unitList)
+        for(PartyUnit u: unitList)
             ret.addAll(u.getInventory());
         
         return ret;
@@ -481,7 +475,7 @@ public class PlayerData
     /**
      * @return the unitList
      */
-    public ArrayList<Unit> getUnitList() 
+    public ArrayList<PartyUnit> getUnitList() 
     {
         return unitList;
     }

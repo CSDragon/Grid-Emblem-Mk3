@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.scene.mapscene.Map;
 import solenus.gridemblem3.ui.menu.GenericChecklistMenu;
 
@@ -89,8 +90,21 @@ public class ChooseUnitsChecklistMenu extends GenericChecklistMenu
      */
     public void start(PlayerData pd, Map m)
     {
-        army = pd.getUnitList();
-        mandatoryUnits = m.getMandatoryPlayerUnits();
+        ArrayList<PartyUnit> pus = pd.getUnitList();
+        ArrayList<String> manNames = m.getMandatoryPlayerUnits();
+        army = new ArrayList<>();
+        mandatoryUnits = new ArrayList<>();
+        
+        for(PartyUnit pu : pus)
+        {
+            Unit u = new Unit(pu);
+            army.add(u);
+            for(String name : manNames)
+            {
+                if (pu.getName().equals(name))
+                    mandatoryUnits.add(u);
+            }
+        }
 
         super.start(army.size());
         

@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
-import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
@@ -37,7 +36,7 @@ public class InventoryScene extends Scene
     private ItemActionsMenu iam;
     private TabbedInventoryScene tis;
     
-    Unit activeUnit;
+    PartyUnit activeUnit;
     Item activeItem;
     
     private BufferedImage blackout;
@@ -465,7 +464,7 @@ public class InventoryScene extends Scene
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
 
-    public void cst1to2(Unit u)
+    public void cst1to2(PartyUnit u)
     {
         controlState = 2;
 

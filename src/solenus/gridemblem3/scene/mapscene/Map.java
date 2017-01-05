@@ -57,7 +57,7 @@ public class Map
     private ArrayList<Point> reinforcementLocations;
     private ArrayList<Integer> reinforcementTurnTimings;
     
-    private ArrayList<Unit> mandatoryPlayerUnits;
+    private ArrayList<String> mandatoryPlayerUnits;
     private ArrayList<Point> mandatoryPlayerUnitLocations;
     
     public Map()
@@ -177,14 +177,6 @@ public class Map
             for(int i = 0; i< numReinforcements; i++)
                 reinforcements.get(i).moveInstantly(reinforcementLocations.get(i));
             
-            //Set the mandatory units.
-            for(int i = 0; i< numManUnits; i++)
-            {
-                mandatoryPlayerUnits.add(pd.getUnit(manNames.get(i)));
-                if(mandatoryPlayerUnits.get(i) != null)
-                    mandatoryPlayerUnits.get(i).moveInstantly(mandatoryPlayerUnitLocations.get(i));
-            }
-            
             in.close();
         }
         catch(Exception e)
@@ -224,7 +216,7 @@ public class Map
             bw.newLine();
             
             //write starting locations
-            bw.write("Player Army Starting Locations"); bw.newLine();
+            bw.write("Player Army Starting Locations (Not including mandatory units)"); bw.newLine();
             bw.write("Number of Starting Locations: "+startingPlayerLocations.size()); bw.newLine();
             for (Point startingPoint : startingPlayerLocations) 
                 writePoint(startingPoint, bw);
@@ -265,9 +257,9 @@ public class Map
             bw.write("Mandatory Player Units"); bw.newLine();
             bw.write("Number of Mandatory Player Units: "+mandatoryPlayerUnits.size()); bw.newLine();
             bw.newLine();
-            for(Unit u: mandatoryPlayerUnits)
+            for(String name: mandatoryPlayerUnits)
             {
-                bw.write(u.getName()); bw.newLine();
+                bw.write(name); bw.newLine();
             }
             bw.newLine();
             
@@ -316,56 +308,6 @@ public class Map
     }
     
     //</editor-fold>
-    
-    public static void main(String[] args)
-    {
-        /*
-        Map m = new Map(1, null);
-        ArrayList<Point> p = new ArrayList<>();
-        p.add(new Point(14, 7));
-        p.add(new Point(9, 7));
-        p.add(new Point(10, 9));
-        p.add(new Point(10, 5));
-        m.setStartingPoints(p);
-        
-        ArrayList<Unit> startingEnemies = new ArrayList<>();
-        ArrayList<Point> startingEnemyPoints = new ArrayList<>();
-        
-        startingEnemies.add(new Unit(1, 6, 1));
-        startingEnemyPoints.add(new Point(6, 7));
-        startingEnemies.get(0).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
-
-        startingEnemies.add(new Unit(1, 6, 1));
-        startingEnemyPoints.add(new Point(7, 8));
-        startingEnemies.get(1).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
-
-        startingEnemies.add(new Unit(1, 6, 1));
-        startingEnemyPoints.add(new Point(7, 7));
-        startingEnemies.get(2).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
-
-        startingEnemies.add(new Unit(1, 6, 1));
-        startingEnemyPoints.add(new Point(7,6));
-        startingEnemies.get(3).addWeapon(new Weapon("Tome", 100, Weapon.LIGHT, 1, 'D', 10, 2, 100, 0 ,0, 1, 2));
-
-        m.setStartingUnits(startingEnemies);
-        m.setStartingUnitLocations(startingEnemyPoints);
-        
-        m.test();
-        
-        m.saveMap(1);
-        
-        /*
-        unitList.get(0).placeOnGrid(15, 7);
-        unitList.get(1).placeOnGrid(10, 7);
-
-        */
-    }
-    
-    public void test()
-    {
-        mandatoryPlayerUnitLocations.add(new Point(15,7));
-        mandatoryPlayerUnitLocations.add(new Point(10,7));
-    }
     
     
     /**
@@ -489,17 +431,9 @@ public class Map
     /**
      * @return the mandatoryPlayerUnits
      */
-    public ArrayList<Unit> getMandatoryPlayerUnits() 
+    public ArrayList<String> getMandatoryPlayerUnits() 
     {
         return mandatoryPlayerUnits;
-    }
-
-    /**
-     * @param mandatoryPlayerUnits the mandatoryPlayerUnits to set
-     */
-    public void setMandatoryPlayerUnits(ArrayList<Unit> mandatoryPlayerUnits) 
-    {
-        this.mandatoryPlayerUnits = mandatoryPlayerUnits;
     }
 
     /**

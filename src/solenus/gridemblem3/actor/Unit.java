@@ -354,12 +354,6 @@ public class Unit extends Actor
 
     //</editor-fold>
     
-    public void newMap()
-    {
-        curHP = (int)pu.getHP();
-        hasMoved = false;
-    }
-    
     /**
      * Start a new turn. So far it's just hasMoved, but there will be more.
      */

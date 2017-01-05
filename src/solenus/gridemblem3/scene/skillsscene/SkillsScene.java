@@ -8,7 +8,7 @@ package solenus.gridemblem3.scene.skillsscene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
-import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 
@@ -22,7 +22,7 @@ public class SkillsScene extends Scene
     private SkillsMenu skillsMenu;
     private SkillsReserveScrollingMenu srsm;
     private PlayerData data;
-    private Unit selectedUnit;
+    private PartyUnit selectedUnit;
     
     public SkillsScene()
     {

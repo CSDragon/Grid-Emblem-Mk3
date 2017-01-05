@@ -6,7 +6,7 @@
 package solenus.gridemblem3.ui.menu;
 
 import java.util.ArrayList;
-import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.ui.menu.scrollingMenu.GenericScrollingMenu;
 
 /**
@@ -17,14 +17,14 @@ public class CharacterSelectMenu extends GenericScrollingMenu
 {
     public static final int CONVOYMODE = -3;
     
-    private ArrayList<Unit> units;
+    private ArrayList<PartyUnit> units;
     boolean convoyMode;
     
     /**
      * The standard constructor. 
      * @param units The list of units
      */
-    public CharacterSelectMenu(ArrayList<Unit> units)
+    public CharacterSelectMenu(ArrayList<PartyUnit> units)
     {
         this(units, false);
     }
@@ -34,7 +34,7 @@ public class CharacterSelectMenu extends GenericScrollingMenu
      * @param units The list of units.
      * @param convoyMode Should it include a convoy.
      */
-    public CharacterSelectMenu(ArrayList<Unit> units, boolean convoyMode)
+    public CharacterSelectMenu(ArrayList<PartyUnit> units, boolean convoyMode)
     {
         super(unitsToString(units, convoyMode), 5);
         this.units = units;
@@ -47,7 +47,7 @@ public class CharacterSelectMenu extends GenericScrollingMenu
      * @param convoyMode Whether or not we should include the convoy.
      * @return Weather or not the convoy should be included.
      */
-    public static String[] unitsToString(ArrayList<Unit> u, boolean convoyMode)
+    public static String[] unitsToString(ArrayList<PartyUnit> u, boolean convoyMode)
     {
         String[] ret;
         if(convoyMode)
@@ -69,7 +69,7 @@ public class CharacterSelectMenu extends GenericScrollingMenu
      * @param i The location to look
      * @return The unit at that location.
      */
-    public Unit getUnitAt(int i)
+    public PartyUnit getUnitAt(int i)
     {
         if((convoyMode && i == units.size()) || i >= units.size())
             return null;
@@ -80,7 +80,7 @@ public class CharacterSelectMenu extends GenericScrollingMenu
      * Gets the unit at the cursorLoc
      * @return The unit at that location
      */
-    public Unit getSelectedUnit()
+    public PartyUnit getSelectedUnit()
     {
         return getUnitAt(cursorLoc);
     }

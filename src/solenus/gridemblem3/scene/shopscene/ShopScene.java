@@ -8,10 +8,10 @@ package solenus.gridemblem3.scene.shopscene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
-import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Item;
 import solenus.gridemblem3.item.Usable;
 import solenus.gridemblem3.item.Weapon;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.ui.menu.CharacterSelectMenu;
 
@@ -24,7 +24,7 @@ public class ShopScene extends Scene
     private PlayerData data;
     private CharacterSelectMenu csm;
     private ShopMenu shopMenu;
-    private Unit buyer;
+    private PartyUnit buyer;
     
     public ShopScene()
     {

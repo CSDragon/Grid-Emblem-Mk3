@@ -205,7 +205,6 @@ public class PartyUnit
         try
         {
             BufferedReader in = new BufferedReader(new FileReader("assets/prefabs/units/"+name+".txt"));
-            in.readLine().substring(6);//Remove later:
 
             ret = new PartyUnit(in);
         }
