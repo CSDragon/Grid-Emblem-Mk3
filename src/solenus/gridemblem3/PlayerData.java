@@ -180,6 +180,7 @@ public class PlayerData
         unitList.add(PartyUnit.loadFromPrefab("Quinn"));
         unitList.add(PartyUnit.loadFromPrefab("Xin Zhao"));
         unitList.add(PartyUnit.loadFromPrefab("Sona"));
+        unitList.add(PartyUnit.loadFromPrefab("Jarvan"));
         unitList.add(PartyUnit.loadFromPrefab("Jox"));
         unitList.add(PartyUnit.loadFromPrefab("Jarman"));
         

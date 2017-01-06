@@ -1,4 +1,4 @@
-Name: Jarvan
+Name: Jox
 Class: Lord
 Team: 0
 Level: 4

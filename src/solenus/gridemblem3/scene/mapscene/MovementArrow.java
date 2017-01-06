@@ -199,13 +199,16 @@ public class MovementArrow
             {
                 //if Diagonal
                 if(Math.abs(p.x-areaTraveled.get(areaTraveled.size()-1).x + p.y-areaTraveled.get(areaTraveled.size()-1).y) != 1)
+                {
                     addPoint(new Point(p.x, areaTraveled.get(areaTraveled.size()-1).y));
-
-                areaTraveled.add(p);
-                weight+= getWeightOfPoint(p);
+                    addPoint(new Point(p));
+                }
+                else
+                {
+                    areaTraveled.add(p);
+                    weight+= getWeightOfPoint(p);
+                }
             }
-
-
         }
 
         //if we're on an old point, move back to it. 
