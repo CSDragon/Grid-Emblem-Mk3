@@ -317,6 +317,7 @@ public class Pathfinding
                 //we want the point with the lowest remaining distance.
                 //prioritise N,S,W,E. Because why not.
                 //there's prolly a better way to do this, but whatever.
+                //TODO: Randomize among equal directions.
                 
                 //is north the closest?
                 if(nw <= ww && nw <= ew && nw <= sw)

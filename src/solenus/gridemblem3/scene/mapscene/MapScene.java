@@ -111,6 +111,7 @@ public class MapScene extends Scene
      * most Scene subclasses must override this, and check if they are active.
      * @param im the input manager
      */
+    @Override
     public void respondControls(InputManager im)
     {
         //always check this
@@ -139,6 +140,9 @@ public class MapScene extends Scene
                 18) Select a staff to use 
                 19) Heal "combat"
                 20) Healing item usage
+                21) Item Selection
+                22) AI Unit selection
+                23) AI Unit Movement
             */
 
             //cursor mode
@@ -335,6 +339,7 @@ public class MapScene extends Scene
      * most scene subclasses must override this, and check if they are active.
      * @return The state of this scene that the parent scene needs to know.
      */
+    @Override
     public int runFrame()
     {   
         //always check this
@@ -365,6 +370,10 @@ public class MapScene extends Scene
                     18) Select a staff to use
                     19) Heal "combat"
                     20) Healing item usage
+                    21) Item Selection
+                    22) AI Unit selection
+                    23) AI Unit Movement
+                
 
                 */
                 
@@ -555,7 +564,7 @@ public class MapScene extends Scene
                     switch(xp.runFrame())
                     {
                         case 1:
-                            cst13to1();
+                            cst13toX();
                             break;
                     }
                     break;
@@ -683,7 +692,7 @@ public class MapScene extends Scene
                     {
                         case AI.UNITFOUND:
                             selectedUnit = ai.getActiveUnit();
-                            controlState = 23;
+                            cst22to23();
                             break;
                         case AI.DONE:
                             cst10to9();
@@ -696,8 +705,14 @@ public class MapScene extends Scene
                     Camera Follows: selectedUnit
                 */
                 case 23:
-                    ai.decideAction();
-                    controlState = 22;
+                    if(!ai.getHasMoved() && ai.getMovePath() != null && ai.getMovePath().size() != 1)
+                        cst23to5();
+                    else if(!ai.getHasPerformedAction() && ai.getGettingAttacked() != null)
+                    {
+                        cst23to8();
+                    }
+                    else
+                        controlState = 22;
                     break;    
             }  
             
@@ -711,6 +726,7 @@ public class MapScene extends Scene
      * renders the scene.
      * most scene subclasses must override this, and check if they are visible.
      */
+    @Override
     public void animate()
     {   
         //always check this
@@ -739,13 +755,11 @@ public class MapScene extends Scene
         }
     }
 
-    
-    
-    
     /**
      * Paints the scene
      * @param g2 graphics.
      */
+    @Override
     public void draw(Graphics2D g2)
     {
         if(visible)
@@ -792,6 +806,8 @@ public class MapScene extends Scene
             terrainUI.draw(g2);
             unitHoverUI.draw(g2);
             unitInspectScene.draw(g2);
+            
+            //Rendering.renderTextAbsolute("Dropped frames: " + GridEmblemMk3.framesLost, g2, 200, 200, 0, 0, 0, 0, 0);
         }
         
     }
@@ -1394,12 +1410,20 @@ public class MapScene extends Scene
      */
     public void cst5toX()
     {
-        //if it's you're turn, and you're in a place w
+        movingIndex = 0;
+        
+        //if it's you're turn (TODO: And no traps activated)
         if(turn == 0)
         {
             controlState = 3;
             selectedUnit.getSprite().sendTrigger("idle");
             unitActionMenu.start(selectedUnit);
+        }
+        //AI turn
+        else
+        {
+            controlState = 23;
+            selectedUnit.getSprite().sendTrigger("idle");
         }
     }
     
@@ -1464,12 +1488,20 @@ public class MapScene extends Scene
                 break;
             
             case 0:
-                controlState = 1;
-                cursor.setVisible(true);
-                cursor.moveInstantly(selectedUnit.getCoord());
                 cursor.getSprite().sendTrigger("deactivate");
                 selectedUnit.setHasMoved(true);
                 fightUI.end();
+
+                if(turn == 0)
+                {
+                    controlState = 1;
+                    cursor.setVisible(true);
+                    cursor.moveInstantly(selectedUnit.getCoord());
+                }
+                else
+                {
+                    controlState = 23;
+                }
                 break;
         }
         
@@ -1541,16 +1573,24 @@ public class MapScene extends Scene
         cst8toX();
     }
     
-    public void cst13to1()
+    public void cst13toX()
     {
-        controlState = 1;
-        cursor.setVisible(true);
-        cursor.moveInstantly(selectedUnit.getCoord());
         cursor.getSprite().sendTrigger("deactivate");
         selectedUnit.setHasMoved(true);
         fightUI.end();
         staffUI.end();
         xp.end();
+        
+        if(turn == 0)
+        {
+            controlState = 1;
+            cursor.setVisible(true);
+            cursor.moveInstantly(selectedUnit.getCoord());
+        }
+        else
+        {
+            controlState = 23;
+        }
     }
     
     /**
@@ -1642,7 +1682,9 @@ public class MapScene extends Scene
     }
     
     
-    
+    /**
+     * The unit has used the item. Return to start.
+     */
     public void cst20to1()
     {
         controlState = 1;
@@ -1653,6 +1695,9 @@ public class MapScene extends Scene
 
     }
     
+    /**
+     * Using a healing item
+     */
     public void cst21to20()
     {
         controlState = 20;
@@ -1673,16 +1718,51 @@ public class MapScene extends Scene
             healingDone = Integer.parseInt(itemType.substring(4));
         }
 
-        //Take Damage
+        //Take healing
         selectedUnit.heal(healingDone);
 
         singleHealthBar.heal(healingDone);
     }
     
+    /**
+     * Return to previous menu
+     */
     public void cst21to3()
     {
         controlState = 3;
         itemSelect.end();
+    }
+    
+    /**
+     * The AI has decided a unit. Now it must act.
+     */
+    public void cst22to23()
+    {
+        controlState = 23;
+        ai.decideAction();
+    }
+    
+    /**
+     * Setting up for the AI to move a unit
+     */
+    public void cst23to5()
+    {
+        controlState = 5;
+        
+        movingIndex = 0;
+        movingLine = ai.getMovePath();
+        ai.setHasMoved(true);
+    }
+    
+    /**
+     * setting up for the AI to fight a unit
+     */
+    public void cst23to8()
+    {
+        controlState = 8;
+        fightUI.start(selectedUnit,  ai.getGettingAttacked(), fightGraphicsMode, map);
+        ai.setHasPerformedAction(true);
+
     }
     
     public int getTurn()

@@ -7,7 +7,6 @@ package solenus.gridemblem3.scene.mapscene;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 import solenus.gridemblem3.actor.Unit;
 
 /**
@@ -23,6 +22,9 @@ public class AI
     private Unit activeUnit;
     private Point moveToPoint;
     private Unit gettingAttacked;
+    private ArrayList<Point> movePath;
+    private boolean hasMoved;
+    private boolean hasPerformedAction;
     
     public static final int DONE = 0;
     public static final int UNITFOUND = 1;
@@ -85,30 +87,38 @@ public class AI
      */
     public void decideAction()
     {
-        //First, get a pathfinding report.
+        //First, get a pathfinding report, and reset for this unit.
         PathfindingReport pr = new PathfindingReport(activeUnit, true);
+        gettingAttacked = null;
+        movePath = null;
+        hasMoved = false;
+        hasPerformedAction = false;
         
         //Then, get the list of all locations you can attack people from
         
-        
+    /*    
+        //Distance map testing
         ArrayList<Point> ordered = Pathfinding.sortLocationsByDistance(pr.getThreatRange(), pr.getDistanceMap());
-        
         System.out.println("I am at "+activeUnit.getCoord());
         for(int i = 0; i<ordered.size();i++)
         {
             System.out.println("<"+ordered.get(i).x+", "+ordered.get(i).y+">: "+pr.getDistanceMap().get(ordered.get(i))+" units away.");
         }
         System.out.println("\n");
-        
+    */   
         //HECK WITH THIS: TestAI
         //If it can move left it will.
         //Then, it attacks if able.
+        
         moveToPoint = activeUnit.getCoord();
         Point left = new Point(-1 + activeUnit.getCoord().x, 0 + activeUnit.getCoord().y);
-        if(ms.getUnitAtPoint(left) != null)
+        if(ms.getUnitAtPoint(left) == null)
             moveToPoint = left;
+        else
+            gettingAttacked = ms.getUnitAtPoint(left);
         
-        gettingAttacked = null;
+        //creates a move path. It includes the location the unit is currently at, at position 0, so a length 1 path goes nowhere.
+        movePath = Pathfinding.repath(moveToPoint, activeUnit, pr.getDistanceMap());
         
         //temp
         activeUnit.setHasMoved(true);
@@ -138,5 +148,45 @@ public class AI
     public Unit getGettingAttacked()
     {
         return gettingAttacked;
+    }
+
+    /**
+     * @return the movePath
+     */
+    public ArrayList<Point> getMovePath()
+    {
+        return movePath;
+    }
+
+    /**
+     * @return the hasMoved
+     */
+    public boolean getHasMoved() 
+    {
+        return hasMoved;
+    }
+
+    /**
+     * @return the hasPerformedAction
+     */
+    public boolean getHasPerformedAction() 
+    {
+        return hasPerformedAction;
+    }
+
+    /**
+     * @param hasMoved the hasMoved to set
+     */
+    public void setHasMoved(boolean hasMoved)
+    {
+        this.hasMoved = hasMoved;
+    }
+
+    /**
+     * @param hasPerformedAction the hasPerformedAction to set
+     */
+    public void setHasPerformedAction(boolean hasPerformedAction)
+    {
+        this.hasPerformedAction = hasPerformedAction;
     }
 }

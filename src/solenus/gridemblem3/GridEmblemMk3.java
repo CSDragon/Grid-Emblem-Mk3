@@ -26,8 +26,7 @@ public class GridEmblemMk3
     //the max ammount of gameframes the game can process without rendering is 5. After that it MUST render. Giving a theoretic minimum of 12fps.
     //though, if it's having trouble processing the gamestate good gracious it's gonna have trouble rendering.
     private static final int MAX_FRAMESKIP = 5; 
-    private static final double timeBetweenFrames = 1000000000/60.0;
-    private static final boolean VISUALDEBUG = true;
+    private static final double TIMEBETWEENFRAMES = 1000000000/60.0;
     
     private static JFrame gameFrame;
     private static GamePanel gamePanel;
@@ -47,6 +46,9 @@ public class GridEmblemMk3
     public static boolean windowState = false;
     public static final int WINDOWED = 1;
     public static final int BORDERLESS = 2;
+    
+    //test data
+    public static long framesLost = 0;
     
     /**
      * @param args the command line arguments
@@ -101,7 +103,7 @@ public class GridEmblemMk3
             
             
             //If it's been 16.6666 ms since the last game tick happened, advance the game
-            if(System.nanoTime() >= nextGameTick)
+            if(System.nanoTime() > nextGameTick)
             {
                 //Input
                 im.gameStep();

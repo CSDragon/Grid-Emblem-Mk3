@@ -1,17 +1,23 @@
 How should AI work?
-
+pa
 Simple AI: 
 	Enemies are off by default.
 	Turned on when something enters their attack radius. Or on a turn trigger.
-	Once on they move towards they find all enemies in their move+attack range
+	Once on, they find all enemies in their move+attack range
 		If none, they move to the nearest enemy
-		If some, they attack the target they have highest EDPS on. (might - [def or res] * 2 if speed). Maybe might work out their EDPS vs their target's EDPS.
+		If some, they atta	ck the target they have highest EDPS on. (might - [def or res] * 2 if speed). Maybe might work out their EDPS vs their target's EDPS.
 	Enemies move in order of "Don't have to move to hit something", "Can move and hit" and "Can't target an enemy" to reduce the ammount of accidental crowding out.
 	If a destination is occupied, it moves as far along its movement path as it can.
 
 	How it decides where to move:
 		Unit checks its min and max range. Makes a list of all points around enemies within that range. Removes duplicates, occupied and immpassable loctations.
 		Generates a pathfinding map, and looks at each of these locations, it chooses the closest one. Or the first on the list, in case of tie.
+________________________________
+
+
+Fake Test AI:
+	Moves 1 tile right and attacks a random target if able.
+
 ________________________________
 	
 22) Select next unit
@@ -28,3 +34,23 @@ ________________________________
 		Select the appropriate weapon -> 8
 		
 8)	Realize it's an oponents turn and -> 22 when it's over.
+
+
+________________________________
+	
+So: we have a function that goes through all the attackable locations. It orders them by closest to farthest.
+
+When we get back to AI, AI should check if the closest one is occupied, if it is try the next one etc, until we're past how far the unit can move. 
+If no point was reachable this turn, it moves towards the first point as much as it can
+
+
+________________________________
+
+UUUUUUUUUUUUGH:
+
+	Figure out how to actually move the dumb thing
+	Create a list that only has the locations you can actually attack stuff from.
+	rename pathfinding funtions things like "threatRange"
+	
+	
+	
