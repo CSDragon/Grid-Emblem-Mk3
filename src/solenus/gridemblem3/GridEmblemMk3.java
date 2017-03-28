@@ -116,21 +116,20 @@ public class GridEmblemMk3
                 sceneControl.animate();
                 
                 //set the next frame
-                nextGameTick += timeBetweenFrames;
-
-                if(VISUALDEBUG)
+                nextGameTick += TIMEBETWEENFRAMES;
+                
+                //Graphics: If we still have time before the next frame, draw the graphics, with a minimum of 12fps
+                if(System.nanoTime() < nextGameTick || loops >= MAX_FRAMESKIP)
+                {
                     gameFrame.repaint();
-
-
-                //Graphics: If the graphics step takes too long, the system is designed to skip it, with a minimum of 12fps
-                if(System.currentTimeMillis() > nextGameTick && loops < MAX_FRAMESKIP)
-                    loops++;
+                    loops = 0;
+                }
                 else
                 {
-                    if(!VISUALDEBUG)
-                        gameFrame.repaint();
-                    loops = 0;
+                    loops++;
                 } 
+                
+                
             }
             
         }
