@@ -96,26 +96,30 @@ public class AI
         
         //Then, get the list of all locations you can attack people from
         
-    /*    
+        //First, get all the units. This will need to be changed once other factions are added, but for now, this is fine.
+        //TODO: Add a team allianes chart, and have this get an arraylist for each team.
+        ArrayList<Unit> attackableUnits = ms.getUnitsOnTeam(0);
+        
+        
+        
         //Distance map testing
         ArrayList<Point> ordered = Pathfinding.sortLocationsByDistance(pr.getThreatRange(), pr.getDistanceMap());
-        System.out.println("I am at "+activeUnit.getCoord());
-        for(int i = 0; i<ordered.size();i++)
-        {
-            System.out.println("<"+ordered.get(i).x+", "+ordered.get(i).y+">: "+pr.getDistanceMap().get(ordered.get(i))+" units away.");
-        }
-        System.out.println("\n");
-    */   
+        
+        
+        
+       
         //HECK WITH THIS: TestAI
-        //If it can move left it will.
+        //If it can move right it will.
         //Then, it attacks if able.
         
+        /*
         moveToPoint = activeUnit.getCoord();
-        Point left = new Point(-1 + activeUnit.getCoord().x, 0 + activeUnit.getCoord().y);
-        if(ms.getUnitAtPoint(left) == null)
-            moveToPoint = left;
+        Point right = new Point(1 + activeUnit.getCoord().x, 0 + activeUnit.getCoord().y);
+        if(ms.getUnitAtPoint(right) == null)
+            moveToPoint = right;
         else
-            gettingAttacked = ms.getUnitAtPoint(left);
+            gettingAttacked = ms.getUnitAtPoint(right);
+        */
         
         //creates a move path. It includes the location the unit is currently at, at position 0, so a length 1 path goes nowhere.
         movePath = Pathfinding.repath(moveToPoint, activeUnit, pr.getDistanceMap());

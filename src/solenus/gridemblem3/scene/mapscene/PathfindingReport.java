@@ -8,8 +8,6 @@ package solenus.gridemblem3.scene.mapscene;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
 import solenus.gridemblem3.actor.Unit;
 
 /**
@@ -39,7 +37,7 @@ public class PathfindingReport
     /**
      * 
      * @param u
-     * @param unconstrained If you are allowing this to check the entire map, or just the movement range.
+     * @param unconstrained True if you are allowing this to check the entire map, or false if just the movement range.
      */
     public PathfindingReport(Unit u, boolean unconstrained)
     {

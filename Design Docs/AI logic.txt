@@ -53,4 +53,15 @@ UUUUUUUUUUUUGH:
 	rename pathfinding funtions things like "threatRange"
 	
 	
-	
+Current thought stack	
+	Developing AI
+		Get list of enemy units
+		Find unoccupied attackable points in walking distance
+			if exist
+				Select point with best damage pottential.
+					Confirm move location and action taken.
+			else
+				move towards closest enemy unit on the map
+					if no enemies can be reached by any means, move as far as possible literally towards the team's boss
+						If the team doesn't have a boss, do nothing.
+				

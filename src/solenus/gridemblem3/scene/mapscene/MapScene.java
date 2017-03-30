@@ -1088,7 +1088,6 @@ public class MapScene extends Scene
         return null;
     }
     
-    
 
     /**
      * Finds the unit at point p
@@ -1167,6 +1166,22 @@ public class MapScene extends Scene
         }
         if(found != null)
             cursor.moveInstantly(found.getX(), found.getY());
+    }
+    
+    /**
+     * Gets all the units on a specific team
+     * @param team
+     * @return The units.
+     */
+    public ArrayList<Unit> getUnitsOnTeam(int team)
+    {
+        ArrayList<Unit> units = new ArrayList<>();
+        
+        for(int i =0; i< unitList.size(); i++)
+            if(unitList.get(i).getTeam() == team)
+                units.add(unitList.get(i));
+        
+        return units;
     }
     
     //</editor-fold>
