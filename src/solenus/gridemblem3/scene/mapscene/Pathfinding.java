@@ -90,6 +90,24 @@ public class Pathfinding
     }
     
     /**
+     * Finds all the places a unit can actually stop, not just pass through.
+     * @param u The moving unit
+     * @param movableLocations The locations a unit can move through, but not necessarily stop on.
+     * @return The list of locations you can actually stop at.
+     */
+    public static ArrayList<Point> listAllStoppableLocations(Unit u, ArrayList<Point> movableLocations)
+    {
+        ArrayList<Point> ret = new ArrayList();
+        for(Point p : movableLocations)
+        {
+            if(isStoppingAllowed(u, p))
+                ret.add(p);
+        }
+        
+        return ret;
+    }
+    
+    /**
      * Finds the list of available points to move.
      * @param u The unit whose range is being checked
      * @return the list of all movable locations
@@ -103,7 +121,7 @@ public class Pathfinding
     /**
      * Gets all the points a unit can attack 
      * @param u the attacking unit
-     * @param moveRange the range it can move (which determines how far it can move before attacking)
+     * @param moveRange All locations this unit can move to and attack from.
      * @param staffFlag If we're checking a staff, this is true. Otherwise it's false.
      * @return the list of points the unit can attack
      */
@@ -126,19 +144,14 @@ public class Pathfinding
                     //and get all the places you can hit from that range.
                     for (Point mr : moveRange) 
                     {
-                        //"All movable locations" includes spaces occupied by allies and other objects you can pass through but not stop on.
-                        //...Except that the point you're standing is also technically occupied, but we don't want to count that.
-                        if(Pathfinding.isStoppingAllowed(u, mr))
+                        for (int i = min; i<= max; i++) 
                         {
-                            for (int i = min; i<= max; i++) 
+                            for (int j = 0; j<i; j++) 
                             {
-                                for (int j = 0; j<i; j++) 
-                                {
-                                    ret.add(new Point(mr.x-i+j, mr.y+j));
-                                    ret.add(new Point(mr.x+j,   mr.y+i-j));
-                                    ret.add(new Point(mr.x+i-j, mr.y-j));
-                                    ret.add(new Point(mr.x-j,   mr.y-i+j));
-                                }
+                                ret.add(new Point(mr.x-i+j, mr.y+j));
+                                ret.add(new Point(mr.x+j,   mr.y+i-j));
+                                ret.add(new Point(mr.x+i-j, mr.y-j));
+                                ret.add(new Point(mr.x-j,   mr.y-i+j));
                             }
                         }
                     }
@@ -367,6 +380,41 @@ public class Pathfinding
         return ((map.getTerrainAtPoint(p).getMoveCost(u.getTransportType()) != -1)&&
                 //If the location is empty of Actors (unless that actor is already itself)
                 (mapScene.getActorAtPoint(p) == null) || mapScene.getUnitAtPoint(p) == u);
+    }
+    
+    /**
+     * Lists all the locations surrounding point p at a specific range
+     * @param min The minimum range
+     * @param max The maximum range
+     * @param p The point we're analyzing
+     * @return The list of points around p at the range.
+     */
+    public static ArrayList<Point> listPointsInARange(int min, int max, Point p)
+    {
+        ArrayList<Point> ret = new ArrayList<>();
+        
+        for (int i = min; i<= max; i++) 
+        {
+            //We only need to add 1 point at 0 distance
+            if(i == 0)
+                ret.add(p);
+            
+            else
+            {
+                //This kinda looks weird but it basically goes around the diamond 
+                //adding one point from each direction each rep
+                //and continuing until it's hit the other direction.
+                for (int j = 0; j<i; j++) 
+                {
+                    ret.add(new Point(p.x-i+j, p.y+j));
+                    ret.add(new Point(p.x+j,   p.y+i-j));
+                    ret.add(new Point(p.x+i-j, p.y-j));
+                    ret.add(new Point(p.x-j,   p.y-i+j));
+                }
+            }
+        }
+        
+        return ret;
     }
     
     //<editor-fold desc="Getters and setters">

@@ -5,6 +5,7 @@
  */
 package solenus.gridemblem3.scene.mapscene;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import solenus.gridemblem3.actor.Unit;
 import solenus.gridemblem3.item.Weapon;
@@ -16,7 +17,9 @@ import solenus.gridemblem3.item.Weapon;
 public class PreBattleReport 
 {
     private Map map;
+    private Point location;
     
+    private Unit attacker;
     private boolean canAttackerAttack; //theoretically useless
     private int attackerHit;
     private int attackerDamage;
@@ -24,6 +27,7 @@ public class PreBattleReport
     private int attackerAttacks;
     private int attackerAdvantage;
     
+    private Unit defender;
     private boolean canDefenderAttack;
     private int defenderHit;
     private int defenderDamage;
@@ -38,11 +42,20 @@ public class PreBattleReport
      * Standard constructor
      * @param attacker The attacking unit
      * @param attackerWeapon The weapon the attacking unit is examining to attack with.
+     * @param loc The location the attacker will be attacking from.
      * @param defender The defending unit
      * @param m The map
      */
-    public PreBattleReport(Unit attacker, Weapon attackerWeapon, Unit defender, Map m)
+    public PreBattleReport(Unit attacker, Weapon attackerWeapon, Point loc, Unit defender, Map m)
     {
+        this.attacker = attacker;
+        this.defender = defender;
+        location = loc;
+        
+        //spoof that the attacker is in the new location
+        Point actulLocation = attacker.getCoord();
+        attacker.setCoord(location);
+        
         canAttackerAttack = CombatMechanics.canAttack(attacker, attackerWeapon, defender);
         attackerAdvantage = CombatMechanics.weaponAdvantage(attackerWeapon, defender.getEquppedWeapon());
         attackerHit = CombatMechanics.hitChance(attacker, attackerWeapon, defender, attackerAdvantage, m);
@@ -64,6 +77,9 @@ public class PreBattleReport
         double defenderExpectedDamage = (defenderHit/100.0 * defenderDamage * (1+3*(defenderCrit/100.0))) * defenderAttacks;
         
         expectedNetDamage = attackerExpectedDamage - defenderExpectedDamage;
+        
+        //return the attacker to it's actual location
+        attacker.setCoord(actulLocation);
     }
     
     public static PreBattleReport selectBestReport(ArrayList<PreBattleReport> reports)
@@ -87,10 +103,26 @@ public class PreBattleReport
     
     //<editor-fold desc="Getters and Setters">
 
+    
+    public Unit getAttacker()
+    {
+        return attacker;
+    }
+    
+    public Unit getDefender()
+    {
+        return defender;
+    }
+    
+    public Point getLocation()
+    {
+        return location;
+    }
+    
     /**
      * @return the canAttackerAttack
      */
-    public boolean isCanAttackerAttack() 
+    public boolean getCanAttackerAttack() 
     {
         return canAttackerAttack;
     }
@@ -139,7 +171,7 @@ public class PreBattleReport
     /**
      * @return the canDefenderAttack
      */
-    public boolean isCanDefenderAttack() 
+    public boolean getCanDefenderAttack() 
     {
         return canDefenderAttack;
     }

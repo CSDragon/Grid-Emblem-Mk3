@@ -122,6 +122,11 @@ public abstract class GridRenderable
         yCur = _y;
     }
     
+    public void setCoord(Point p)
+    {
+        moveInstantly(p);
+    }
+    
     /**
      * Moves the renderable to this exact coordinate
      * @param p the point to move to
@@ -158,9 +163,15 @@ public abstract class GridRenderable
             Rendering.renderGrid(sprite, c, g2, xCur, yCur);
     }
     
-    
+    /**
+     * Returns the number of squares between this and another unit
+     * @param other The other unit
+     * @return The distance in squares. Not the direct distance.
+     */
     public int distanceTo(GridRenderable other)
     {
+        //Don't use this.coord.distance(other.getCoord()) because that gives a literal number.
+        //(0,0) to (1,1) should be 2 not 1.41
         return(Math.abs(x - other.getX()) + Math.abs(y - other.getY()));
     }
     

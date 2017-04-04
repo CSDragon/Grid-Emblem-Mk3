@@ -1785,5 +1785,10 @@ public class MapScene extends Scene
         return turn;
     }
     
+    public Map getMap()
+    {
+        return map;
+    }
+    
     //</editor-fold>
 }

@@ -29,6 +29,7 @@ public class PathfindingReport
     private boolean unlimited;
     private HashMap<Point, Integer> distanceMap;
     private ArrayList<Point> movableLocations;
+    private ArrayList<Point> stoppableLocations;
     private ArrayList<Point> threatRange;
     private ArrayList<Point> staffRange;
     private ArrayList<Unit> attackableUnits;
@@ -45,8 +46,9 @@ public class PathfindingReport
         unlimited = unconstrained;
         distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited);
         movableLocations = Pathfinding.listAllMovableLocations(unitMapped, distanceMap);
-        threatRange = Pathfinding.listThreatRange(unitMapped, movableLocations, false);
-        staffRange = Pathfinding.listThreatRange(unitMapped, movableLocations, true);
+        stoppableLocations = Pathfinding.listAllStoppableLocations(unitMapped, movableLocations);
+        threatRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, false);
+        staffRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, true);
         attackableUnits = Pathfinding.listAllAttackableObjects(unitMapped, threatRange, false);
         staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, staffRange, true);
     }
@@ -58,8 +60,8 @@ public class PathfindingReport
     {
         distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited);
         movableLocations = Pathfinding.listAllMovableLocations(unitMapped, distanceMap);
-        threatRange = Pathfinding.listThreatRange(unitMapped, movableLocations, false);
-        staffRange = Pathfinding.listThreatRange(unitMapped, movableLocations, false);
+        threatRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, false);
+        staffRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, false);
         attackableUnits = Pathfinding.listAllAttackableObjects(unitMapped, threatRange, false);
         staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, staffRange, true);
     }
@@ -105,6 +107,11 @@ public class PathfindingReport
     public ArrayList<Point> getMovableLocations() 
     {
         return movableLocations;
+    }
+    
+    public ArrayList<Point> getStoppableLocations()
+    {
+        return stoppableLocations;
     }
 
     /**

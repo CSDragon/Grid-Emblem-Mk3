@@ -20,24 +20,6 @@ Fake Test AI:
 
 ________________________________
 	
-22) Select next unit
-	Unit selected -> 23
-	No units left -> end turn
-	
-23) Determine where to move the unit.
-	Available targets?
-		Yes: Target one, move to it -> 24
-		No: Find distance to all enemy units
-			Move towards closest one -> 22
-			
-24) Attack
-		Select the appropriate weapon -> 8
-		
-8)	Realize it's an oponents turn and -> 22 when it's over.
-
-
-________________________________
-	
 So: we have a function that goes through all the attackable locations. It orders them by closest to farthest.
 
 When we get back to AI, AI should check if the closest one is occupied, if it is try the next one etc, until we're past how far the unit can move. 
@@ -57,11 +39,12 @@ Current thought stack
 	Developing AI
 		Get list of enemy units
 		Find unoccupied attackable points in walking distance
-			if exist
-				Select point with best damage pottential.
-					Confirm move location and action taken.
-			else
-				move towards closest enemy unit on the map
-					if no enemies can be reached by any means, move as far as possible literally towards the team's boss
-						If the team doesn't have a boss, do nothing.
-				
+		if exist
+			Confirm move location and action taken.
+				STOP MOVING TO LOCATIONS YOU ALREADY OCCUPY
+		else
+			move towards closest enemy unit on the map
+			if no enemies can be reached by any means, move as far as possible literally towards the team's boss
+				if the team doesn't have a boss, do nothing.
+				if the team has more than one boss, the true boss is the one whatever I figure out finds first.
+		

@@ -15,7 +15,7 @@ import solenus.gridemblem3.item.Weapon;
 public class CombatMechanics 
 {
     /**
-     * Determines if a can even hit b
+     * Determines if the attacking unit can even hit the defending unit
      * @param a The unit attacking. Not necessarily attacker
      * @param attackingWeapon The weapon the attacking unit is using.
      * @param b The unit defending. Not necessarily defender
@@ -23,7 +23,6 @@ public class CombatMechanics
      */
     public static boolean canAttack(Unit a, Weapon attackingWeapon, Unit b)
     {
-        //TODO Automatic weapon selection if at the wrong range.
         int dist = a.distanceTo(b);
         return (attackingWeapon.getMinRange() <= dist && attackingWeapon.getMaxRange() >= dist);
     }
@@ -44,8 +43,12 @@ public class CombatMechanics
         int evade = b.getTotalSpd()*2 + b.getTotalLuck() + m.getTerrainAtPoint(b.getCoord()).getEvade();
         // +/- 10 if advantaged or disadvantaged.
         int hit = hitRate + advantage*10 - evade;
+        
+        //sanity check.
         if(hit < 0)
             hit = 0;
+        if(hit > 100)
+            hit = 100;
         
         return hit;
     }
@@ -63,7 +66,14 @@ public class CombatMechanics
         int critRate = attackingWeapon.getCrit() + a.getTotalSkill()/2;
         int avoid = b.getTotalLuck();
         
-        return critRate-avoid;
+        //sanity check
+        int crit = critRate-avoid;
+        if(crit < 0)
+            crit = 0;
+        if(crit > 100)
+            crit = 100;
+        
+        return crit;
     }
     
     /**

@@ -8,6 +8,7 @@ package solenus.gridemblem3.scene.mapscene;
 import java.awt.Point;
 import java.util.ArrayList;
 import solenus.gridemblem3.actor.Unit;
+import solenus.gridemblem3.item.Weapon;
 
 /**
  *
@@ -98,14 +99,39 @@ public class AI
         
         //First, get all the units. This will need to be changed once other factions are added, but for now, this is fine.
         //TODO: Add a team allianes chart, and have this get an arraylist for each team.
-        ArrayList<Unit> attackableUnits = ms.getUnitsOnTeam(0);
+        ArrayList<Unit> attackableUnits = pr.getAttackableUnits();
+        ArrayList<PreBattleReport> reports = new ArrayList<>();
         
+        //for each unit you can attack
+        for(Unit defender : attackableUnits)
+        {
+            //for each weapon you can attack with
+            for(Weapon wep : activeUnit.getWeaponInventory())
+            {
+                //Get the list of points this weapon can attack that unit 
+                ArrayList<Point> range = Pathfinding.listPointsInARange(wep.getMinRange(), wep.getMaxRange(), defender.getCoord());
+                //and only keep the ones we can actually reach
+                range.retainAll(pr.getMovableLocations());
+                for(Point loc : range)
+                {
+                    reports.add(new PreBattleReport(activeUnit, wep, loc, defender,ms.getMap()));
+                }
+            }
+        }
         
+        PreBattleReport r = PreBattleReport.selectBestReport(reports);
         
-        //Distance map testing
-        ArrayList<Point> ordered = Pathfinding.sortLocationsByDistance(pr.getThreatRange(), pr.getDistanceMap());
+        moveToPoint = r.getLocation();
+        gettingAttacked = r.getDefender();
         
-        
+        /*System.out.println("I am at "+activeUnit.getCoord());
+        for(int i = 0; i < attackableUnits.size(); i++)
+        {
+            PreBattleReport pbr = new PreBattleReport(activeUnit, activeUnit.getEquppedWeapon(), attackableUnits.get(i), ms.getMap());
+            System.out.println("I can hit " + attackableUnits.get(i).getName() + " and expect a net of " + pbr.getExpectedNetDamage());
+        }
+        System.out.println(" ");
+        */
         
        
         //HECK WITH THIS: TestAI
