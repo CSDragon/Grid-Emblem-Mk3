@@ -66,6 +66,42 @@ public class PathfindingReport
         staffableUnits = Pathfinding.listAllAttackableObjects(unitMapped, staffRange, true);
     }
     
+    /**
+     * Finds the nearest enemy.
+     * @param allUnits the list of all units
+     * @return The location of the enemy, or the unit's location if there is no nearest enemy.
+     */
+    public Point findNearestEnemy(ArrayList<Unit> allUnits)
+    {
+        //setup
+        Point nearest = null;
+        int dist = Integer.MAX_VALUE;
+        
+        //for each unit
+        for(Unit u : allUnits)
+        {
+            //if it's an enemy
+            if(!unitMapped.isAlly(u))
+            {
+                //and if the location that enemy is at reachable
+                if(distanceMap.containsKey(u.getCoord()))
+                {
+                    //and if the location on the distance map is closer than the previous nearest
+                    if(distanceMap.get(u.getCoord()) < dist)
+                    {
+                        nearest = u.getCoord();
+                        dist = distanceMap.get(u.getCoord());
+                    }
+                }
+            }
+        }
+        
+        if(nearest == null)
+           nearest = unitMapped.getCoord();
+        
+        return nearest;
+    }
+    
     //<editor-fold desc="getters and setters">
     
     /**

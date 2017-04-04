@@ -100,52 +100,39 @@ public class AI
         //First, get all the units. This will need to be changed once other factions are added, but for now, this is fine.
         //TODO: Add a team allianes chart, and have this get an arraylist for each team.
         ArrayList<Unit> attackableUnits = pr.getAttackableUnits();
-        ArrayList<PreBattleReport> reports = new ArrayList<>();
         
-        //for each unit you can attack
-        for(Unit defender : attackableUnits)
+        if(!attackableUnits.isEmpty())
         {
-            //for each weapon you can attack with
-            for(Weapon wep : activeUnit.getWeaponInventory())
+            ArrayList<PreBattleReport> reports = new ArrayList<>();
+
+            //for each unit you can attack
+            for(Unit defender : attackableUnits)
             {
-                //Get the list of points this weapon can attack that unit 
-                ArrayList<Point> range = Pathfinding.listPointsInARange(wep.getMinRange(), wep.getMaxRange(), defender.getCoord());
-                //and only keep the ones we can actually reach
-                range.retainAll(pr.getMovableLocations());
-                for(Point loc : range)
+                //for each weapon you can attack with
+                for(Weapon wep : activeUnit.getWeaponInventory())
                 {
-                    reports.add(new PreBattleReport(activeUnit, wep, loc, defender,ms.getMap()));
+                    //Get the list of points this weapon can attack that unit 
+                    ArrayList<Point> range = Pathfinding.listPointsInARange(wep.getMinRange(), wep.getMaxRange(), defender.getCoord());
+                    //and only keep the ones we can actually reach
+                    range.retainAll(pr.getStoppableLocations());
+                    for(Point loc : range)
+                    {
+                        reports.add(new PreBattleReport(activeUnit, wep, loc, defender,ms.getMap()));
+                    }
                 }
             }
+
+            PreBattleReport r = PreBattleReport.selectBestReport(reports);
+
+            moveToPoint = r.getLocation();
+            gettingAttacked = r.getDefender();
         }
         
-        PreBattleReport r = PreBattleReport.selectBestReport(reports);
-        
-        moveToPoint = r.getLocation();
-        gettingAttacked = r.getDefender();
-        
-        /*System.out.println("I am at "+activeUnit.getCoord());
-        for(int i = 0; i < attackableUnits.size(); i++)
-        {
-            PreBattleReport pbr = new PreBattleReport(activeUnit, activeUnit.getEquppedWeapon(), attackableUnits.get(i), ms.getMap());
-            System.out.println("I can hit " + attackableUnits.get(i).getName() + " and expect a net of " + pbr.getExpectedNetDamage());
-        }
-        System.out.println(" ");
-        */
-        
-       
-        //HECK WITH THIS: TestAI
-        //If it can move right it will.
-        //Then, it attacks if able.
-        
-        /*
-        moveToPoint = activeUnit.getCoord();
-        Point right = new Point(1 + activeUnit.getCoord().x, 0 + activeUnit.getCoord().y);
-        if(ms.getUnitAtPoint(right) == null)
-            moveToPoint = right;
         else
-            gettingAttacked = ms.getUnitAtPoint(right);
-        */
+        {
+            moveToPoint = pr.findNearestEnemy(allUnits);
+            gettingAttacked = null;
+        }
         
         //creates a move path. It includes the location the unit is currently at, at position 0, so a length 1 path goes nowhere.
         movePath = Pathfinding.repath(moveToPoint, activeUnit, pr.getDistanceMap());

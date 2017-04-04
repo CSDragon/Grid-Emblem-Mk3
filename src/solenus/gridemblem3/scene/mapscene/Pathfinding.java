@@ -26,6 +26,7 @@ public class Pathfinding
     /**
      * Finds the shortest route a Unit can move to any point on the map.
      * @param u The moving Unit
+     * @param unconstrained is this map unconstrained by a unit's maximum movement, or is it constrained
      * @return A hashmap of distances
      */
     public static HashMap<Point, Integer> mapShortestDistanceFromUnit(Unit u, boolean unconstrained)
@@ -57,11 +58,19 @@ public class Pathfinding
                     {
                         weight = ret.get(cur) + weight;
                         //If the map is empty or if this is a shorter path, update the hashmap
-                        if(ret.get(p) == null || ret.get(p) > weight)
+                        if(ret.get(p) == null || weight < ret.get(p))
                         {
                             ret.put(p, weight);
                             queue.add(p);
                         }
+                    }
+                    //else, if there's an enemy, add it to the map, but don't chain to it's neighbors, stop here.
+                    else if(mapScene.getActorAtPoint(p) != null && !mapScene.getUnitAtPoint(p).isAlly(u))
+                    {
+                        weight = ret.get(cur) + weight;
+                        //If the map is empty or if this is a shorter path, update the hashmap
+                        if(ret.get(p) == null || weight < ret.get(p))
+                            ret.put(p, weight);
                     }
                 }
             }
@@ -82,8 +91,11 @@ public class Pathfinding
         
         for(Point p : distanceMap.keySet())
         {
+            //If the location is reachable in one turn's movement
             if(distanceMap.get(p) <= u.getMove() && distanceMap.get(p) != -1)
-                ret.add(p);
+                //And if there's no unit there, or the unit there is an ally.
+                if(mapScene.getUnitAtPoint(p) == null || mapScene.getUnitAtPoint(p).isAlly(u))
+                    ret.add(p);
         }
         
         return ret;
@@ -347,6 +359,17 @@ public class Pathfinding
             
             //it's actually backwards, so let's fix that.
             Collections.reverse(ret);
+            
+            //Now, we make sure the unit isn't moving farther than it's movement.
+            int weight = u.getMove();
+            //starting at 1 because you don't count the weight of where you start.
+            int i = 1;
+            while(i < ret.size() && weightMap.get(ret.get(i)) <= u.getMove())
+            {
+                i++;
+            }
+            
+            ret.subList(i, ret.size()).clear();
         }
         
         return ret;
