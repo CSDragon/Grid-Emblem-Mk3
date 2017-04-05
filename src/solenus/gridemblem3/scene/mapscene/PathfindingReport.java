@@ -28,6 +28,7 @@ public class PathfindingReport
     private Unit unitMapped;
     private boolean unlimited;
     private HashMap<Point, Integer> distanceMap;
+    private HashMap<Point, Integer> distanceMapEnemies;
     private ArrayList<Point> movableLocations;
     private ArrayList<Point> stoppableLocations;
     private ArrayList<Point> threatRange;
@@ -44,7 +45,8 @@ public class PathfindingReport
     {
         unitMapped = u;
         unlimited = unconstrained;
-        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited);
+        distanceMapEnemies = new HashMap<>();
+        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited, distanceMapEnemies);
         movableLocations = Pathfinding.listAllMovableLocations(unitMapped, distanceMap);
         stoppableLocations = Pathfinding.listAllStoppableLocations(unitMapped, movableLocations);
         threatRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, false);
@@ -58,7 +60,8 @@ public class PathfindingReport
      */
     public void update()
     {
-        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited);
+        distanceMapEnemies = new HashMap<>();
+        distanceMap = Pathfinding.mapShortestDistanceFromUnit(unitMapped, unlimited, distanceMapEnemies);
         movableLocations = Pathfinding.listAllMovableLocations(unitMapped, distanceMap);
         threatRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, false);
         staffRange = Pathfinding.listThreatRange(unitMapped, stoppableLocations, false);
@@ -68,38 +71,22 @@ public class PathfindingReport
     
     /**
      * Finds the nearest enemy.
-     * @param allUnits the list of all units
      * @return The location of the enemy, or the unit's location if there is no nearest enemy.
      */
-    public Point findNearestEnemy(ArrayList<Unit> allUnits)
+    public Point findNearestReachableEnemy()
     {
-        //setup
-        Point nearest = null;
-        int dist = Integer.MAX_VALUE;
-        
-        //for each unit
-        for(Unit u : allUnits)
+        Point ret = null;
+        int shortest = Integer.MAX_VALUE;
+        for(Point p : distanceMapEnemies.keySet())
         {
-            //if it's an enemy
-            if(!unitMapped.isAlly(u))
+            if(distanceMapEnemies.get(p) < shortest)
             {
-                //and if the location that enemy is at reachable
-                if(distanceMap.containsKey(u.getCoord()))
-                {
-                    //and if the location on the distance map is closer than the previous nearest
-                    if(distanceMap.get(u.getCoord()) < dist)
-                    {
-                        nearest = u.getCoord();
-                        dist = distanceMap.get(u.getCoord());
-                    }
-                }
+                shortest = distanceMapEnemies.get(p);
+                ret = p;
             }
         }
         
-        if(nearest == null)
-           nearest = unitMapped.getCoord();
-        
-        return nearest;
+        return ret;
     }
     
     //<editor-fold desc="getters and setters">
@@ -129,12 +116,21 @@ public class PathfindingReport
     {
         return unlimited;
     }
+    
     /**
      * @return the distanceMap
      */
     public HashMap<Point, Integer> getDistanceMap() 
     {
         return distanceMap;
+    }
+    
+    /**
+     * @return the distanceMap
+     */
+    public HashMap<Point, Integer> getDistanceMapEnemies() 
+    {
+        return distanceMapEnemies;
     }
     
     /**

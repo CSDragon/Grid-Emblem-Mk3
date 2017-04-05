@@ -242,7 +242,7 @@ public class MovementArrow
         if(active)
         {
             Point dest = areaTraveled.get(areaTraveled.size()-1);
-            areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap());
+            areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap(), false);
         }
         reweight();
         
@@ -257,7 +257,7 @@ public class MovementArrow
     {
         if(active)
         {
-            areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap());
+            areaTraveled = Pathfinding.repath(dest, movingUnit, pr.getDistanceMap(), false);
         }
         //This is the one time we can set weight to the weightmap value, because it will be an optimized route.
         weight = pr.getDistanceTo(areaTraveled.get(areaTraveled.size()-1));

@@ -126,16 +126,18 @@ public class AI
 
             moveToPoint = r.getLocation();
             gettingAttacked = r.getDefender();
+        
+            //creates a move path. It includes the location the unit is currently at, at position 0, so a length 1 path goes nowhere.
+             movePath = Pathfinding.repath(moveToPoint, activeUnit, pr.getDistanceMap(), false);
         }
         
         else
         {
-            moveToPoint = pr.findNearestEnemy(allUnits);
+            moveToPoint = pr.findNearestReachableEnemy();
             gettingAttacked = null;
+            //creates a move path. It includes the location the unit is currently at, at position 0, so a length 1 path goes nowhere.
+           movePath = Pathfinding.repath(moveToPoint, activeUnit, pr.getDistanceMap(), true);
         }
-        
-        //creates a move path. It includes the location the unit is currently at, at position 0, so a length 1 path goes nowhere.
-        movePath = Pathfinding.repath(moveToPoint, activeUnit, pr.getDistanceMap());
         
         //temp
         activeUnit.setHasMoved(true);

@@ -27,9 +27,10 @@ public class Pathfinding
      * Finds the shortest route a Unit can move to any point on the map.
      * @param u The moving Unit
      * @param unconstrained is this map unconstrained by a unit's maximum movement, or is it constrained
+     * @param adjacentEnemyLocationsMap An additional possible return value containing the locations of all enemies adjacent to a reachable location on the map. Input "null" if not needed. Input an empty but initialized HashMap otherwise.
      * @return A hashmap of distances
      */
-    public static HashMap<Point, Integer> mapShortestDistanceFromUnit(Unit u, boolean unconstrained)
+    public static HashMap<Point, Integer> mapShortestDistanceFromUnit(Unit u, boolean unconstrained, HashMap<Point, Integer> adjacentEnemyLocationsMap)
     {
         HashMap<Point, Integer> ret = new HashMap<>();
         Queue<Point> queue = new LinkedList<>();
@@ -64,13 +65,17 @@ public class Pathfinding
                             queue.add(p);
                         }
                     }
-                    //else, if there's an enemy, add it to the map, but don't chain to it's neighbors, stop here.
-                    else if(mapScene.getActorAtPoint(p) != null && !mapScene.getUnitAtPoint(p).isAlly(u))
+                    //else, if we're making an enemy locatiosn map, and we have an enemy, map 'em.
+                    else if(adjacentEnemyLocationsMap != null)
                     {
-                        weight = ret.get(cur) + weight;
-                        //If the map is empty or if this is a shorter path, update the hashmap
-                        if(ret.get(p) == null || weight < ret.get(p))
-                            ret.put(p, weight);
+                        //I am keeping this if separate to make it clear that adjacentEnemyLocationsMap sometimes isn't there.
+                        if(mapScene.getActorAtPoint(p) != null && !mapScene.getUnitAtPoint(p).isAlly(u))
+                        {
+                            weight = ret.get(cur) + weight;
+                            //If the map is empty or if this is a shorter path, update the hashmap
+                            if(ret.get(p) == null || weight < ret.get(p))
+                                adjacentEnemyLocationsMap.put(p, weight);
+                        }
                     }
                 }
             }
@@ -119,16 +124,6 @@ public class Pathfinding
         return ret;
     }
     
-    /**
-     * Finds the list of available points to move.
-     * @param u The unit whose range is being checked
-     * @return the list of all movable locations
-     */
-    public static ArrayList<Point> listAllMovableLocations(Unit u)
-    {
-        HashMap<Point, Integer> distanceMap = Pathfinding.mapShortestDistanceFromUnit(u, false);
-        return listAllMovableLocations(u, distanceMap);
-    }
     
     /**
      * Gets all the points a unit can attack 
@@ -180,16 +175,6 @@ public class Pathfinding
         return ret;
     }
     
-    /**
-     * Performs listThreatRange with the default movement range of the unit's whole range.
-     * @param u the attacking unit
-     * @param staffMode If we're actually looking for allies to heal, not enemies to attack.
-     * @return the list of points the unit can attack
-     */
-    public static ArrayList<Point> listThreatRange(Unit u, boolean staffMode)
-    {
-        return Pathfinding.listThreatRange(u, listAllMovableLocations(u), staffMode);
-    }
     
     /**
      * Gets the list of points a unit can attack while standing still
@@ -294,22 +279,23 @@ public class Pathfinding
      * @param dest the place we're going
      * @param u the unit that's pathing
      * @param weightMap the map of distances from the unit's point
+     * @param moveNextToAndStop Sometimes we just want to move towards something, not onto something. (Like, if it's not actually ON the weightMap. Like an enemy. So, true if we want to move next to dest. False if we want to move TO dest.
      * @return the path between the two points.
      */
-    public static ArrayList<Point> repath(Point dest, Unit u, HashMap<Point, Integer> weightMap)
+    public static ArrayList<Point> repath(Point dest, Unit u, HashMap<Point, Integer> weightMap, boolean moveNextToAndStop)
     {
-        //set up return object
+        //set up return object 
         ArrayList<Point> ret = new ArrayList<>();
-        
+
         //set up stuff
         Point start = u.getCoord();
         
-        //start MUST be the center of the weight map, or it doesn't even make sense.
+        //Sanity Check: start MUST be the center of the weight map, or it doesn't even make sense.
         if(!weightMap.containsKey(start) || weightMap.get(start) != 0)
             return ret;
         
-        //just check we can actually get to dest
-        if(weightMap.containsKey(dest))
+        //just check we can actually get to dest, or can at least get next to it.
+        if(weightMap.containsKey(dest) || moveNextToAndStop)
         {
             //add dest and let's get cracking
             ret.add(dest);
@@ -338,7 +324,10 @@ public class Pathfinding
                 if(weightMap.containsKey(e))
                     ew = weightMap.get(e);
                 
-                
+                //Sanity check: make sure we didn't slip off the map somehow
+                if(nw == Integer.MAX_VALUE && ww == Integer.MAX_VALUE && sw == Integer.MAX_VALUE && ew == Integer.MAX_VALUE)
+                    return ret;
+                    
                 //we want the point with the lowest remaining distance.
                 //prioritise N,S,W,E. Because why not.
                 //there's prolly a better way to do this, but whatever.
@@ -356,20 +345,33 @@ public class Pathfinding
                 
                 ret.add(top);
             }
-            
+
             //it's actually backwards, so let's fix that.
             Collections.reverse(ret);
             
-            //Now, we make sure the unit isn't moving farther than it's movement.
-            int weight = u.getMove();
-            //starting at 1 because you don't count the weight of where you start.
-            int i = 1;
-            while(i < ret.size() && weightMap.get(ret.get(i)) <= u.getMove())
+            //If we're moving towards, but not to, delete the last part of the path
+            if(moveNextToAndStop)
             {
-                i++;
+                //Look, I don't know why someone would say "move to where you're standing, but also say "move next to that spot, and stop". But I ain't having none of that.
+                //So it won't do anything if the arrayList is only size 1.
+                if(ret.size() > 1)
+                    ret.remove(ret.size()-1);
             }
             
-            ret.subList(i, ret.size()).clear();
+            //Now, we make sure the unit isn't moving farther than it's allowed to.
+            boolean done = false;
+            int i = ret.size()-1;
+            while(!done)
+            {
+                if(weightMap.get(ret.get(i)) > u.getMove() || !Pathfinding.isStoppingAllowed(u, ret.get(i)))
+                {
+                    ret.remove(i);
+                    i--;
+                }
+                else
+                    done = true;
+            }
+            
         }
         
         return ret;
