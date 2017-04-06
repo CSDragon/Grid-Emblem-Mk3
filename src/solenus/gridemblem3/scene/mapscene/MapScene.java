@@ -18,6 +18,7 @@ import solenus.gridemblem3.InputManager;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.actor.*;
 import solenus.gridemblem3.item.Usable;
+import solenus.gridemblem3.party.PartyUnit;
 import solenus.gridemblem3.render.Rendering;
 import solenus.gridemblem3.scene.Scene;
 import solenus.gridemblem3.scene.mapscene.unitinspectscene.UnitInspectScene;
@@ -385,7 +386,18 @@ public class MapScene extends Scene
                     cursor.runFrame();
                     camera.moveToRenderable(cursor, map);
                     if(checkWinCondition())
+                    {
+                        //We won. Let's do winning things like save our stats.
+                        ArrayList<PartyUnit> endTeam = new ArrayList<>();
+                        for(Unit u : unitList)
+                        {
+                            if(u.getTeam() == 0)
+                                endTeam.add(u.getPartyUnit());
+                        }
+                        playerArmy.getUnitList().addAll(0, endTeam);
+                        
                         return VICTORY;
+                    }
                     break;
                 
                 /*  Unit Movement Mode
@@ -1616,7 +1628,11 @@ public class MapScene extends Scene
         controlState = 1;
         cursor.setVisible(true);
         preBattleScene.end();
-        
+        for(Unit u: unitList)
+        {
+            if(u.getTeam() == 0)
+                playerArmy.getUnitList().remove(u.getPartyUnit());
+        }
     }
     
     /**
