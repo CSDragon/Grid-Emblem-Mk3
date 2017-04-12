@@ -43,6 +43,19 @@ public class Weapon extends Item
     public static final int A = 2*B;
     public static final int S = 2*A;
       
+    public static final int[][] WEAPONADVANTAGE = {{ 0,-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                   { 1, 0,-1, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                                                   {-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 0, 1,-1, 1,-1, 0, 0},
+                                                   { 0, 0, 0, 0, 0,-1, 0, 1, 1,-1, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 1,-1, 0, 1,-1, 0, 0},
+                                                   { 0, 0, 0, 0, 0,-1,-1,-1, 0, 1, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 1, 1, 1,-1, 0, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    
     private int weaponType;
     private int strOrMag;
     private char masteryRequirement;

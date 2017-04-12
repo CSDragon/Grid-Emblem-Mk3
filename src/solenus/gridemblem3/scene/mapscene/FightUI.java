@@ -562,7 +562,7 @@ public class FightUI extends UI
             d100 = (int)Math.ceil(Math.random()*100);
             
             //Deterimine raw damage
-            attackDamage = determineDamage(a, b);
+            attackDamage = determineDamage(a, b, CombatMechanics.weaponAdvantage(a.getEquppedWeapon(), b.getEquppedWeapon()));
             
             //(Insert Damage Resist abilities)
             
@@ -628,11 +628,12 @@ public class FightUI extends UI
      * Determines the amount of damage
      * @param a The unit dealing damage (not necessarily attacker)
      * @param b The unit taking damage (not necessarily defender)
+     * @param advantage The weapon triangle modifier.
      * @return The amount of damage taken
      */
-    public static int determineDamage(Unit a, Unit b)
+    public static int determineDamage(Unit a, Unit b, int advantage)
     {
-        int attack = a.getEquppedWeapon().getDmg();
+        int attack = a.getEquppedWeapon().getDmg() + advantage;
         switch(a.getEquppedWeapon().getStrOrMag())
         {
             case 0:

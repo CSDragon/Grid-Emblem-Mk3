@@ -16,7 +16,6 @@ import solenus.gridemblem3.item.Weapon;
  */
 public class PreBattleReport 
 {
-    private Map map;
     private Point location;
     
     private Unit attacker;

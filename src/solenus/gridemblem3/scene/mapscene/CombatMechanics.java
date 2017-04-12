@@ -130,7 +130,7 @@ public class CombatMechanics
      */
     public static int weaponAdvantage(Weapon a, Weapon b)
     {
-        return 0;
+        return Weapon.WEAPONADVANTAGE[a.getWeaponType()][b.getWeaponType()];
     }
 
     /**
