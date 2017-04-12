@@ -43,12 +43,6 @@ public class PartyUnit
     public static final int MEDIUM = 2;
     public static final int HEAVY = 3;
     
-    //Team values
-    public static final int PLAYER = 0;
-    public static final int ENEMY = 1;
-    public static final int ALLY = 2;
-    public static final int OTHER = 3;
-    
     private String name;
     private String unitClass;
     private int team;
@@ -108,7 +102,7 @@ public class PartyUnit
         loadPortrait();
     }
     
-        /**
+    /**
      * Creates a new unit from a text file
      * @param in The text we're reading from.
      * @throws IOException 
@@ -609,19 +603,7 @@ public class PartyUnit
         return false;
     }
     
-    /**
-     * Checks if this unit and another unit are friends or foes
-     * @param other
-     * @return if they are allies or enemies
-     */
-    public boolean isAlly(PartyUnit other)
-    {
-        if(team == PartyUnit.ENEMY)
-            return other.team == PartyUnit.ENEMY;
-        else
-            return (other.getTeam() != PartyUnit.ENEMY);
-    }
-    
+
     //</editor-fold>
     
     //<editor-fold desc="Getters and Setters">

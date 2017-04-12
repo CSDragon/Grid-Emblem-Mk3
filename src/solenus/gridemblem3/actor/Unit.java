@@ -8,14 +8,10 @@ package solenus.gridemblem3.actor;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import solenus.gridemblem3.item.*;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.party.PartyUnit;
@@ -382,15 +378,6 @@ public class Unit extends Actor
         super.setDest(_x, _y);
     }
     
-    /**
-     * Checks if this unit and another unit are friends or foes
-     * @param other
-     * @return if they are allies or enemies
-     */
-    public boolean isAlly(Unit other)
-    {
-        return(pu.isAlly(other.getPartyUnit()));
-    }
     
     public boolean isDead()
     {

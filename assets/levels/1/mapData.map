@@ -3,6 +3,16 @@ Width: 24
 Height: 13
 Skip Setup: false
 Win Condition: 0
+Number of Players: 2
+Team1:
+Name: Demacian
+Type: Human
+Player: 1
+Alliances: 10
+Team2:
+Name: Bandits
+Type: AI
+Alliances: 01
 
 Terrain:
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands

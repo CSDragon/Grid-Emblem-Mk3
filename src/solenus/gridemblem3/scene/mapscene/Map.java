@@ -41,6 +41,10 @@ public class Map
     
     private int winCondition;
     
+    private int numberOfPlayers;
+    private ArrayList<Team> teams;
+
+    
     private BufferedImage mapImage;
     
     private ArrayList<Terrain> terrainList;
@@ -90,7 +94,13 @@ public class Map
             height = Integer.decode(in.readLine().substring(8));
             skipSetup = in.readLine().substring(12).equals("true");
             winCondition = Integer.decode(in.readLine().substring(15));
-
+            numberOfPlayers = Integer.decode(in.readLine().substring(19));
+            teams = new ArrayList<>();
+            for(int i = 0; i<numberOfPlayers; i++)
+            {
+                in.readLine();
+                teams.add(new Team(in, i, numberOfPlayers));
+            }
             
             //discard extra lines
             in.readLine();
@@ -338,6 +348,21 @@ public class Map
         return getTerrainAt(p.x, p.y);
     }
     
+        
+    /**
+     * Tells if two teams are allied or not.
+     * @param team1 The first team. In the odd case of one-sided alliances, this is the attacker.
+     * @param team2 The second team. In the odd case of one-sided alliances, this is the defender.
+     * @return True if they're allied. False if they're enemies.
+     */
+    public boolean areAllied(int team1, int team2)
+    {
+        // sanity check
+        if(team1 >= numberOfPlayers || team1 < 0 || team2 >= numberOfPlayers || team2 < 0)
+            return false;
+        return teams.get(team1).getAlliance(team2);
+    }
+    
     //<editor-fold desc="getters and setters">
     
     /**
@@ -458,6 +483,17 @@ public class Map
     {
         return winCondition;
     }
+    
+    public int getNumberOfPlayers()
+    {
+        return numberOfPlayers;
+    }
+    
+    public Team getTeam(int teamNum)
+    {
+        return teams.get(teamNum);
+    }
+
     
 //</editor-fold>
 

@@ -69,7 +69,7 @@ public class Pathfinding
                     else if(adjacentEnemyLocationsMap != null)
                     {
                         //I am keeping this if separate to make it clear that adjacentEnemyLocationsMap sometimes isn't there.
-                        if(mapScene.getActorAtPoint(p) != null && !mapScene.getUnitAtPoint(p).isAlly(u))
+                        if(mapScene.getActorAtPoint(p) != null && !map.areAllied(mapScene.getUnitAtPoint(p).getTeam(), u.getTeam()))
                         {
                             weight = ret.get(cur) + weight;
                             //If the map is empty or if this is a shorter path, update the hashmap
@@ -99,7 +99,7 @@ public class Pathfinding
             //If the location is reachable in one turn's movement
             if(distanceMap.get(p) <= u.getMove() && distanceMap.get(p) != -1)
                 //And if there's no unit there, or the unit there is an ally.
-                if(mapScene.getUnitAtPoint(p) == null || mapScene.getUnitAtPoint(p).isAlly(u))
+                if(mapScene.getUnitAtPoint(p) == null || map.areAllied(mapScene.getUnitAtPoint(p).getTeam(), u.getTeam()))
                     ret.add(p);
         }
         
@@ -207,7 +207,7 @@ public class Pathfinding
             check = mapScene.getUnitAtPoint(checkpoint);
             //TODO this check may not be optimal for non-team objects like destructable rocks.
             //Checks if it's an ally or an enemy. Add it if it's an enemy and we're attacking, or if it's an ally and we're healing.
-            if(check != null && (selectedUnit.isAlly(check) == staffMode))
+            if(check != null && (map.areAllied(selectedUnit.getTeam(), check.getTeam()) == staffMode))
             ret.add(check);
         }
         
@@ -232,7 +232,7 @@ public class Pathfinding
             check = mapScene.getUnitAtPoint(checkpoint);
             //TODO this check may not be optimal for non-team objects like destructable rocks.
             //Checks if it's an ally or an enemy. Add it if it's an enemy and we're attacking, or if it's an ally and we're healing.
-            if(check != null && (selectedUnit.isAlly(check) == staffMode))
+            if(check != null && (map.areAllied(selectedUnit.getTeam(), check.getTeam()) == staffMode))
             ret.add(check);
         }
         
@@ -390,7 +390,7 @@ public class Pathfinding
                 //If the location is empty of Actors, or if the actor at that location is passable, AND
                 (mapScene.getActorAtPoint(p) == null || mapScene.getActorAtPoint(p).isPassable())&&
                 //If the location is empty of Units, or if the unit at that location is an ally
-                (mapScene.getUnitAtPoint(p) == null || mapScene.getUnitAtPoint(p).isAlly(u)));
+                (mapScene.getUnitAtPoint(p) == null || map.areAllied(mapScene.getUnitAtPoint(p).getTeam(), u.getTeam())));
     }
     
     /**

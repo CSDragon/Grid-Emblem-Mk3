@@ -164,9 +164,11 @@ public class MapScene extends Scene
                         //nothing found, open up the system action box
                         if(found == null)
                             cst1to4();
-                        else if(found.getTeam() == 1)
+                        //if an ememy, add them to the enemy ranges
+                        else if(!map.getTeam(turn).getAlliance(found.getTeam()))
                             addEnemyRange(found);
-                        else if(found.getTeam() == 0)
+                        //if our own unit, enter move mode
+                        else if(found.getTeam() == turn)
                         {
                             if(!found.getHasMoved())
                                 cst1to2(found);
@@ -978,7 +980,7 @@ public class MapScene extends Scene
     {
         for (Unit u : unitList)
         {
-            if(u.getTeam() == 1)
+            if(map.getTeam(turn).getAlliance(u.getTeam()))
             {
                 PathfindingReport pr = new PathfindingReport(u, false);
                 allEnemyRangeMap.addAll(pr.getThreatRange());
@@ -1148,7 +1150,7 @@ public class MapScene extends Scene
     public void moveToNextUnmovedUnit()
     {
         //If we're currently on an unmoved allied unit, use that one as the base
-        if(getUnitAtPoint(cursor.getCoord()) != null && (unitList.get(lastUnitIndexSearched).getTeam() == 0 && unitList.get(lastUnitIndexSearched).getHasMoved() == false))
+        if(getUnitAtPoint(cursor.getCoord()) != null && (unitList.get(lastUnitIndexSearched).getTeam() == turn && unitList.get(lastUnitIndexSearched).getHasMoved() == false))
         {
             lastUnitIndexSearched = unitList.indexOf(getUnitAtPoint(cursor.getCoord()));
         }
@@ -1166,7 +1168,7 @@ public class MapScene extends Scene
         
         while (lastUnitIndexSearched != back && found == null)
         {
-            if(unitList.get(lastUnitIndexSearched).getTeam() == 0 && unitList.get(lastUnitIndexSearched).getHasMoved() == false)
+            if(unitList.get(lastUnitIndexSearched).getTeam() == turn && unitList.get(lastUnitIndexSearched).getHasMoved() == false)
             {
                 found = unitList.get(lastUnitIndexSearched);
                 break;
@@ -1440,7 +1442,7 @@ public class MapScene extends Scene
         movingIndex = 0;
         
         //if it's you're turn (TODO: And no traps activated)
-        if(turn == 0)
+        if(map.getTeam(turn).getIsHuman())
         {
             controlState = 3;
             selectedUnit.getSprite().sendTrigger("idle");
@@ -1519,7 +1521,7 @@ public class MapScene extends Scene
                 selectedUnit.setHasMoved(true);
                 fightUI.end();
 
-                if(turn == 0)
+                if(map.getTeam(turn).getIsHuman())
                 {
                     controlState = 1;
                     cursor.setVisible(true);
@@ -1554,7 +1556,7 @@ public class MapScene extends Scene
     public void cst9toX()
     {
         //if it's now the player's turn
-        if(turn == 0)
+        if(map.getTeam(turn).getIsHuman())
             controlState = 11;
         
         //if it's now someone else's turn;
@@ -1608,7 +1610,7 @@ public class MapScene extends Scene
         staffUI.end();
         xp.end();
         
-        if(turn == 0)
+        if(map.getTeam(turn).getIsHuman())
         {
             controlState = 1;
             cursor.setVisible(true);
