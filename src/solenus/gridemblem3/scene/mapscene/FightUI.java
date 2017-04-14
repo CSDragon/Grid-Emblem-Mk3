@@ -24,6 +24,10 @@ public class FightUI extends UI
     public static final int DEFENDERDIED = 2;
     public static final int BOTHDIED = 3;
     
+    public static final int ATTACKMISS = 0;
+    public static final int ATTACKHIT = 1;
+    public static final int ATTACKCRIT = 2;
+    
     private boolean fastForwardFlag;
     private boolean graphics;
     
@@ -422,7 +426,7 @@ public class FightUI extends UI
         Unit b = (attackerTurn) ? defender : attacker;
         
         //Perform the attack
-        if(canAttack(a,b))
+        if(CombatMechanics.canAttack(a, a.getEquppedWeapon(), b))
         {
             attack(a,b);
         }
@@ -435,15 +439,15 @@ public class FightUI extends UI
             if(attackerTurn)
                 switch(attackResult)
                 {
-                    case 0:
+                    case ATTACKMISS:
                         animationLength = attackerMissFrames;
                         damagePoint = attackerMissDamagePoint;
                         break;
-                    case 1:
+                    case ATTACKHIT:
                         animationLength = attackerHitFrames;
                         damagePoint = attackerHitDamagePoint;
                         break;
-                    case 2:
+                    case ATTACKCRIT:
                         animationLength = attackerCritFrames;
                         damagePoint = attackerCritDamagePoint;
                         break;
@@ -451,15 +455,15 @@ public class FightUI extends UI
             else
                 switch(attackResult)
                 {
-                    case 0:
+                    case ATTACKMISS:
                         animationLength = defenderMissFrames;
                         damagePoint = defenderMissDamagePoint;
                         break;
-                    case 1:
+                    case ATTACKHIT:
                         animationLength = defenderHitFrames;
                         damagePoint = defenderHitDamagePoint;
                         break;
-                    case 2:
+                    case ATTACKCRIT:
                         animationLength = defenderCritFrames;
                         damagePoint = defenderCritDamagePoint;
                         break;
@@ -531,30 +535,18 @@ public class FightUI extends UI
     
 
     /**
-     * Determines if a can even hit b
-     * @param a The unit attacking. Not necessarily attacker
-     * @param b The unit defending. Not necessarily defender
-     * @return If an attack can be made.
-     */
-    public boolean canAttack(Unit a, Unit b)
-    {
-        //TODO Automatic weapon selection if at the wrong range.
-        int dist = a.distanceTo(b);
-        return (a.getEquppedWeapon().getMinRange() <= dist && a.getEquppedWeapon().getMaxRange() >= dist);
-    }
-    
-    /**
      * Simulates 1 attack, from a to b
      * @param a The unit attacking. Not necessarily attacker
      * @param b The unit defending. Not necessarily defender
      */
     public void attack(Unit a, Unit b)
     {
-        //Get the RNG
-        int d100 = (int)Math.ceil(Math.random()*100);
-        
+        int weaponAdvantage = CombatMechanics.weaponAdvantage(a.getEquppedWeapon(), b.getEquppedWeapon());
+        int d100; //Just makes things a bit easier to parse.
+
         //Do we hit?
-        boolean hit = d100 < hitChance(a, b, map);
+        d100 = (int)Math.ceil(Math.random()*100);
+        boolean hit = d100 < (CombatMechanics.hitChance(a, a.getEquppedWeapon(), b, weaponAdvantage, map));
         
         if(hit)
         {
@@ -562,23 +554,20 @@ public class FightUI extends UI
             d100 = (int)Math.ceil(Math.random()*100);
             
             //Deterimine raw damage
-            attackDamage = determineDamage(a, b, CombatMechanics.weaponAdvantage(a.getEquppedWeapon(), b.getEquppedWeapon()));
+            attackDamage = CombatMechanics.determineDamage(a, a.getEquppedWeapon(), b, weaponAdvantage);
             
             //(Insert Damage Resist abilities)
             
             //Do we crit?
-            boolean crit = d100 < critChance(a,b);
+            boolean crit = d100 < CombatMechanics.critChance(a, a.getEquppedWeapon(), b);
 
             if(crit)
             {
                 attackDamage = attackDamage*3;
-                attackResult = 2; 
+                attackResult = ATTACKCRIT; 
             }
-            
             else
-            {
-                attackResult = 1;
-            }
+                attackResult = ATTACKHIT;
             
             //Take Damage
             b.takeDamage(attackDamage);
@@ -595,95 +584,6 @@ public class FightUI extends UI
         else
             attackResult = 0;
         
-    }
-    
-    /**
-     * Gets the chance a unit can hit its target
-     * @param a The attacking Unit
-     * @param b The defending Unit
-     * @param m The map it takes place on.
-     * @return The hit chance.
-     */
-    public static int hitChance(Unit a, Unit b, Map m)
-    {
-        //Determine Hit Rate, Evasion, and Weapon Advantage.
-        int hitRate = a.getTotalSkill()*2 + a.getTotalLuck() + a.getEquppedWeapon().getHit();
-        int evade = b.getTotalSpd()*2 + b.getTotalLuck() + m.getTerrainAtPoint(b.getCoord()).getEvade();
-        int weaponAdvantage = weaponAdvantageAccuracy(a.getEquppedWeapon(), b.getEquppedWeapon());
-        
-        return(hitRate + weaponAdvantage - evade);
-    }
-    
-    public static int critChance(Unit a, Unit b)
-    {
-        //Determine crit chance
-        int critRate = a.getEquppedWeapon().getCrit() + a.getTotalSkill()/2;
-        int avoid = b.getTotalLuck();
-        
-        return critRate-avoid;
-    }
-
-    
-    /**
-     * Determines the amount of damage
-     * @param a The unit dealing damage (not necessarily attacker)
-     * @param b The unit taking damage (not necessarily defender)
-     * @param advantage The weapon triangle modifier.
-     * @return The amount of damage taken
-     */
-    public static int determineDamage(Unit a, Unit b, int advantage)
-    {
-        int attack = a.getEquppedWeapon().getDmg() + advantage;
-        switch(a.getEquppedWeapon().getStrOrMag())
-        {
-            case 0:
-                attack += a.getTotalStr();
-                break;
-            case 1:
-                attack += a.getTotalMag();
-                break;
-            // case other? What else do we need? Half/half?
-        }
-        
-        int defense = 0;
-        switch(a.getEquppedWeapon().getWeaponType())
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                defense = (int)b.getTotalDef();
-                break;
-            case 4:
-            case 5:
-            case 6:
-                defense = (int)b.getTotalRes();
-                break;
-        }
-        
-        return attack - defense;
-    }
-    
-    /**
-     * Determines the weapon triangle advantage of two weapons. TODO
-     * @param a The attacker's weapon
-     * @param b The defender's weapon
-     * @return The bonus accuracy the attacker gets;
-     */
-    public static int weaponAdvantageAccuracy(Weapon a, Weapon b)
-    {
-        return 0;
-    }
-    
-    /**
-     * Determines the weapon triangle advantage of two weapons. TODO
-     * @param a The attacker's weapon
-     * @param b The defender's weapon
-     * @return The bonus accuracy the defender gets.
-     */
-    public static int weaponAdvantageDamage(Weapon a, Weapon b)
-    {
-        return 0;
     }
     
     //</editor-fold>

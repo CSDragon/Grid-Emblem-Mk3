@@ -19,6 +19,7 @@ public class PreBattleReport
     private Point location;
     
     private Unit attacker;
+    private Weapon attackerWeapon;
     private boolean canAttackerAttack; //theoretically useless
     private int attackerHit;
     private int attackerDamage;
@@ -106,6 +107,11 @@ public class PreBattleReport
     public Unit getAttacker()
     {
         return attacker;
+    }
+    
+    public Weapon getAttackerWeapon()
+    {
+        return attackerWeapon;
     }
     
     public Unit getDefender()

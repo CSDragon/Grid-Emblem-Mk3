@@ -123,6 +123,9 @@ public class AI
             }
 
             PreBattleReport r = PreBattleReport.selectBestReport(reports);
+            
+            //Gotta equip the right weapon.
+            activeUnit.equipWeapon(r.getAttackerWeapon());
 
             moveToPoint = r.getLocation();
             gettingAttacked = r.getDefender();
