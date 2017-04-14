@@ -257,7 +257,32 @@ public class TopMenuScene extends Scene
     {
         super.resize();
     }
-
+    
+    /**
+     * Starts this scene.
+     */
+    public void start()
+    {
+        super.start();
+        
+        main.start();
+    }
+    
+    /**
+     * Ends this scene.
+     */
+    public void end()
+    {
+        super.end();
+        
+        main.end();
+        settings.end();
+        keybinds.end();
+        graphics.end();
+        audio.end();
+        load.end();
+    }
+    
     //</editor-fold>
     
     

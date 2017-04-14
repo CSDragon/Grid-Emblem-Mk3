@@ -9,6 +9,7 @@ import solenus.gridemblem3.scene.topmenuscene.TopMenuScene;
 import solenus.gridemblem3.scene.dialoguescene.DialogueScene;
 import solenus.gridemblem3.scene.hqscene.HQScene;
 import solenus.gridemblem3.scene.mapscene.MapScene;
+import solenus.gridemblem3.scene.gameoverscene.GameOverScene;
 import java.awt.Graphics2D;
 import solenus.gridemblem3.PlayerData;
 import solenus.gridemblem3.InputManager;
@@ -32,6 +33,7 @@ public class SceneManager extends Scene
     public static final int MAPSCENE = 5;
     public static final int POSTMAPSKIT = 6;
     public static final int POSTMAPSAVE = 7;
+    public static final int GAMEOVER = 8;
     //and retrn to new level
     
     
@@ -39,6 +41,7 @@ public class SceneManager extends Scene
     private TopMenuScene tms;
     private DialogueScene ds;
     private HQScene hs;
+    private GameOverScene gs;
     
     private SaveMenu saveMenu; 
     
@@ -57,6 +60,7 @@ public class SceneManager extends Scene
         tms = new TopMenuScene(this);
         ds = new DialogueScene(this);
         hs = new HQScene(this);
+        gs = new GameOverScene(this);
         
         saveMenu = new SaveMenu();
     }
@@ -65,6 +69,7 @@ public class SceneManager extends Scene
      * Responds to controls.
      * @param im the input 
      */
+    @Override
     public void respondControls(InputManager im)
     {
         if(active)
@@ -79,6 +84,7 @@ public class SceneManager extends Scene
                 5) Map
                 6) Post-Map Skit
                 7) Post-Map Save
+                8) Game Over screen
             */
             switch(getControlState())
             {
@@ -103,6 +109,10 @@ public class SceneManager extends Scene
                 case POSTMAPSAVE:
                     saveMenu.respondControls(im);
                     break;
+                    
+                case GAMEOVER:
+                    gs.respondControls(im);
+                    break;
             }
         }
     }
@@ -111,6 +121,7 @@ public class SceneManager extends Scene
      * advances the scene's gamestate 1 frame.
      * @return The state of this scene that the parent scene needs to know.
      */
+    @Override
     public int runFrame()
     {   
         //always check this
@@ -209,6 +220,8 @@ public class SceneManager extends Scene
                             else
                                 controlStateTransition(POSTMAPSAVE);
                             break;
+                        case MapScene.GAMEOVER:
+                            controlStateTransition(GAMEOVER);
                     }
                     break;
                     
@@ -236,6 +249,18 @@ public class SceneManager extends Scene
                             break;
                     }
                     break;
+                    
+                case GAMEOVER:
+                    switch(gs.runFrame())
+                    {
+                        case GameOverScene.RESTART:
+                            controlStateTransition(TOPMENU);
+                            break;
+                        
+                        case GameOverScene.NOTHING:
+                            break;
+                    }
+                    break;
             }
         }
         
@@ -245,6 +270,7 @@ public class SceneManager extends Scene
     /**
      * animates the scene's objects 1 frame
      */
+    @Override
     public void animate()
     {
         if(active)
@@ -253,6 +279,7 @@ public class SceneManager extends Scene
             ms.animate();
             ds.animate();
             hs.animate();
+            gs.animate();
             
             saveMenu.animate();
         }
@@ -262,6 +289,7 @@ public class SceneManager extends Scene
      * Draws the scene.
      * @param g2 The graphics
      */
+    @Override
     public void draw(Graphics2D g2)
     {
         if(visible)
@@ -270,6 +298,7 @@ public class SceneManager extends Scene
             ms.draw(g2);
             hs.draw(g2);
             ds.draw(g2);
+            gs.draw(g2);
             
             saveMenu.draw(g2);
         }
@@ -280,6 +309,7 @@ public class SceneManager extends Scene
     //Methods who's primary function is to transition the control state from one state to another.
     //"cst = controlState transition"
     
+    @Override
     public void start()
     {
         super.start();
@@ -320,6 +350,10 @@ public class SceneManager extends Scene
             case POSTMAPSAVE:
                 saveMenu.end();
                 break;
+                
+            case GAMEOVER:
+                gs.end();
+                break;
         }
         
         //set the new controlState
@@ -349,6 +383,10 @@ public class SceneManager extends Scene
             case POSTMAPSAVE: 
                 saveMenu.start();
                 break;
+                
+            case GAMEOVER:
+                gs.start();
+                break;
         }
     }
 
@@ -357,6 +395,7 @@ public class SceneManager extends Scene
     /**
      * resizes the scene.
      */
+    @Override
     public void resize()
     {
         super.resize();

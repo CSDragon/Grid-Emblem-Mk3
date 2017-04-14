@@ -17,7 +17,12 @@ import solenus.gridemblem3.scene.mapscene.Camera;
  */
 public class Rendering 
 {
- 
+    
+    public static final int LEFT = 0;
+    public static final int CENTER = 1;
+    public static final int RIGHT = 2;
+    public static final int TOP = 0;
+    public static final int BOTTOM = 2; 
     /**
      * Renders an image at a location on the map (x,y)
      * @param image the image to be rendered
@@ -65,8 +70,8 @@ public class Rendering
      * @param y the yloc on the screen
      * @param xAdjust the amount to move x based on the sprite's size and orientation
      * @param yAdjust the amount to move y based on the sprite's size and orientation.
-     * @param xOrientation the orientation which it should be rendered, left, center or right.
-     * @param yOrientation the orientation which it should be rendered, up, center or down.
+     * @param xOrientation the orientation which it should be rendered, LEFT, CENTER or RIGHT.
+     * @param yOrientation the orientation which it should be rendered, TOP, CENTER or BOTTOM.
      */
     public static void renderAbsolute(BufferedImage image, Graphics2D g, int x, int y, int xAdjust, int yAdjust, int xOrientation, int yOrientation)
     {
@@ -108,9 +113,9 @@ public class Rendering
      * @param y the yloc on the screen
      * @param xAdjust the amount to move x based on the sprite's size and orientation
      * @param yAdjust the amount to move y based on the sprite's size and orientation.
-     * @param xOrientation the orientation which it should be rendered, left, center or right.
-     * @param yOrientation the orientation which it should be rendered, up, center or down.
-     * @param textOrientation the orientation which line of text renders. Left, center or right.
+     * @param xOrientation the orientation which it should be rendered, LEFT, CENTER or RIGHT.
+     * @param yOrientation the orientation which it should be rendered, TOP, CENTER or BOTTOM.
+     * @param textOrientation the orientation which line of text renders. LEFT, CENTER or RIGHT.
      */
     public static void renderTextAbsolute(String s, Graphics2D g, int x, int y, int xAdjust, int yAdjust, int xOrientation, int yOrientation, int textOrientation)
     {
@@ -143,8 +148,8 @@ public class Rendering
      * @param c The camera.
      * @param xAdjust Adjustment due to orientation
      * @param yAdjust Adjustment due to orientation
-     * @param xOrientation the orientation which it should be rendered, left, center or right.
-     * @param yOrientation the orientation which it should be rendered, up, center or down.
+     * @param xOrientation the orientation which it should be rendered, LEFT, CENTER or RIGHT.
+     * @param yOrientation the orientation which it should be rendered, TOP, CENTER or BOTTOM.
      */
     public static void renderRectAbsolute(Graphics2D g, int x, int y, int width, int height, Color c, int xAdjust, int yAdjust, int xOrientation, int yOrientation)
     {

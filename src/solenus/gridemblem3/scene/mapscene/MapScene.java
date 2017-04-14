@@ -33,6 +33,7 @@ public class MapScene extends Scene
 {
     public static final int RETURNTOBASE = 2;
     public static final int VICTORY = 3;
+    public static final int GAMEOVER = 4;
     
     //the game map
     private Map map;
