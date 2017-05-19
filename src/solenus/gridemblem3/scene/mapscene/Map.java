@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choose License Headers mapdata Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template mapdata the editor.
  */
 package solenus.gridemblem3.scene.mapscene;
 
@@ -85,96 +85,96 @@ public class Map
         try
         {
             mapImage = ImageIO.read(new File("assets/levels/"+idNum+"/map.png"));
-            BufferedReader in = new BufferedReader(new FileReader("assets/levels/"+idNum+"/mapdata.map"));
-            
+            BufferedReader mapdata = new BufferedReader(new FileReader("assets/levels/"+idNum+"/mapData.map"));
+            BufferedReader mapunits = new BufferedReader(new FileReader("assets/levels/"+idNum+"/mapUnits.map"));
             
             //get basic data
-            name = in.readLine().substring(6);
-            width = Integer.decode(in.readLine().substring(7));
-            height = Integer.decode(in.readLine().substring(8));
-            skipSetup = in.readLine().substring(12).equals("true");
-            winCondition = Integer.decode(in.readLine().substring(15));
-            numberOfPlayers = Integer.decode(in.readLine().substring(19));
+            name = mapdata.readLine().substring(6);
+            width = Integer.decode(mapdata.readLine().substring(7));
+            height = Integer.decode(mapdata.readLine().substring(8));
+            skipSetup = mapdata.readLine().substring(12).equals("true");
+            winCondition = Integer.decode(mapdata.readLine().substring(15));
+            numberOfPlayers = Integer.decode(mapdata.readLine().substring(19));
             teams = new ArrayList<>();
             for(int i = 0; i<numberOfPlayers; i++)
             {
-                in.readLine();
-                teams.add(new Team(in, i, numberOfPlayers));
+                mapdata.readLine();
+                teams.add(new Team(mapdata, i, numberOfPlayers));
             }
             
             //discard extra lines
-            in.readLine();
-            in.readLine();
+            mapdata.readLine();
+            mapdata.readLine();
             
-            //read in terrain
+            //read mapdata terrain
             terrainList = new ArrayList();
             for(int i = 0; i<height;i++)
             {
-                ArrayList<String> terrains = parseComma(in.readLine());
+                ArrayList<String> terrains = parseComma(mapdata.readLine());
                 for(String t: terrains)
                     terrainList.add(new Terrain(t));
             }
-            in.readLine();
+            mapdata.readLine();
             
-            //Read in player army starting locations
-            in.readLine();
-            int numPoints = Integer.parseInt(in.readLine().substring(30));
+            //Read mapdata player army starting locations
+            mapdata.readLine();
+            int numPoints = Integer.parseInt(mapdata.readLine().substring(30));
             for(int i = 0; i<numPoints; i++)
-                startingPlayerLocations.add(loadPoint(parseComma(in.readLine())));
-            in.readLine();
+                startingPlayerLocations.add(loadPoint(parseComma(mapdata.readLine())));
+            mapdata.readLine();
             
-            //Read in starting Units
-            in.readLine();
-            int numUnits = Integer.parseInt(in.readLine().substring(26));
-            in.readLine();
+            //Read mapdata starting Units
+            mapdata.readLine();
+            int numUnits = Integer.parseInt(mapdata.readLine().substring(26));
+            mapdata.readLine();
             for(int i = 0; i<numUnits; i++)
             {
-                PartyUnit pu = new PartyUnit(in);
+                PartyUnit pu = new PartyUnit(mapunits);
                 startingUnits.add(new Unit(pu));
             }
             
-            //Read in the staring unit locations.
-            in.readLine();
+            //Read mapdata the staring unit locations.
+            mapdata.readLine();
             for(int i = 0; i<numUnits; i++)
-                startingUnitLocations.add(loadPoint(parseComma(in.readLine())));
-            in.readLine();
+                startingUnitLocations.add(loadPoint(parseComma(mapdata.readLine())));
+            mapdata.readLine();
             
             //Reinforcements
-            in.readLine();
-            int numReinforcements = Integer.parseInt(in.readLine().substring(26));
-            in.readLine();
+            mapdata.readLine();
+            int numReinforcements = Integer.parseInt(mapdata.readLine().substring(26));
+            mapdata.readLine();
             
             for(int i = 0; i< numReinforcements; i++)
             {
-                PartyUnit pu = new PartyUnit(in);
+                PartyUnit pu = new PartyUnit(mapdata);
                 reinforcements.add(new Unit(pu));
             }
             
             //Reinforcement Locations
-            in.readLine();
+            mapdata.readLine();
             for(int i = 0; i< numReinforcements; i++)
-                reinforcementLocations.add(loadPoint(parseComma(in.readLine())));
-            in.readLine();
+                reinforcementLocations.add(loadPoint(parseComma(mapdata.readLine())));
+            mapdata.readLine();
             
             //Reinforcement Timings
-            in.readLine();
+            mapdata.readLine();
             for(int i = 0; i< numReinforcements; i++)
-                reinforcementTurnTimings.add(Integer.parseInt(in.readLine().substring(5)));
-            in.readLine();
+                reinforcementTurnTimings.add(Integer.parseInt(mapdata.readLine().substring(5)));
+            mapdata.readLine();
 
             //sets the mandatory player units.
-            in.readLine();
-            int numManUnits = Integer.parseInt(in.readLine().substring(34));
+            mapdata.readLine();
+            int numManUnits = Integer.parseInt(mapdata.readLine().substring(34));
             
             
             for(int i = 0; i<numManUnits; i++)
-                mandatoryPlayerUnits.add(in.readLine());
-            in.readLine();
+                mandatoryPlayerUnits.add(mapdata.readLine());
+            mapdata.readLine();
             
-            in.readLine();
+            mapdata.readLine();
             for(int i = 0; i<numManUnits; i++)
-                mandatoryPlayerUnitLocations.add(loadPoint(parseComma(in.readLine())));
-            in.readLine();
+                mandatoryPlayerUnitLocations.add(loadPoint(parseComma(mapdata.readLine())));
+            mapdata.readLine();
             
                         
             
@@ -186,7 +186,7 @@ public class Map
             for(int i = 0; i< numReinforcements; i++)
                 reinforcements.get(i).moveInstantly(reinforcementLocations.get(i));
             
-            in.close();
+            mapdata.close();
         }
         catch(Exception e)
         {

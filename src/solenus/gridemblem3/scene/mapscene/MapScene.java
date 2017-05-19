@@ -1133,6 +1133,21 @@ public class MapScene extends Scene
         return null;
     }
     
+    /**
+     * Searches for a unit with a specific name (don't use to search for nameless units)
+     * @param name The name of the unit we're searching for
+     * @return The first instance of a unit with that name, or null
+     */
+    public Unit getUnitByName(String name)
+    {
+        for(Unit u : unitList)
+        {
+            if(u.getName().equals(name))
+                return u;
+        }
+        return null;
+    }
+    
     
     /**
      * Finds the unit at point p
@@ -1798,6 +1813,8 @@ public class MapScene extends Scene
         ai.setHasPerformedAction(true);
 
     }
+        
+    //</editor-fold>
     
     public int getTurn()
     {
@@ -1808,6 +1825,5 @@ public class MapScene extends Scene
     {
         return map;
     }
-    
-    //</editor-fold>
+
 }
