@@ -41,7 +41,7 @@ public class MapScene extends Scene
     private Camera camera;
     private ArrayList<Actor> actorList;
     private ArrayList<Unit> unitList;
-    private ArrayList<Unit> dieingUnits;
+    private ArrayList<Unit> dyingUnits;
     
     
     //game control
@@ -55,6 +55,7 @@ public class MapScene extends Scene
     boolean fightGraphicsMode;
     private int animationFrames;
     private PlayerData playerArmy;
+    private ArrayList<Unit> gameOverUnits;
     
 
     //UI Elements
@@ -103,6 +104,9 @@ public class MapScene extends Scene
         preBattleScene = new PreBattleScene(this);
         terrainUI = new TerrainUI();
         unitHoverUI = new UnitHoverUI();
+        
+        //initalize other stuff
+        gameOverUnits = new ArrayList<>();
     }
     
     // <editor-fold desc="Scene control methods">
@@ -522,13 +526,30 @@ public class MapScene extends Scene
                     int result = fightUI.runFrame(); //gotta store result so resolveBattle can be passed it regardless of which case it came from.
                     switch(result)
                     {
-                        case 0:
+                        case FightUI.NOBODYDIED:
                             cst8toX();
                             break;
-                        case 1:
-                        case 2:
-                        case 3:
-                            resolveBattle(result);
+                        case FightUI.ATTACKERDIED:
+                        case FightUI.DEFENDERDIED:
+                        case FightUI.BOTHDIED:
+                            if(result !=FightUI.DEFENDERDIED)
+                            {
+                                unitList.remove(fightUI.getAttacker());
+                                actorList.remove(fightUI.getAttacker());
+                                dyingUnits.add(fightUI.getAttacker());
+
+
+                                //if team == 0, remove from your party. Edit: If we needed to do it that way
+                            }
+
+                            if(result != FightUI.ATTACKERDIED)
+                            {
+                                unitList.remove(fightUI.getDefender());
+                                actorList.remove(fightUI.getDefender());
+                                dyingUnits.add(fightUI.getDefender());
+
+                                //if team == 0, remove from your party. Edit: If we needed to do it that way
+                            }
                             cst8to12();
                             break;
                     }
@@ -560,7 +581,7 @@ public class MapScene extends Scene
                     cst11to1();
                     break;
                 
-                /*  Dieing Unit
+                /*  Dying Unit
                     Active Object: None
                     Camera Follows: None
                 */
@@ -793,11 +814,11 @@ public class MapScene extends Scene
             for (Unit ul : unitList)
                 ul.renderCam(g2, camera);
             
-            //Draw the dieing units in fade out.
-            if(!dieingUnits.isEmpty())
+            //Draw the dying units in fade out.
+            if(!dyingUnits.isEmpty())
             {
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (animationFrames/30.0f)));
-                for (Unit dead : dieingUnits)
+                for (Unit dead : dyingUnits)
                     dead.renderCam(g2, camera);
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
             }
@@ -863,7 +884,7 @@ public class MapScene extends Scene
         //Unit Lists
         actorList = new ArrayList<>();
         unitList = new ArrayList<>();
-        dieingUnits = new ArrayList<>();
+        dyingUnits = new ArrayList<>();
         
         unitCircles = new UnitCircles(unitList);
         
@@ -1238,31 +1259,6 @@ public class MapScene extends Scene
     }
     
     /**
-     * Removes dead units from the board after a fight.
-     * @param whoDied Who died. 1 = attacker died. 2 = defender died, 3 = both died.
-     */
-    public void resolveBattle(int whoDied)
-    {
-        if(whoDied !=2)
-        {
-            unitList.remove(fightUI.getAttacker());
-            actorList.remove(fightUI.getAttacker());
-            dieingUnits.add(fightUI.getAttacker());
-            
-            //if team == 0, remove from your party.
-        }
-
-        if(whoDied != 1)
-        {
-            unitList.remove(fightUI.getDefender());
-            actorList.remove(fightUI.getDefender());
-            dieingUnits.add(fightUI.getDefender());
-            
-            //if team == 0, remove from your party.
-        }
-    }
-    
-    /**
      * Redoes the starting units based on the selected units.
      */
     public void setStartingUnits()
@@ -1283,6 +1279,12 @@ public class MapScene extends Scene
         
         unitList.addAll(sel);
         unitList.addAll(map.getStartingUnits());
+        
+        gameOverUnits.clear();
+        for(int i = 0; i<map.getGameOverUnitNames().size(); i++)
+        {
+            gameOverUnits.add(this.getUnitByName(map.getGameOverUnitNames().get(i)));
+        }
     }
     
     /**
@@ -1560,7 +1562,7 @@ public class MapScene extends Scene
         controlState = 12;
         animationFrames = 30;
         
-        //play sound of unit dieing
+        //play sound of unit dying
         
         
     }
@@ -1610,11 +1612,11 @@ public class MapScene extends Scene
     }
     
     /**
-     * Removes the dieing units from DieingUnits, removing them from the game. And then goes back to 8's transition.
+     * Removes the dying units from DyingUnits, removing them from the game. And then goes back to 8's transition.
      */
     public void cst12toX()
     {
-        dieingUnits.clear();
+        dyingUnits.clear();
         cst8toX();
     }
     

@@ -14,7 +14,7 @@ Name: Bandits
 Type: AI
 Alliances: 01
 
-Terrain:
+Terrain: //This lays the map's tiles
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands
@@ -29,14 +29,14 @@ Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslan
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands
 Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands, Grasslands
 
-Player Army Starting Locations (Not including mandatory units)
+Player Army Starting Locations (Not including mandatory units) //Locations you can place your army in as you see fit
 Number of Starting Locations: 4
 14, 7
 9, 7
 10, 9
 10, 5
 
-Units staring on the map
+Units staring on the map: //Data on the units that begin play on the map
 Number of Starting Units: 9
 
 Unit Starting Locations
@@ -50,19 +50,23 @@ Unit Starting Locations
 10, 11
 0, 0
 
-Reinforcements
+Reinforcements: //Data on reinforcements
 Number of Reinforcements: 0
 
 Reinforcement Locations
 
 Reinforcement Timings
 
-Mandatory Player Units
+Mandatory Player Units: //The units you have to use this mission, and where they'll start
 Number of Mandatory Player Units: 2
 Garen
 Quinn
 
-Mandatory Player Units Locations
+Mandatory Player Units Locations:
 15, 7
 10, 7
 
+Game Over Units: //The units that you lose if they die
+Number of Game Over Units: 2
+Garen
+Quinn

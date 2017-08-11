@@ -63,6 +63,7 @@ public class Map
     
     private ArrayList<String> mandatoryPlayerUnits;
     private ArrayList<Point> mandatoryPlayerUnitLocations;
+    private ArrayList<String> gameOverUnitNames;
     
     public Map()
     {
@@ -75,6 +76,7 @@ public class Map
         reinforcementTurnTimings = new ArrayList<>();
         mandatoryPlayerUnits = new ArrayList<>();
         mandatoryPlayerUnitLocations = new ArrayList<>();
+        gameOverUnitNames = new ArrayList<>();
     }
     
     public Map(PlayerData pd)
@@ -166,18 +168,30 @@ public class Map
             mapdata.readLine();
             int numManUnits = Integer.parseInt(mapdata.readLine().substring(34));
             
-            
+            //Read in the units
             for(int i = 0; i<numManUnits; i++)
                 mandatoryPlayerUnits.add(mapdata.readLine());
             mapdata.readLine();
             
+            //Read in their locations
             mapdata.readLine();
             for(int i = 0; i<numManUnits; i++)
                 mandatoryPlayerUnitLocations.add(loadPoint(parseComma(mapdata.readLine())));
             mapdata.readLine();
             
-                        
+            //Gave Over units (units you lose if they die)
+            mapdata.readLine();
+            int numGameOverUnits = Integer.parseInt(mapdata.readLine().substring(27));
+            for(int i = 0; i<numGameOverUnits; i++)
+                gameOverUnitNames.add(mapdata.readLine());
+            mapdata.readLine();
             
+            //clean up
+            mapdata.close();
+
+            
+            
+            //This has to be in here because numUnits and numReinforcements are local
             //Set the starting units's locations
             for(int i = 0; i< numUnits; i++)
                 startingUnits.get(i).moveInstantly(startingUnitLocations.get(i));
@@ -185,8 +199,6 @@ public class Map
             //Set the reinforcements's locations.
             for(int i = 0; i< numReinforcements; i++)
                 reinforcements.get(i).moveInstantly(reinforcementLocations.get(i));
-            
-            mapdata.close();
         }
         catch(Exception e)
         {
@@ -200,11 +212,16 @@ public class Map
      */
     public void saveMap(int mapNum)
     {
-        File saveFile = new File("assets/levels/"+mapNum+"/mapData.map");
+        File mapData = new File("assets/levels/"+mapNum+"/mapData.map");
+        File mapUnits = new File("assets/levels/"+mapNum+"/mapUnits.map");
+
         try
         {
-            FileOutputStream fos = new FileOutputStream(saveFile);
+            FileOutputStream fos = new FileOutputStream(mapData);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+            
+            FileOutputStream fos2 = new FileOutputStream(mapUnits);
+            BufferedWriter bw2 = new BufferedWriter(new OutputStreamWriter(fos2));
             
             //save dimensions
             bw.write("Width: "+ width); bw.newLine();
@@ -237,7 +254,7 @@ public class Map
             bw.newLine();
             
             for(Unit u: startingUnits)
-                u.save(bw);
+                u.save(bw2);
             
             bw.write("Unit Starting Locations"); bw.newLine();
             for(Point sel : startingUnitLocations)
@@ -275,6 +292,15 @@ public class Map
             bw.write("Mandatory Player Units Locations"); bw.newLine();
             for(Point manLoc: mandatoryPlayerUnitLocations)
                 writePoint(manLoc, bw);
+            bw.newLine();
+            
+            //Gave Over units (units you lose if they die)
+            bw.newLine();
+            bw.write("Number of Mandatory Player Units: " + gameOverUnitNames.size()); bw.newLine();
+            for(int i = 0; i<gameOverUnitNames.size(); i++)
+            {
+                bw.write(gameOverUnitNames.get(i));bw.newLine();
+            }
             bw.newLine();
             
             
@@ -492,6 +518,11 @@ public class Map
     public Team getTeam(int teamNum)
     {
         return teams.get(teamNum);
+    }
+    
+    public ArrayList<String> getGameOverUnitNames()
+    {
+        return gameOverUnitNames;
     }
 
     

@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import solenus.gridemblem3.scene.SceneManager;
 
 /**
- *
  * @author Chris
+ * The JPanel object that contains the game. Allows Java2D graphics to work
  */
 public class GamePanel extends JPanel 
 {
@@ -22,7 +22,7 @@ public class GamePanel extends JPanel
     public GamePanel(SceneManager sm)
     {
         sceneControl = sm;
-        //boot it up
+        //boot it up.
         setLayout(null);
         setSize(GridEmblemMk3.WIDTH, GridEmblemMk3.HEIGHT);
         setLocation(0, 0);
@@ -30,6 +30,7 @@ public class GamePanel extends JPanel
         setVisible(true);
     }
     
+    @Override
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
