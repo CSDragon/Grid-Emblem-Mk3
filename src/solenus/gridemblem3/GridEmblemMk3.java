@@ -17,7 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Contains the Main function and the game loop.
+ * In charge of maintaining 60fps
  * @author Chris
  */
 public class GridEmblemMk3 
@@ -51,6 +52,7 @@ public class GridEmblemMk3
     public static long framesLost = 0;
     
     /**
+     * Starts the program
      * @param args the command line arguments
      */
     public static void main(String[] args) 
@@ -135,31 +137,8 @@ public class GridEmblemMk3
         }
     }
     
-    
     /**
-     * runs the gamestate 1 frame
-     */
-    public static void gameLocic()
-    {
-        im.gameStep();
-        //sceneControl.getActiveScene().respondControls(im);
-        //sceneControl.getActiveScene().runFrame();
-        
-    }
-    
-    
-    
-    /**
-     * fetches the SceneManager
-     * @return the scene manager
-     */
-    public static SceneManager getSceneMangager()
-    {
-        return sceneControl;
-    }
-    
-    /**
-     * If there are any graphic settings, load them in.
+     * Loads the previous graphics settings if there were any.
      */
     public static void checkGraphicSettings()
     {
@@ -257,6 +236,9 @@ public class GridEmblemMk3
         saveGraphicsSettings();
     }
     
+    /**
+     * Saves the graphics settings to a file.
+     */
     public static void saveGraphicsSettings()
     {
         File graphics = new File("settings/graphics.txt");
@@ -290,9 +272,22 @@ public class GridEmblemMk3
         
     }
     
+    /**
+     * Tells the input manager to save custom keybinds to a file
+     */
     public static void saveKeybinds()
     {
         im.saveKeybinds();
+    }
+    
+        
+    /**
+     * fetches the SceneManager
+     * @return the scene manager
+     */
+    public static SceneManager getSceneMangager()
+    {
+        return sceneControl;
     }
     
 

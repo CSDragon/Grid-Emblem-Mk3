@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import solenus.gridemblem3.scene.SceneManager;
 
 /**
- * @author Chris
  * The JPanel object that contains the game. Allows Java2D graphics to work
+ * @author Chris
  */
 public class GamePanel extends JPanel 
 {

@@ -19,7 +19,7 @@ import solenus.gridemblem3.item.Weapon;
 import solenus.gridemblem3.party.PartyUnit;
 
 /**
- * The data collection of your army. This should only be used for the HQ and for starting a mission. MapScene should NOT use Armies.
+ * The data storage for the player's army. This is where all unit data is saved to and loaded from 
  * @author Chris
  */
 public class PlayerData 
@@ -47,6 +47,7 @@ public class PlayerData
      */
     public PlayerData()
     {
+        //initialize array lists
         unitList = new ArrayList<>();
         weaponConvoy = new ArrayList<>();
         itemConvoy = new ArrayList<>();
@@ -59,8 +60,10 @@ public class PlayerData
      */
     public PlayerData(int saveNum)
     {
+        //do the default constructor 
         this();
         
+        //Load the player's data from the save file.
         try
         {
             BufferedReader in = new BufferedReader(new FileReader("saves/"+saveNum+".sav"));
@@ -101,7 +104,7 @@ public class PlayerData
             
             in.close();
         }
-        
+        //corrupt or missing save file
         catch(Exception e)
         {
             e.printStackTrace(System.out);
@@ -115,10 +118,14 @@ public class PlayerData
      */
     public void saveFile(int saveNum)
     {
+        //If there isn't a "saves" folder make one.
         File saves = new File("saves");
         saves.mkdir();
         
+        //If there isn't a save file, make one
         File saveFile = new File("saves/"+saveNum+".sav");
+        
+        //try to write datat to the save file
         try
         {
             FileOutputStream fos = new FileOutputStream(saveFile);
@@ -159,6 +166,7 @@ public class PlayerData
             
             bw.close();
         }
+        //Could not save.
         catch(Exception e)
         {
             e.printStackTrace(System.out);
@@ -167,7 +175,7 @@ public class PlayerData
     }
     
     /**
-     * Creates the default units
+     * Initializes the player's army for a new game.
      */
     public void newGame()
     {
@@ -240,6 +248,9 @@ public class PlayerData
         eventsWatched.add(Boolean.FALSE);
     }
     
+    /**
+     * resets all the between-mission data and puts the player on the next mission
+     */
     public void nextLevel()
     {
         mapNum++;

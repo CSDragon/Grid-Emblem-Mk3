@@ -13,6 +13,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.Point;
 
+/**
+ * A JPanel object that can detect mouse movements and clicks. Used mainly to close the game in borderless windowed mode. (Not actually implemented) 
+ * @author Chris
+ */
 public class MotionPanel extends JPanel
 {
     private Point initialClick;

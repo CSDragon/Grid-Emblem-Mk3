@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import solenus.gridemblem3.scene.topmenuscene.KeybindsMenu;
 
 /**
- *
+ * Converts keyboard presses into game inputs.
  * @author Chris
  */
 public class InputManager implements KeyListener
@@ -63,9 +63,10 @@ public class InputManager implements KeyListener
     private int startKey = KeyEvent.VK_ENTER;
     
     /**
-     * keyReleased key event
+     * Responds to keys being released.
      * @param e key event
      */
+    @Override
     public void keyReleased(KeyEvent e)
     {
         if(e.getKeyCode() == upKey)
@@ -104,9 +105,10 @@ public class InputManager implements KeyListener
     
     
     /**
-     * keyPressed key event 
+     * Responds to keys being pressed
      * @param e key event
      */
+    @Override
     public void keyPressed(KeyEvent e)
     {
         if(rebindMode)
@@ -156,9 +158,12 @@ public class InputManager implements KeyListener
     }
     
     /**
-     * keyTyped key event 
+     * Responds to keys being typed.
+     * Well, if that actually mattered.
+     * This method only exists because the interface requires it to.
      * @param e key event
      */
+    @Override
     public void keyTyped(KeyEvent e)
     {
 
@@ -166,7 +171,7 @@ public class InputManager implements KeyListener
     
     
     /**
-     * iterates the keys if they're being pressed
+     * If a key is being pressed, increment its press duration. Otherwise set it to 0.
      */
     public void gameStep()
     {
@@ -232,15 +237,25 @@ public class InputManager implements KeyListener
     public static final int FAILURE = 0;
     public static final int SUCCESS = 1;
     
+    /**
+     * The process of rebinding a button from one key to another.
+     * @param keyNum The button being changed.
+     * @return An int that represents the 3 states, the key change was successful, the key change was a failure, or nothing happened and to continue with the key bind procedure next frame.
+     */
     public int rebindKey(int keyNum)
     {
+        //If this is our first frame of key rebinding, set the last pressed key to zero. 
+        //This avoids automatically setting the button you're binding to the confirm key on the menu.
         if(!rebindMode)
             lastKey = 0;
+        //Now set rebind mode to true, so we don't do that EVERY FRAME
         rebindMode = true;
         rebindNum = keyNum;
         
+        //If a key has been pressed, rebind the button to that key. Otherwise, wait till the next frame.
         if(lastKey != 0)
         {
+            //Unless it's any of these keys. We don't want to rebind over a key already in use.
             if(lastKey == KeyEvent.VK_ESCAPE || lastKey == KeyEvent.VK_ENTER || lastKey == upKey || lastKey == downKey
             || lastKey == leftKey || lastKey == rightKey || lastKey == aKey || lastKey == bKey || lastKey == xKey
             || lastKey == yKey|| lastKey == lKey || lastKey == rKey)
@@ -248,6 +263,8 @@ public class InputManager implements KeyListener
                 rebindMode = false;
                 return FAILURE;
             }
+            
+            //Now just put the keybind into the right button.
             switch(keyNum)
             {
                 case KeybindsMenu.UP:
@@ -281,6 +298,8 @@ public class InputManager implements KeyListener
                     rKey = lastKey;
                     break;
             }
+            
+            //rebind mode is over, end the rebind mode, save the keybinds, and return that everything worked.
             rebindMode = false;
             saveKeybinds();
             return SUCCESS;
@@ -295,7 +314,9 @@ public class InputManager implements KeyListener
      */
     public void checkKeybindSettings()
     {
+        //search for the file.
         File keybinds = new File("settings/keybinds.txt");
+        //If it doesn't exist, MAKE one with the default settings.
         if(!keybinds.exists())
         {
             try
@@ -306,6 +327,7 @@ public class InputManager implements KeyListener
                 FileOutputStream fos = new FileOutputStream(keybinds);
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
                 
+                //bind the keys
                 bw.write(String.valueOf(KeyEvent.VK_W));
                 bw.newLine();
                 bw.write(String.valueOf(KeyEvent.VK_S));
@@ -332,6 +354,7 @@ public class InputManager implements KeyListener
                 bw.close();
                 
             }
+            //Unable to save to the disk. That's bad.
             catch(Exception e)
             {
                 System.out.println(e);
@@ -339,7 +362,7 @@ public class InputManager implements KeyListener
                 System.exit(-1);
             }
         }
-        
+        //read the file we found, or created.
         try
         {
             BufferedReader in = new BufferedReader(new FileReader("settings/keybinds.txt"));
@@ -359,6 +382,7 @@ public class InputManager implements KeyListener
             
             in.close();
         }
+        //The settings file has been corrupted.
         catch(Exception e)
         {
             System.out.println(e);
@@ -373,6 +397,7 @@ public class InputManager implements KeyListener
      */
     public void saveKeybinds()
     {
+        //write the keybinds to a file
         File keybinds = new File("settings/keybinds.txt");
         try
         {
@@ -406,6 +431,7 @@ public class InputManager implements KeyListener
             bw.close();
 
         }
+        // If we can't write to a disk, we really can't play the game
         catch(Exception e)
         {
             System.out.println(e);
