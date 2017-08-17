@@ -49,6 +49,7 @@ public class PreBattleReport
     public PreBattleReport(Unit attacker, Weapon attackerWeapon, Point loc, Unit defender, Map m)
     {
         this.attacker = attacker;
+        this.attackerWeapon = attackerWeapon;
         this.defender = defender;
         location = loc;
         
