@@ -15,16 +15,16 @@ import solenus.gridemblem3.ui.menu.GenericMenu;
 public class KeybindsMenu extends GenericMenu
 {
     public static final int UP = 0;
-	public static final int DOWN = 1;
-	public static final int LEFT = 2;
-	public static final int RIGHT = 3;
-	public static final int A = 4;
-	public static final int B = 5;
-	public static final int X = 6;
-	public static final int Y = 7;
-	public static final int L = 8;
-	public static final int R = 9;
-	public static final int CONFIRM = 10;
+    public static final int DOWN = 1;
+    public static final int LEFT = 2;
+    public static final int RIGHT = 3;
+    public static final int A = 4;
+    public static final int B = 5;
+    public static final int X = 6;
+    public static final int Y = 7;
+    public static final int L = 8;
+    public static final int R = 9;
+    public static final int CONFIRM = 10;
     
     private int controlState;
     

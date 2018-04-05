@@ -1766,7 +1766,7 @@ public class MapScene extends Scene
 
         if(itemType.substring(0,4).equals("Heal"))
         {
-            healingDone = Integer.parseInt(itemType.substring(4));
+            healingDone = Integer.parseInt(itemType.substring(5));
         }
 
         //Take healing
