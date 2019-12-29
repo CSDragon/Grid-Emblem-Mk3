@@ -161,6 +161,7 @@ public class MovementArrow
         movingUnit = u;
         pr = pathRep;
         map = m;
+        weight = 0;
     }
     
     /**
@@ -197,7 +198,9 @@ public class MovementArrow
                 repath(p);
             else
             {
-                //if Diagonal
+                //If Diagonal, add the horizontal first, then the vertical
+                //WARN: This causes unnesisary repaths if the horizontal is not a valid point.
+                //WARN: May crash under some very specific conditions, if terrain weight makes it repath I think it might cause an issue? Not sure though. Testing required
                 if(Math.abs(p.x-areaTraveled.get(areaTraveled.size()-1).x + p.y-areaTraveled.get(areaTraveled.size()-1).y) != 1)
                 {
                     addPoint(new Point(p.x, areaTraveled.get(areaTraveled.size()-1).y));
